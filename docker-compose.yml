@@ -1,0 +1,27 @@
+version: '3.1'
+services:
+  db:
+    container_name: smarttickets_mysql_1
+    image: mysql
+    restart: always
+    ports:
+        - "3306:3306"
+    environment:
+#        MYSQL_ROOT_HOST: '%'
+        MYSQL_USER: smarttickts
+        MYSQL_PASSWORD: smarttickets
+        MYSQL_DATABASE: smarttickts
+        MYSQL_RANDOM_ROOT_PASSWORD: 1
+  smarttickets:
+    container_name: smarttickets_server_1
+    restart: always
+    build: ./app
+    ports:
+        - "8050:80"
+    depends_on:
+        - db
+    environment:
+        MYSQL_HOSTNAME: "db"
+        MYSQL_DATABASE: smarttickets
+        MYSQL_USERNAME: smarttickets
+        MYSQL_PASSWORD: smarttickets
