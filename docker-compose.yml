@@ -7,7 +7,7 @@ services:
     ports:
         - "3306:3306"
     environment:
-#        MYSQL_ROOT_HOST: '%'
+        MYSQL_ROOT_HOST: '%'
         MYSQL_USER: smarttickts
         MYSQL_PASSWORD: smarttickets
         MYSQL_DATABASE: smarttickts
@@ -15,9 +15,10 @@ services:
   smarttickets:
     container_name: smarttickets_server_1
     restart: always
-    build: ./app
+    image: smarttickets/smarttickets
+    #build: ./app
     ports:
-        - "8050:80"
+        - "80:80"
     depends_on:
         - db
     environment:
