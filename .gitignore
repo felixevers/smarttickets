@@ -181,3 +181,4 @@ Session.vim
 tags
 # Persistent undo
 [._]*.un~
+app/frontend/node_modules/
