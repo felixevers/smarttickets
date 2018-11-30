@@ -14,7 +14,7 @@ services:
   smarttickets:
     container_name: smarttickets_server_1
     restart: always
-    image: smarttickets/smarttickets
+    build: ./app
     ports:
         - "8050:80"
     depends_on:

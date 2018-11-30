@@ -17,9 +17,9 @@ def create_app() -> Flask:
         if config["CROSS_ORIGIN"]:
             CORS(app)
 
-        register_extensions(app)
-
         register_render(app)
+
+        register_extensions(app)
 
         register_namespaces()
 
