@@ -7,10 +7,22 @@ services:
     ports:
         - "3306:3306"
     environment:
-        MYSQL_USER: smarttickts
+        MYSQL_ROOT_HOST: '%'
+        MYSQL_USER: smarttickets
         MYSQL_PASSWORD: smarttickets
-        MYSQL_DATABASE: smarttickts
+        MYSQL_DATABASE: smarttickets
         MYSQL_RANDOM_ROOT_PASSWORD: 1
+  phpmyadmin:
+    container_name: smarttickets_phpmyadmin_1
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+        - "8055:80"
+    depends_on:
+        - "db"
+    environment:
+        MYSQL_USER: smarttickets
+        MYSQL_PASSWORD: smarttickets
   smarttickets:
     container_name: smarttickets_server_1
     restart: always
