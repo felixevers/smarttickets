@@ -25,7 +25,7 @@ WORKDIR /app
 
 ADD . /app/
 
-COPY --from=builder /frontend/dist/frontend/ /app/frontend/dist/
+COPY --from=builder /frontend/dist/frontend/ /app/frontend/dist/frontend
 
 RUN apk add gcc musl-dev libffi-dev libressl-dev
 
