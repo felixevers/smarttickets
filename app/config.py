@@ -1,7 +1,7 @@
 import os
 from typing import Union, Tuple
 
-to_load: Union[str, Tuple[str, bool]] = [
+to_load: Union[str, Tuple[str, any]] = [
     # flask settings
     ("CROSS_ORIGIN", True),
     ("DEBUG", True),

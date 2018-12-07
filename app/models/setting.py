@@ -9,7 +9,6 @@ class SettingModel(db.Model):
 
     @property
     def serialize(self):
-        _ = self.uuid
         return self.__dict__
 
     @staticmethod

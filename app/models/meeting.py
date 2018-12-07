@@ -19,5 +19,12 @@ class MeetingModel(db.Model):
         return self.__dict__
 
     @staticmethod
-    def create():
-        pass
+    def create(name: str, description: str) -> "MeetingModel":
+        uuid = str(uuid4()).replace('-', '')
+
+        meeting: MeetingModel = MeetingModel(uuid=uuid, name=name, description=description)
+
+        db.session.add(meeting)
+        db.session.commit()
+
+        return meeting

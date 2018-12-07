@@ -13,6 +13,10 @@ requestSchema = {
         "address": fields.String(required=True, example="Musterstreet 123",
                                  description="street with addition of the housenumber"),
         "place": fields.String(required=True, example="Mustercity", description="place")
+    }),
+    "CustomerInformationSchema": api.model("get information request", {
+        "token": fields.String(required=True, example="12abc34d5efg67hi89j1klm2nop3pqrs",
+                               description="auth-token (like an password)")
     })
 }
 
@@ -26,6 +30,7 @@ responseSchema = {
         "place": fields.String(exmaple="Mustercity", description="place")
     })
 }
+
 
 @customer_api.route('/')
 @customer_api.doc('create customer')
@@ -51,11 +56,12 @@ class CustomerCreateService(Resource):
 class CustomerService(Resource):
 
     @customer_api.doc('returns general information about the customer')
+    @customer_api.expect(requestSchema["CustomerInformationSchema"])
     @customer_api.marshal_with(responseSchema["CustomerGeneralInformationSchema"])
     @customer_api.response(404, "Not Found", {})
     def get(self, uuid: str):
         token: str = request.json["token"]
-        customer: Optional[CustomerModel] = CustomerModel.query.filter_by(uuid=uuid, token=token).first()
+        customer: CustomerModel = CustomerModel.query.filter_by(uuid=uuid, token=token).first()
 
         if not customer:
             abort(404, "invalid customer")

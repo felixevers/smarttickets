@@ -15,3 +15,5 @@ def register_render(app: Flask):
     @app.route('/')
     def redirect_index():
         return redirect("/f/", code=302)
+
+    # add here angular routes (redirect/render the index.html)

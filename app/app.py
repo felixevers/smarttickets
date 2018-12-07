@@ -2,12 +2,15 @@ from flask import Flask
 
 from resources.render import register_render
 from resources.customer import customer_api
+from resources.setting import setting_api
+from resources.meeting import meeting_api
 
 from config import config
 from api import db, api
 from flask_cors import CORS
 from time import sleep
 
+# only imported to create the tables (remove after finishing the resources)
 from models.customer import CustomerModel
 from models.meeting import MeetingModel
 from models.price import PriceModel
@@ -48,6 +51,8 @@ def register_extensions(app: Flask) -> None:
 
 def register_namespaces() -> None:
     api.add_namespace(customer_api)
+    api.add_namespace(setting_api)
+    api.add_namespace(meeting_api)
 
 
 def setup_database() -> None:

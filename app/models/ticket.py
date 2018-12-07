@@ -1,6 +1,6 @@
 from api import db
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import relationship
+#from sqlalchemy.orm import relationship
 
 
 class TicketModel(db.Model):
@@ -13,9 +13,9 @@ class TicketModel(db.Model):
     meeting_id: db.Column(db.String(32), ForeignKey('meeting.uuid'))
     price_id: db.Column(db.String(32), ForeignKey('price.uuid'))
 
-    seat = relationship("SeatModel")
-    meeting = relationship("MeetingModel")
-    price = relationship("PriceModel")
+    #seat = relationship("SeatModel")
+    #meeting = relationship("MeetingModel")
+    #price = relationship("PriceModel")
 
     @property
     def serialize(self):

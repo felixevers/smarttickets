@@ -16,7 +16,7 @@ class PriceModel(db.Model):
     value: db.Column = db.Column(db.Integer(), nullable=False)
     meeting_id: db.Column(db.String(32), ForeignKey('meeting.uuid'))
 
-    meeting = relationship(MeetingModel, backref="meeting")
+    #meeting = relationship(MeetingModel, backref="meeting")
 
     @property
     def serialize(self):
