@@ -1,3 +1,17 @@
-smarttickets
+<mat-toolbar color="primary">
+  {{title}}
+</mat-toolbar>
+
+<mat-card class="meeting" *ngFor="let meeting of meetings">
+  <mat-card-header>
+    <mat-card-title>{{meeting.title}}</mat-card-title>
+    <mat-card-subtitle>{{meeting.date.title}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <p>
+      {{meeting.details}}
+    </p>
+  </mat-card-content>
+</mat-card>
 
 <router-outlet></router-outlet>
