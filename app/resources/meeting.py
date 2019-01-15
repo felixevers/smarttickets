@@ -11,6 +11,8 @@ requestSchema = {
                               description="name of meeting"),
         "description": fields.String(required=True, example="A musical written by...",
                                      description="short description of the meeting")
+    }),
+    "MeetingGetAllModel": api.model("get all meetings", {
     })
 }
 
@@ -22,7 +24,9 @@ responseSchema = {
                               description="name of meeting"),
         "description": fields.String(required=True, example="A musical written by...",
                                      description="short description of the meeting"),
-
+    }),
+    "MeetingModelList": api.model("array of meetings", {
+        "list": fields.List(cls_or_instance="", required=True, example="", description="list of all meetings")
     })
 }
 
@@ -31,6 +35,12 @@ responseSchema = {
 @meeting_api.route('/')
 @meeting_api.doc('create meeting')
 class MeetingCreateService(Resource):
+
+    @meeting_api.doc('get all meetingd')
+    @meeting_api.expect(requestSchema["MeetingGetAllModel"])
+    @meeting_api.marshal_with(responseSchema["MeetingModelList"])
+    def get(self):
+        return None
 
     @meeting_api.doc('create a meeting')
     @meeting_api.expect(requestSchema["MeetingCreateModel"])

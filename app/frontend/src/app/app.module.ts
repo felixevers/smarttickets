@@ -6,22 +6,29 @@ import { AppComponent } from './app.component';
 
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatCardModule} from '@angular/material/card';
+import {MatButtonModule} from '@angular/material/button';
+
+import { HttpClientModule } from '@angular/common/http';
+import { ViewMeetingComponent } from './view-meeting/view-meeting.component';
+import { MeetingComponent } from './meeting/meeting.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ViewMeetingComponent,
+    MeetingComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-
+    HttpClientModule,
     MatToolbarModule,
-    MatCardModule
+    MatCardModule,
+    MatButtonModule
   ],
   providers: [
     Title
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

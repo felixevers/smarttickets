@@ -19,7 +19,7 @@ export class AppComponent {
   }
 
   public setTitle(newTitle: string) {
-    this.titleService.setTitle( newTitle );
+    this.titleService.setTitle(newTitle);
   }
 
 }
