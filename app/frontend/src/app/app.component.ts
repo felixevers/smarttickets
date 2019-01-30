@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Title } from '@angular/platform-browser';
 
 @Component({
@@ -7,15 +8,40 @@ import { Title } from '@angular/platform-browser';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+@Injectable()
 export class AppComponent {
 
   title = 'smarttickets';
-  meetings = [
-    {"title": "Title", "date": {"title": "01.01.2000 00:00"}, "details": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}
-  ];
+  meetings = [];
 
-  public constructor(private titleService: Title) {
+  public constructor(private titleService: Title, private http: HttpClient) {
     this.setTitle(this.title);
+    this.getMeetings();
+  }
+
+  private getMeetings() {
+    let obj = this;
+    this.http.get("http://localhost:5000/meeting/").subscribe(
+      resp => {
+        let list = resp["meetings"];
+
+        if(list != null) {
+          list.forEach(function(uuid) {
+            obj.getMeeting(uuid).subscribe(
+              resp => {
+                if(resp != null) {
+                  obj.meetings.push(resp);
+                }
+              }
+            );;
+          });
+        }
+      }
+    );
+  }
+
+  private getMeeting(uuid) {
+    return this.http.get("http://localhost:5000/meeting/" + uuid);
   }
 
   public setTitle(newTitle: string) {

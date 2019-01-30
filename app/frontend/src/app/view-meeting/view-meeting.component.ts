@@ -9,11 +9,9 @@ export class ViewMeetingComponent implements OnInit {
   @Input() meeting;
 
   constructor() {
-
   }
 
   ngOnInit() {
-    console.log(this.meeting);
   }
 
 }

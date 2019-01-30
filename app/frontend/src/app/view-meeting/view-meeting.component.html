@@ -1,14 +1,17 @@
 <mat-card class="meeting">
   <mat-card-header>
-    <mat-card-title>{{meeting.title}}</mat-card-title>
-    <mat-card-subtitle>{{meeting.date.title}}</mat-card-subtitle>
+    <mat-card-title><h2>{{meeting.name}}</h2></mat-card-title>
+    <!--<mat-card-subtitle>----</mat-card-subtitle>-->
   </mat-card-header>
   <mat-card-content>
     <p>
-      {{meeting.details}}
+      {{meeting.description}}
     </p>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-button>MORE</button>
+    <button mat-fab style="transform: translate(0%, 50%); position:">
+      <mat-icon>event_available</mat-icon>
+    </button>
   </mat-card-actions>
 </mat-card>
+<br>
