@@ -1,2 +1,20 @@
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
- 
+<mat-card>
+  <mat-card-header>
+    <mat-card-title><h2>{{name}}</h2></mat-card-title>
+    <mat-card-subtitle>{{description}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <br><br>
+  <mat-card-content>
+    <mat-grid-list [cols]="calcBlocks()">
+      <mat-grid-tile *ngFor="let block of room; let i = index">
+        <div *ngFor="let row of block; let ri = index" class="row">
+          <mat-icon *ngFor="let seat of row; let si = index" [class.reserved]="seat.reserved">
+            {{seat.icon}}
+          </mat-icon>
+          <!-- TODO: ADD LINEBREAKS! -->
+        </div>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,16 @@
+mat-icon:hover {
+  cursor: pointer;
+}
+
+mat-icon {
+  cursor: pointer;
+  float: left;
+}
+
+.row {
+  white-space: pre-line;
+}
+
+.reserved {
+  color: red;
+}
