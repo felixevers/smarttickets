@@ -1,0 +1,7 @@
+#title {
+  cursor: pointer;
+}
+
+#title:cursor {
+  cursor: pointer;
+}

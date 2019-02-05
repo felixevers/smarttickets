@@ -4,13 +4,48 @@ mat-icon:hover {
 
 mat-icon {
   cursor: pointer;
+  white-space: pre-line;
+  color: green;
+}
+
+.block {
   float: left;
+  text-align: center;
+  margin-bottom: 10%;
 }
 
 .row {
-  white-space: pre-line;
+  padding: 2.0%;
 }
 
 .reserved {
   color: red;
+}
+
+.selected {
+  color: blue;
+}
+
+.map {
+  font-size: 1rem;
+}
+
+mat-card {
+  margin-bottom: 12.5%;
+}
+
+#bottom-toolbar {
+  position: fixed;
+  bottom: 0;
+}
+
+#bottom-toolbar button {
+  position: absolute;
+  bottom: 0;
+  right: 5%;
+  transform: translate(-50%, -50%);
+}
+
+#bottom-toolbar button mat-icon {
+  color: rgb(255,255,255);
 }

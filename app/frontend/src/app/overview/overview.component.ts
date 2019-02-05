@@ -18,7 +18,7 @@ export class OverviewComponent implements OnInit {
 
   private getMeetings() {
     let obj = this;
-    this.http.get("http://localhost:5000/meeting/").subscribe(
+    this.http.get("http://192.168.178.22:5000/meeting/").subscribe(
       resp => {
         let list = resp["meetings"];
 
@@ -38,7 +38,7 @@ export class OverviewComponent implements OnInit {
   }
 
   private getMeeting(uuid) {
-    return this.http.get("http://localhost:5000/meeting/" + uuid);
+    return this.http.get("http://192.168.178.22:5000/meeting/" + uuid);
   }
 
 }

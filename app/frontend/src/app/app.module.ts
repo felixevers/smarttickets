@@ -12,12 +12,15 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatListModule} from '@angular/material/list';
 import {MatDividerModule} from '@angular/material/divider';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 import { HttpClientModule } from '@angular/common/http';
 import { ViewMeetingComponent } from './view-meeting/view-meeting.component';
 import { MeetingComponent } from './meeting/meeting.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { OverviewComponent } from './overview/overview.component';
+
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 const appRoutes: Routes = [
   { path: 'meeting/:uuid', component: MeetingComponent },
@@ -34,6 +37,7 @@ const appRoutes: Routes = [
     OverviewComponent
   ],
   imports: [
+    BrowserAnimationsModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
@@ -44,6 +48,7 @@ const appRoutes: Routes = [
     MatGridListModule,
     MatListModule,
     MatDividerModule,
+    MatSnackBarModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true } // <-- debugging purposes only

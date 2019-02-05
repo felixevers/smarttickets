@@ -40,7 +40,7 @@ responseSchema = {
 @meeting_api.doc('general meeting actions')
 class GeneralMeetingService(Resource):
 
-    @meeting_api.doc('get all meetingd')
+    @meeting_api.doc('get all meetings')
     @meeting_api.expect(requestSchema["MeetingGetAllModel"])
     @meeting_api.marshal_with(responseSchema["MeetingModelList"])
     def get(self):
@@ -60,7 +60,7 @@ class GeneralMeetingService(Resource):
     @meeting_api.doc('create a meeting')
     @meeting_api.expect(requestSchema["MeetingCreateModel"])
     @meeting_api.marshal_with(responseSchema["MeetingModel"])
-    def post(self):
+    def put(self):
         name = request.json["name"]
         description = request.json["description"]
 

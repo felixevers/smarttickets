@@ -6,15 +6,25 @@
   <mat-divider></mat-divider>
   <br><br>
   <mat-card-content>
-    <mat-grid-list [cols]="calcBlocks()">
-      <mat-grid-tile *ngFor="let block of room; let i = index">
-        <div *ngFor="let row of block; let ri = index" class="row">
-          <mat-icon *ngFor="let seat of row; let si = index" [class.reserved]="seat.reserved">
-            {{seat.icon}}
-          </mat-icon>
+    <div [style.width.%]="calcBlocks()" *ngFor="let block of room; let i = index" class="block">
+      <div *ngFor="let row of block; let ri = index" class="row">
+        <sup>{{ri+1}} </sup>
+        <mat-icon *ngFor="let seat of row; let si = index" [class.reserved]="seat.reserved" [class.selected]="selectedSeat(seat)" (click)="select(seat)">
+          {{seat.icon}}
+        </mat-icon>
+        <br>
           <!-- TODO: ADD LINEBREAKS! -->
-        </div>
-      </mat-grid-tile>
-    </mat-grid-list>
+      </div>
+    </div>
+    <div class="map"><mat-icon>event_seat</mat-icon> = <span>free</span></div>
+    <div class="map"><mat-icon class="reserved">event_seat</mat-icon> = <span>reserved</span></div>
+    <div class="map"><mat-icon>accessible</mat-icon> = <span>accessible</span></div>
   </mat-card-content>
 </mat-card>
+
+<mat-toolbar color="primary" id="bottom-toolbar">
+  {{selected.length}} Sitze für {{getAmount()}} €
+  <button mat-fab style="transform: translate(50%, -50%); right: 5%; color: rgb(255,255,255);">
+    <mat-icon>event_available</mat-icon>
+  </button>
+</mat-toolbar>
