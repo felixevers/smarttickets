@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 @Injectable()
 export class AppComponent {
 
-  private static ENDPOINT = "http://192.168.178.22:5000/";
+  private static ENDPOINT = "/../";
 
   title = 'smarttickets';
 
