@@ -9,7 +9,14 @@ class SettingModel(db.Model):
 
     @property
     def serialize(self):
-        return self.__dict__
+        dict = self.__dict__
+
+        key = '_sa_instance_state'
+
+        if key in dict:
+            del dict[key]
+
+        return dict
 
     @staticmethod
     def create(key: str, value: str) -> 'SettingModel':

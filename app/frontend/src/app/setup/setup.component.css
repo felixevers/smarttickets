@@ -1,0 +1,16 @@
+#setup {
+  width: 50%;
+  height: 85%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+form {
+  padding: 2.5% 7.5%;
+}
+
+mat-form-field {
+  width: 100%;
+}

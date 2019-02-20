@@ -4,6 +4,11 @@ from resources.render import register_render
 from resources.customer import customer_api
 from resources.setting import setting_api
 from resources.meeting import meeting_api
+from resources.price import price_api
+from resources.room import room_api
+from resources.seat import seat_api
+from resources.ticket import ticket_api
+from resources.administrator import administrator_api
 
 from config import config
 from api import db, api
@@ -19,6 +24,7 @@ from models.seat import SeatModel
 from models.setting import SettingModel
 from models.customer import CustomerModel
 from models.ticket import TicketModel
+from models.administrator import AdministratorModel
 
 import os
 
@@ -40,7 +46,7 @@ def create_app() -> Flask:
         register_namespaces()
 
         setup_database()
-
+        
     return app
 
 
@@ -53,6 +59,11 @@ def register_namespaces() -> None:
     api.add_namespace(customer_api)
     api.add_namespace(setting_api)
     api.add_namespace(meeting_api)
+    api.add_namespace(price_api)
+    api.add_namespace(room_api)
+    api.add_namespace(seat_api)
+    api.add_namespace(ticket_api)
+    api.add_namespace(administrator_api)
 
 
 def setup_database() -> None:

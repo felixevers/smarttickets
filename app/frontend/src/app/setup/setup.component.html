@@ -1,0 +1,53 @@
+<mat-card id="setup">
+  <mat-card-header>
+    <mat-card-title>
+      <h1>Setup</h1>
+    </mat-card-title>
+    <mat-card-subtitle>Set your ticketing up by configurate the following information.</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <form>
+      <br>
+      <mat-divider></mat-divider>
+      <br>
+      <br>
+      <mat-form-field>
+        <input matInput placeholder="Name" value="smarttickets" [(ngModel)]="name" [ngModelOptions]="{standalone: true}" required>
+      </mat-form-field>
+      <br>
+      <br>
+      <mat-divider></mat-divider>
+      <br>
+      <br>
+      <mat-form-field>
+        <input matInput placeholder="Firstname" [(ngModel)]="firstname" [ngModelOptions]="{standalone: true}" required>
+      </mat-form-field>
+      <br>
+      <br>
+      <mat-form-field>
+        <input matInput placeholder="Lastname" [(ngModel)]="lastname" [ngModelOptions]="{standalone: true}" required>
+      </mat-form-field>
+      <br>
+      <br>
+      <mat-form-field>
+        <input matInput type="password" placeholder="Password" [(ngModel)]="password1" [ngModelOptions]="{standalone: true}" required>
+      </mat-form-field>
+      <br>
+      <br>
+      <mat-form-field>
+        <input matInput type="password" placeholder="Repeat Password" [(ngModel)]="password2" [ngModelOptions]="{standalone: true}" required>
+      </mat-form-field>
+      <br>
+      <br>
+      <mat-divider></mat-divider>
+      <br>
+      <br>
+      <mat-form-field>
+        <textarea matInput placeholder="Imprint" [(ngModel)]="imprint" [ngModelOptions]="{standalone: true}" required></textarea>
+      </mat-form-field>
+      <br>
+      <br>
+      <button mat-flat-button color="primary" (click)="setup()" [disabled]="isDisabled()">Setup</button>
+    </form>
+  </mat-card-content>
+</mat-card>

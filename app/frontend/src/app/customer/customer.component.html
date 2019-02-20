@@ -1,0 +1,52 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title><h2>Hallo {{firstname}} {{lastname}}!</h2></mat-card-title>
+    <mat-card-subtitle>
+      E-Mail: {{email}}<br>
+      Adresse: {{address}}<br>
+      Ort: {{place}}
+    </mat-card-subtitle>
+  </mat-card-header>
+  <div *ngIf="tickets.length == 0">
+    <mat-divider></mat-divider>
+    <br>
+    <mat-card-content class="warning">
+      <h3>Keine Tickets oder Reservierung gefunden.</h3>
+    </mat-card-content>
+  </div>
+  <mat-divider></mat-divider>
+  <button mat-fab style="transform: translate(0%, 75%); position: absoulute;" [routerLink]="'/' + uuid">
+    <mat-icon>add</mat-icon>
+  </button>
+</mat-card>
+<br>
+<br>
+<mat-card *ngFor="let ticket of tickets; let i = index" class="ticket">
+  <mat-card-header>
+    <mat-card-title>Ticket #{{i+1}}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item class="click" [routerLink]="'../../meeting/' + ticket.meeting.uuid + '/' + uuid">
+        <mat-icon mat-list-icon>event</mat-icon>
+        <h4 mat-line>{{ticket.meeting.name}}</h4>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon mat-list-icon>credit_card</mat-icon>
+        <h4 mat-line>{{ticket.paid ? "Bezahlt" : "In Bearbeitung"}}</h4>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon mat-list-icon>attach_money</mat-icon>
+        <h4 mat-line>{{ticket.price.name}} für {{ticket.price.value}} €</h4>
+      </mat-list-item>
+      <mat-list-item class="click success" *ngIf="ticket.paid" [routerLink]="''">
+        <mat-icon mat-list-icon>save</mat-icon>
+        <h4 mat-line>Ticket-Download</h4>
+      </mat-list-item>
+      <mat-list-item class="click warning" *ngIf="!ticket.paid" (click)="deleteTicket(ticket.uuid)">
+        <mat-icon mat-list-icon>delete</mat-icon>
+        <h4 mat-line>Reservierung löschen!</h4>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>

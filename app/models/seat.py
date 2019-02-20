@@ -1,19 +1,36 @@
 from api import db
 from uuid import uuid4
+from sqlalchemy import ForeignKey
 from datetime import datetime, timedelta
-
+from models.room import RoomModel
 
 class SeatModel(db.Model):
     __tablename__: str = "seat"
 
     uuid: db.Column = db.Column(db.String(32), primary_key=True, unique=True)
-    name: db.Column = db.Column(db.String(255), nullable=False)
+    room_id: db.Column = db.Column(db.String(32), ForeignKey('room.uuid'))
+    block: db.Column = db.Column(db.Integer(), nullable=False)
+    row: db.Column = db.Column(db.Integer(), nullable=False)
+    accessible: db.Column = db.Column(db.Boolean(), nullable=False)
 
     @property
     def serialize(self):
-        _ = self.uuid
-        return self.__dict__
+        dict = self.__dict__
+
+        key = '_sa_instance_state'
+
+        if key in dict:
+            del dict[key]
+
+        return dict
 
     @staticmethod
-    def create():
-        pass
+    def create(room: RoomModel, block: int, row: int, accessible: bool=False) -> "SeatModel":
+        uuid = str(uuid4()).replace('-', '')
+
+        seat: SeatModel = SeatModel(uuid=uuid, room_id=room, block=block, row=row, accessible=accessible)
+
+        db.session.add(seat)
+        db.session.commit()
+
+        return seat

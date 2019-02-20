@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-overview',
   templateUrl: './overview.component.html',
@@ -8,9 +11,28 @@ import { HttpClient } from '@angular/common/http';
 })
 export class OverviewComponent implements OnInit {
 
+  private static ENDPOINT = "/../";
+
+  customer = '';
   meetings = [];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {
+    let instance = this;
+
+    this.getSetting('title', function(value) {
+      if(value == '') {
+          router.navigate(['/setup']);
+      } else {
+        instance.route.params.subscribe(params => {
+          instance.customer = params['uuid'];
+
+          if(instance.customer == null) {
+            instance.customer = '';
+          }
+        });
+      }
+    });
+  }
 
   ngOnInit() {
     this.getMeetings();
@@ -18,7 +40,7 @@ export class OverviewComponent implements OnInit {
 
   private getMeetings() {
     let obj = this;
-    this.http.get("http://192.168.178.22:5000/meeting/").subscribe(
+    this.http.get(OverviewComponent.ENDPOINT + "meeting/").subscribe(
       resp => {
         let list = resp["meetings"];
 
@@ -38,7 +60,17 @@ export class OverviewComponent implements OnInit {
   }
 
   private getMeeting(uuid) {
-    return this.http.get("http://192.168.178.22:5000/meeting/" + uuid);
+    return this.http.get(OverviewComponent.ENDPOINT + "meeting/" + uuid);
+  }
+
+  openDashboard() {
+    this.router.navigate(['/customer/' + this.customer]);
+  }
+
+  getSetting(key, callback) {
+    this.http.get(OverviewComponent.ENDPOINT + 'setting/' + key).subscribe(resp => {
+      callback(resp["value"]);
+    });
   }
 
 }

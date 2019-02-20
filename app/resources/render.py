@@ -8,12 +8,11 @@ def register_render(app: Flask):
     def render_files(path):
         return send_from_directory(config["FRONTEND"], path)
 
-    @app.route('/f/')
-    def render_index():
+    @app.route('/f/', defaults={'path': ''})
+    @app.route('/f/<path:path>')
+    def render_index(path):
         return send_from_directory(config["FRONTEND"], 'index.html')
 
     @app.route('/')
     def redirect_index():
         return redirect("/f/", code=302)
-
-    # add here angular routes (redirect/render the index.html)

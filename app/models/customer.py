@@ -16,6 +16,12 @@ class CustomerModel(db.Model):
     @property
     def serialize(self):
         _ = self.uuid
+
+        key = '_sa_instance_state'
+
+        if key in dict:
+            del dict[key]
+        
         return self.__dict__
 
     @staticmethod

@@ -1,15 +1,29 @@
-<mat-card class="meeting">
+<mat-card class="meeting" style="margin-bottom: 7.5%;">
   <mat-card-header>
     <mat-card-title><h2>{{meeting.name}}</h2></mat-card-title>
-    <!--<mat-card-subtitle>----</mat-card-subtitle>-->
+    <mat-card-subtitle>{{meeting.description}}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <p>
-      {{meeting.description}}
-    </p>
+    <mat-list>
+      <mat-list-item>
+        <mat-icon class="time-list-icon" mat-list-icon>event</mat-icon>
+        <h4 mat-line>{{dateStr}}</h4>
+        <p mat-line>Aufführungsdatum</p>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon class="time-list-icon" mat-list-icon>alarm</mat-icon>
+        <h4 mat-line>{{startStr}}</h4>
+        <p mat-line>Verkaufsstart</p>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon class="time-list-icon" mat-list-icon>alarm_off</mat-icon>
+        <h4 mat-line>{{stopStr}}</h4>
+        <p mat-line>Verkaufsstop</p>
+      </mat-list-item>
+    </mat-list>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-fab style="transform: translate(0%, 50%); position:" routerLink="/meeting/{{meeting.uuid}}">
+    <button mat-fab style="transform: translate(0%, 50%); position: absoulute;" [routerLink]="'/meeting/' + meeting.uuid + '/' + customer">
       <mat-icon>event_available</mat-icon>
     </button>
   </mat-card-actions>

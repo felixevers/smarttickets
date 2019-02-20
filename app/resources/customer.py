@@ -1,12 +1,15 @@
 from flask_restplus import Namespace, Resource, fields, abort
-from api import api
+from api import api, db
 from flask import request
 from models.customer import CustomerModel
+from session import require_session
 
 customer_api = Namespace('customer')
 
 requestSchema = {
     "CustomerCreateSchema": api.model("create request", {
+        "uuid": fields.String(required=True, example="12abc34d5efg67hi89j1klm2nop3pqrs",
+                            description="uuid"),
         "email": fields.String(required=True, example="max@mustmann.de", description="email address"),
         "firstname": fields.String(required=True, example="Max", description="firstname"),
         "lastname": fields.String(required=True, example="Mustermann", description="lastname"),
@@ -15,8 +18,8 @@ requestSchema = {
         "place": fields.String(required=True, example="Mustercity", description="place")
     }),
     "CustomerInformationSchema": api.model("get information request", {
-        "token": fields.String(required=True, example="12abc34d5efg67hi89j1klm2nop3pqrs",
-                               description="auth-token (like an password)")
+        "uuid": fields.String(required=True, example="12abc34d5efg67hi89j1klm2nop3pqrs",
+                               description="uuid")
     })
 }
 
@@ -60,8 +63,7 @@ class CustomerService(Resource):
     @customer_api.marshal_with(responseSchema["CustomerGeneralInformationSchema"])
     @customer_api.response(404, "Not Found", {})
     def get(self, uuid: str):
-        token: str = request.json["token"]
-        customer: CustomerModel = CustomerModel.query.filter_by(uuid=uuid, token=token).first()
+        customer: CustomerModel = CustomerModel.query.filter_by(uuid=uuid).first()
 
         if not customer:
             abort(404, "invalid customer")

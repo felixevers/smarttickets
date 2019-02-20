@@ -1,0 +1,19 @@
+.ticket {
+  margin: 2.5%;
+}
+
+.click {
+  cursor: pointer;
+}
+
+.click:hover {
+  cursor: pointer;
+}
+
+.warning {
+  color: red;
+}
+
+.success {
+  color: blue;
+}

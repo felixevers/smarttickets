@@ -4,27 +4,93 @@
     <mat-card-subtitle>{{description}}</mat-card-subtitle>
   </mat-card-header>
   <mat-divider></mat-divider>
-  <br><br>
+  <br>
   <mat-card-content>
-    <div [style.width.%]="calcBlocks()" *ngFor="let block of room; let i = index" class="block">
-      <div *ngFor="let row of block; let ri = index" class="row">
-        <sup>{{ri+1}} </sup>
-        <mat-icon *ngFor="let seat of row; let si = index" [class.reserved]="seat.reserved" [class.selected]="selectedSeat(seat)" (click)="select(seat)">
-          {{seat.icon}}
-        </mat-icon>
-        <br>
-          <!-- TODO: ADD LINEBREAKS! -->
+    <mat-list>
+      <mat-list-item>
+        <mat-icon class="time-list-icon" mat-list-icon>event</mat-icon>
+        <h4 mat-line>{{dateStr}}</h4>
+        <p mat-line>Aufführungsdatum</p>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon class="time-list-icon" mat-list-icon>alarm</mat-icon>
+        <h4 mat-line>{{startStr}}</h4>
+        <p mat-line>Verkaufsstart</p>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon class="time-list-icon" mat-list-icon>alarm_off</mat-icon>
+        <h4 mat-line>{{stopStr}}</h4>
+        <p mat-line>Verkaufsstop</p>
+      </mat-list-item>
+    </mat-list>
+    <br>
+    <mat-divider></mat-divider>
+    <div id="step-1" *ngIf="step == 1">
+      <div [style.width.%]="calcBlocks()" *ngFor="let block of room; let i = index" class="block">
+        <div *ngFor="let row of block; let ri = index" class="row">
+          <sup>{{ri+1}} </sup>
+          <mat-icon *ngFor="let seat of row; let si = index" [class.reserved]="seat.reserved" [class.selected]="selectedSeat(seat)" (click)="select(seat)">
+            {{seat.icon}}
+          </mat-icon>
+          <br>
+        </div>
       </div>
+      <div class="map"><mat-icon>event_seat</mat-icon> = <span>Frei</span></div>
+      <div class="map"><mat-icon class="reserved">event_seat</mat-icon> = <span>Reserviert</span></div>
+      <div class="map"><mat-icon>accessible</mat-icon> = <span>Zugänglich</span></div>
     </div>
-    <div class="map"><mat-icon>event_seat</mat-icon> = <span>free</span></div>
-    <div class="map"><mat-icon class="reserved">event_seat</mat-icon> = <span>reserved</span></div>
-    <div class="map"><mat-icon>accessible</mat-icon> = <span>accessible</span></div>
+    <div id="step-2" *ngIf="step == 2">
+      <form>
+        <div *ngFor="let selectedSeat of selected; let i = index" class="price">
+          <div><sub>{{i+1}}. Sitz</sub></div>
+          <mat-form-field>
+            <mat-select (selectionChange)="calcAmount()" [(ngModel)]="selectedSeat.price" [ngModelOptions]="{standalone: true}" required>
+              <mat-option *ngFor="let price of pricesKeys()" [value]="price">{{prices[price].name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <br>
+        </div>
+        <div *ngIf="customer == null">
+          <br>
+          <mat-divider></mat-divider>
+          <br>
+          <mat-form-field class="input">
+            <input matInput placeholder="Vorname" [(ngModel)]="firstname" [ngModelOptions]="{standalone: true}" required>
+          </mat-form-field>
+          <br>
+          <mat-form-field class="input">
+            <input matInput placeholder="Nachname" [(ngModel)]="lastname" [ngModelOptions]="{standalone: true}" required>
+          </mat-form-field>
+          <mat-form-field class="input">
+            <input matInput placeholder="E-Mail" [(ngModel)]="email" [ngModelOptions]="{standalone: true}" required>
+          </mat-form-field>
+          <mat-form-field class="input">
+            <input matInput placeholder="Straße" [(ngModel)]="street" [ngModelOptions]="{standalone: true}" required>
+          </mat-form-field>
+          <mat-form-field class="input">
+            <input matInput placeholder="Hausnummer" [(ngModel)]="housenumber" [ngModelOptions]="{standalone: true}" required>
+          </mat-form-field>
+          <mat-form-field class="input">
+            <input matInput placeholder="Ort" [(ngModel)]="place" [ngModelOptions]="{standalone: true}" required>
+          </mat-form-field>
+          <mat-form-field class="input">
+            <input matInput placeholder="Postleitzahl" [(ngModel)]="plz" [ngModelOptions]="{standalone: true}" required>
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
+    <div id="step-3" *ngIf="step == 3">
+      Sie haben Ihre Reservierung erfolgreich abgeschlossen.
+      Als nächstes erhalten Sie eine E-Mail mit einer Bestätigung.
+      <br><br>
+      <button *ngIf="customer != null" mat-icon [routerLink]="'/customer/' + customer">Zurück zur Kunden-Übersicht</button>
+    </div>
   </mat-card-content>
 </mat-card>
 
-<mat-toolbar color="primary" id="bottom-toolbar">
-  {{selected.length}} Sitze für {{getAmount()}} €
-  <button mat-fab style="transform: translate(50%, -50%); right: 5%; color: rgb(255,255,255);">
-    <mat-icon>event_available</mat-icon>
+<mat-toolbar color="primary" id="bottom-toolbar" *ngIf="step < 3">
+  {{selected.length}} Sitze &nbsp;<span *ngIf="step == 2">für {{amount}} €</span>
+  <button mat-fab [disabled]="buttonEnabled()" (click)="continue()" style="postition: absolute; transform: translate(50%, -50%); right: 10%; color: rgb(255,255,255);">
+    <mat-icon>{{stepIcon}}</mat-icon>
   </button>
 </mat-toolbar>

@@ -1,7 +1,27 @@
+mat-toolbar {
+  position: relative;
+}
+
 #title {
   cursor: pointer;
 }
 
-#title:cursor {
+#title:hover {
   cursor: pointer;
+}
+
+#info {
+  position: absolute;
+  top: 50%;
+  right: 2.5%;
+  transform: translate(0%, -40%);
+  cursor: pointer;
+}
+
+#info:hover {
+  cursor: pointer;
+}
+
+mat-icon {
+  font-size: 2rem;
 }

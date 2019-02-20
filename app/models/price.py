@@ -1,10 +1,6 @@
 from api import db
 from sqlalchemy.orm import relationship
 from uuid import uuid4
-from sqlalchemy import ForeignKey
-from datetime import datetime, timedelta
-
-from models.meeting import MeetingModel
 
 
 class PriceModel(db.Model):
@@ -13,16 +9,26 @@ class PriceModel(db.Model):
     uuid: db.Column = db.Column(db.String(32), primary_key=True, unique=True)
     name: db.Column = db.Column(db.String(255), nullable=False)
     description: db.Column = db.Column(db.String(255), nullable=False)
-    value: db.Column = db.Column(db.Integer(), nullable=False)
-    meeting_id: db.Column(db.String(32), ForeignKey('meeting.uuid'))
-
-    #meeting = relationship(MeetingModel, backref="meeting")
+    value: db.Column = db.Column(db.Float(), nullable=False)
 
     @property
     def serialize(self):
-        _ = self.uuid
-        return self.__dict__
+        dict = self.__dict__
+
+        key = '_sa_instance_state'
+
+        if key in dict:
+            del dict[key]
+
+        return dict
 
     @staticmethod
-    def create():
-        pass
+    def create(name, description, value):
+        uuid = str(uuid4()).replace('-', '')
+
+        price: PriceModel = PriceModel(uuid=uuid, name=name, description=description, value=value)
+
+        db.session.add(price)
+        db.session.commit()
+
+        return price

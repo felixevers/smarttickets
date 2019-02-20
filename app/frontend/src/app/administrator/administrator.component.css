@@ -1,0 +1,18 @@
+.floating {
+  width: 50%;
+  height: 85%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.input {
+  width: 95%;
+  padding: 2.5%;
+}
+
+button {
+  width: 95%;
+  margin: 2.5%;
+}

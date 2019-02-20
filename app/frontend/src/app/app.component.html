@@ -1,5 +1,8 @@
 <mat-toolbar color="primary">
   <span id="title" routerLink="/">{{title}}</span>
+  <div id="info" routerLink="/imprint" *ngIf="title != 'Setup'">
+    <mat-icon>info</mat-icon>
+  </div>
 </mat-toolbar>
 
 <router-outlet></router-outlet>
