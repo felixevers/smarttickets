@@ -30,3 +30,12 @@ mat-checkbox {
   width: 98%;
   padding: 1%;
 }
+
+#customers {
+  width: 95%;
+  padding: 2.5%;
+}
+
+#customers table {
+  width: 100%;
+}

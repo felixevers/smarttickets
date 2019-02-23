@@ -23,6 +23,9 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatSortModule} from '@angular/material/sort';
+import {MatRadioModule} from '@angular/material/radio';
 
 import { HttpClientModule } from '@angular/common/http';
 import { ViewMeetingComponent } from './view-meeting/view-meeting.component';
@@ -84,6 +87,9 @@ const appRoutes: Routes = [
     MatCheckboxModule,
     MatSliderModule,
     MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatRadioModule,
     FormsModule,
     RouterModule.forRoot(
       appRoutes,
@@ -94,6 +100,9 @@ const appRoutes: Routes = [
     Title,
     CookieService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: [
+      MatSortModule,
+  ],
 })
 export class AppModule { }

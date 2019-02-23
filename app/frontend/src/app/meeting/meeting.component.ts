@@ -17,6 +17,8 @@ export class MeetingComponent implements OnInit {
   uuid: string;
   customer: string;
 
+  customerToken: string;
+
   name: string = "";
   description: string = "";
 
@@ -184,6 +186,7 @@ export class MeetingComponent implements OnInit {
             "place": this.place + " " + this.plz
           }).subscribe(resp => {
             if(resp != null) {
+              instance.customerToken = resp["uuid"];
               buy(resp["uuid"]);
             }
           });

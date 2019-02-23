@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 
 import { HttpClient } from '@angular/common/http';
@@ -6,6 +6,7 @@ import { HttpHeaders } from '@angular/common/http';
 
 import {FormControl} from '@angular/forms';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import {MatSort, MatTableDataSource} from '@angular/material';
 
 import * as data from '../endpoint.json';
 
@@ -27,6 +28,7 @@ export class AdministratorComponent implements OnInit {
   selectedPrice;
   selectedRoom;
   selectedSeat;
+  selectedCustomer;
 
   selectedMeetingDate = new Date();
   selectedMeetingSaleStart = new Date();
@@ -57,18 +59,36 @@ export class AdministratorComponent implements OnInit {
   settingValue: string = '';
   settingBeforeValue: string = '';
 
+  administratorFirstname: string = '';
+  administratorLastname: string = '';
+  administratorPassword: string = '';
+
+  administratorChangePassword: string = '';
+  administratorChangePassword2: string = '';
+
+  loadedCustomers = [];
+  dataSource;
+
+  @ViewChild(MatSort) sort: MatSort;
+
+  customerDisplayedColumns: string[] = ['select', 'uuid', 'firstname', 'lastname', 'email'];
+
   constructor(private cookieService: CookieService, private http: HttpClient) {
     this.token = this.cookieService.get("token");
 
     let instance = this;
-    if(this.token != null) {
+
+    if(this.token != null && this.token != "") {
       instance.http.get(data["endpoint"] + 'administrator/session/', instance.getHeader()).subscribe(resp => {
         instance.firstname = resp["firstname"];
         instance.lastname = resp["lastname"];
         instance.getMeetings();
         instance.getPrices();
         instance.getRooms();
+        instance.getCustomers();
       });
+    } else {
+      this.token = null;
     }
   }
 
@@ -100,10 +120,11 @@ export class AdministratorComponent implements OnInit {
       "lastname": instance.lastname,
       "password": instance.password,
     }).subscribe(resp => {
-      if(!resp["result"]) {
+      if(resp["result"] != null && !resp["result"]) {
         instance.signInError();
       } else {
         instance.token = resp["uuid"];
+        instance.cookieService.set("token", instance.token);
       }
     });
   }
@@ -195,6 +216,22 @@ export class AdministratorComponent implements OnInit {
     });
   }
 
+  private getCustomers() {
+    let instance = this;
+
+    instance.loadedCustomers = [];
+
+    instance.http.get(data["endpoint"] + 'customer/', instance.getHeader()).subscribe(resp => {
+      instance.loadedCustomers = resp["customers"];
+      instance.dataSource = new MatTableDataSource(instance.loadedCustomers);
+      instance.dataSource.sort = instance.sort;
+    });
+  }
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   private getPrices() {
     let instance = this;
 
@@ -268,6 +305,42 @@ export class AdministratorComponent implements OnInit {
 
   private disableSetting() {
     return this.settingKey == '' || this.settingKey == null || this.settingValue == this.settingBeforeValue;
+  }
+
+  private generatePassword() {
+    var length = 16,
+        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        retVal = "";
+    for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    return retVal;
+  }
+
+  private createAdministrator() {
+    let instance = this;
+
+    instance.http.post(data["endpoint"] + 'administrator/', {
+      "firstname": instance.administratorFirstname,
+      "lastname": instance.administratorLastname,
+      "password": instance.administratorPassword,
+    }, instance.getHeader()).subscribe(resp => {
+      instance.administratorFirstname = '';
+      instance.administratorLastname = '';
+      instance.administratorPassword = '';
+    });
+  }
+
+  private disableAdministrator() {
+    return this.administratorFirstname == '' || this.administratorFirstname == null || this.administratorLastname == '' || this.administratorLastname == null;
+  }
+
+  private changeAdminstratorPassword() {
+    let instance = this;
+  }
+
+  private disableChangeAdminstratorPassword() {
+    return this.administratorChangePassword == '' || this.administratorChangePassword == null || this.administratorChangePassword2 == '' || this.administratorChangePassword2 == null || this.administratorChangePassword != this.administratorChangePassword2;
   }
 
   private update() {

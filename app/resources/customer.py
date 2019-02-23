@@ -39,6 +39,13 @@ responseSchema = {
 @customer_api.doc('create customer')
 class CustomerCreateService(Resource):
 
+    @customer_api.doc('get all customers')
+    @require_session
+    def get(self, session):
+        return {
+            "customers": [customer.serialize for customer in CustomerModel.query.all()]
+        }
+
     @customer_api.doc('creates a customer')
     @customer_api.expect(requestSchema["CustomerCreateSchema"])
     @customer_api.marshal_with(responseSchema["CustomerGeneralInformationSchema"])

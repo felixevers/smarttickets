@@ -160,7 +160,7 @@
             </mat-form-field>
             <br>
             <mat-form-field>
-              <input matInput type="number" placeholder="Value" [(ngModel)]="meetingValue" [ngModelOptions]="{standalone: true}" required>
+              <input matInput type="number" placeholder="Value" [(ngModel)]="priceValue" [ngModelOptions]="{standalone: true}" required>
             </mat-form-field>
             <br>
             <button mat-flat-button [disabled]="disablePrice()" color="primary" (click)="createPrice()">Create</button>
@@ -250,14 +250,82 @@
     <mat-tab label="Customer">
       <ng-template matTabContent>
         <div class="content">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          <div id="customers">
+            <mat-form-field>
+              <input matInput placeholder="Search" (keyup)="applyFilter($event.target.value)">
+            </mat-form-field>
+            <mat-radio-group [(ngModel)]="selectedCustomer">
+              <table mat-table matSort matSortStart="desc" [dataSource]="dataSource">
+                <ng-container matColumnDef="uuid">
+                  <th mat-header-cell *matHeaderCellDef> UUID </th>
+                  <td mat-cell *matCellDef="let element"> {{element.uuid}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="firstname">
+                  <th mat-header-cell *matHeaderCellDef> Firstname </th>
+                  <td mat-cell *matCellDef="let element"> {{element.firstname}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="lastname">
+                  <th mat-header-cell *matHeaderCellDef> Lastname </th>
+                  <td mat-cell *matCellDef="let element"> {{element.lastname}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="email">
+                  <th mat-header-cell *matHeaderCellDef> E-Mail </th>
+                  <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="select">
+                   <th mat-header-cell *matHeaderCellDef>
+                   </th>
+                   <td mat-cell *matCellDef="let row">
+                     <mat-radio-button [value]="row"></mat-radio-button>
+                   </td>
+                 </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="customerDisplayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: customerDisplayedColumns;"></tr>
+              </table>
+            </mat-radio-group>
+            <br>
+            <br>
+            <br>
+            <mat-divider></mat-divider>
+            <br>
+            <br>
+            <div *ngIf="selectedCustomer != null">
+              <h2>selected customer</h2>
+              <h3>{{selectedCustomer.firstname}} {{selectedCustomer.lastname}}</h3>
+              <button mat-flat-button color="primary">Set Paid</button>
+              <button mat-flat-button color="primary">Set Unpaid</button>
+            </div>
+          </div>
         </div>
       </ng-template>
     </mat-tab>
     <mat-tab label="Administrator">
       <ng-template matTabContent>
         <div class="content">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          <h2>create administrator</h2>
+          <form>
+            <mat-form-field>
+              <input matInput placeholder="Firstname" [(ngModel)]="administratorFirstname" [ngModelOptions]="{standalone: true}" required>
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+              <input matInput placeholder="Lastname" [(ngModel)]="administratorLastname" [ngModelOptions]="{standalone: true}" required>
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+              <input matInput placeholder="Password" [(ngModel)]="administratorPassword" [ngModelOptions]="{standalone: true}" required>
+              <button mat-button matSuffix mat-icon-button aria-label="Generate Password" (click)="administratorPassword = generatePassword()">
+                <mat-icon>refresh</mat-icon>
+              </button>
+            </mat-form-field>
+            <br>
+            <button mat-flat-button [disabled]="disableAdministrator()" color="primary" (click)="createAdministrator()">Create</button>
+          </form>
         </div>
       </ng-template>
     </mat-tab>

@@ -72,7 +72,7 @@ class GeneralTicketService(Resource):
         meeting: MeetingModel = MeetingModel.query.filter_by(uuid=meeting_uuid).first()
         customer: CustomerModel = CustomerModel.query.filter_by(uuid=customer_uuid).first()
 
-        if TicketModel.query.filter_by(seat_id=seat, meeting_id=meeting).first():
+        if TicketModel.query.filter_by(seat_id=seat.uuid, meeting_id=meeting.uuid).first():
             return { "result": False }
 
         ticket: TicketModel = TicketModel.create(customer, meeting, seat, price)

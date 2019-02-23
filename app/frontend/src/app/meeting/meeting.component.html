@@ -83,7 +83,8 @@
       Sie haben Ihre Reservierung erfolgreich abgeschlossen.
       Als nächstes erhalten Sie eine E-Mail mit einer Bestätigung.
       <br><br>
-      <button *ngIf="customer != null" mat-icon [routerLink]="'/customer/' + customer">Zurück zur Kunden-Übersicht</button>
+      <button mat-stroked-button *ngIf="customer == null" [routerLink]="'/customer/' + customerToken">Zur Kunden-Übersicht</button>
+      <button mat-stroked-button *ngIf="customer != null" [routerLink]="'/customer/' + customer">Zurück zur Kunden-Übersicht</button>
     </div>
   </mat-card-content>
 </mat-card>
