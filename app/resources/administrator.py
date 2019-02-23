@@ -95,7 +95,12 @@ class SessionAdministratorService(Resource):
     @administrator_api.doc('get session')
     @require_session
     def get(self, session):
-        return jsonify(session.serialize)
+        admin = AdministratorModel.query.filter_by(uuid=session.administrator).first()
+
+        if session.broken:
+            return { "result": False }
+
+        return jsonify(admin.serialize)
 
     @administrator_api.doc('delete session')
     @require_session

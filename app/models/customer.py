@@ -17,12 +17,14 @@ class CustomerModel(db.Model):
     def serialize(self):
         _ = self.uuid
 
+        dict = self.__dict__
+
         key = '_sa_instance_state'
 
         if key in dict:
             del dict[key]
-        
-        return self.__dict__
+
+        return dict
 
     @staticmethod
     def create(firstname: str, lastname: str, email: str, address: str, place: str) -> "CustomerModel":

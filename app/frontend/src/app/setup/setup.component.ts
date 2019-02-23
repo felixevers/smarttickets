@@ -6,14 +6,14 @@ import { Router } from '@angular/router';
 
 import { CookieService } from 'ngx-cookie-service';
 
+import * as data from '../endpoint.json';
+
 @Component({
   selector: 'app-setup',
   templateUrl: './setup.component.html',
   styleUrls: ['./setup.component.css']
 })
 export class SetupComponent implements OnInit {
-
-  private static ENDPOINT = "/../";
 
   name: string = '';
   firstname: string = '';
@@ -25,7 +25,7 @@ export class SetupComponent implements OnInit {
   constructor(private http: HttpClient, private cookieService: CookieService, private router: Router) {
     let instance = this;
 
-    instance.http.get(SetupComponent.ENDPOINT + 'setting/title').subscribe(resp => {
+    instance.http.get(data["endpoint"] + 'setting/title').subscribe(resp => {
       if(resp["value"] != '') {
         router.navigate(['/']);
       }
@@ -42,12 +42,12 @@ export class SetupComponent implements OnInit {
   setSetting(key, value, httpOptions) {
     let instance = this;
 
-    instance.http.post(SetupComponent.ENDPOINT + 'setting/', {
+    instance.http.post(data["endpoint"] + 'setting/', {
       "key": key,
       "value": value,
     }, httpOptions).subscribe(resp => {
       if(!resp["result"]) {
-        instance.http.put(SetupComponent.ENDPOINT + 'setting/', {
+        instance.http.put(data["endpoint"] + 'setting/', {
           "key": key,
           "value": value,
         }, httpOptions).subscribe(resp2 => {
@@ -59,12 +59,12 @@ export class SetupComponent implements OnInit {
   setup() {
     let instance = this;
 
-    instance.http.put(SetupComponent.ENDPOINT + 'administrator/', {
+    instance.http.put(data["endpoint"] + 'administrator/', {
       "firstname": instance.firstname,
       "lastname": instance.lastname,
       "password": instance.password1,
     }).subscribe(resp1 => {
-      instance.http.put(SetupComponent.ENDPOINT + 'administrator/session/', {
+      instance.http.put(data["endpoint"] + 'administrator/session/', {
         "firstname": instance.firstname,
         "lastname": instance.lastname,
         "password": instance.password1,
@@ -74,7 +74,7 @@ export class SetupComponent implements OnInit {
 
         const httpOptions = {
           headers: new HttpHeaders({
-            'Content-Type':  'application/json',
+            'Content-Type': 'application/json',
             'Token': token,
           }),
         };

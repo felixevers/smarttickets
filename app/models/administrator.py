@@ -18,9 +18,7 @@ class AdministratorModel(db.Model):
             "firstname": self.firstname,
             "lastname": self.lastname,
         }
-
-        print(dict)
-
+        
         return dict
 
     @staticmethod

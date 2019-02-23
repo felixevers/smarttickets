@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
+import * as data from '../endpoint.json';
+
 @Component({
   selector: 'app-view-meeting',
   templateUrl: './view-meeting.component.html',

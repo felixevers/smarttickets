@@ -3,6 +3,8 @@
     <h1>Impressum</h1>
   </mat-card-header>
   <mat-card-content>
-    {{text}}
+    <p *ngFor="let line of text.split('\n')">
+      {{line}}
+    </p>
   </mat-card-content>
 </mat-card>

@@ -17,8 +17,6 @@ class SessionModel(db.Model):
             "broken": self.broken,
         }
 
-        print(dict)
-
         return dict
 
     @staticmethod

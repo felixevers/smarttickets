@@ -53,6 +53,9 @@ class SettingService(Resource):
 
         if setting:
             setting.value = value
+
+            db.session.commit()
+
             return setting.serialize
         else:
             return { "result": False }

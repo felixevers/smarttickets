@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 
 import {MatSnackBar} from '@angular/material';
 
+import * as data from '../endpoint.json';
 
 @Component({
   selector: 'app-meeting',
@@ -47,8 +48,6 @@ export class MeetingComponent implements OnInit {
   roomID = 0;
   room = [];
 
-  private static ENDPOINT = "http://192.168.178.22:5000/";
-
   private sub: any;
 
   pricesKeys() {
@@ -64,7 +63,7 @@ export class MeetingComponent implements OnInit {
         instance.uuid = params['uuid'];
         instance.customer = params['customer'];
 
-        instance.http.get(MeetingComponent.ENDPOINT + "meeting/" + this.uuid).subscribe(resp => {
+        instance.http.get(data["endpoint"] + "meeting/" + this.uuid).subscribe(resp => {
           if(resp != null) {
             instance.name = resp["name"];
             instance.description = resp["description"];
@@ -79,19 +78,19 @@ export class MeetingComponent implements OnInit {
             instance.stopStr = instance.timeConverter(instance.stop);
 
             instance.roomID = resp["room"];
-            this.http.get(MeetingComponent.ENDPOINT + "price/").subscribe(resp => {
+            this.http.get(data["endpoint"] + "price/").subscribe(resp => {
               if(resp != null) {
                 let prices = resp['prices']
 
                 prices.forEach(price => {
                   instance.prices[price['uuid']] = price;
                 });
-                instance.http.post(MeetingComponent.ENDPOINT + "ticket/", {
+                instance.http.post(data["endpoint"] + "ticket/", {
                   "meeting": instance.uuid,
                 }).subscribe(resp2 => {
                   let reserved = resp2['reserved'];
 
-                  instance.http.post(MeetingComponent.ENDPOINT + "seat/", {
+                  instance.http.post(data["endpoint"] + "seat/", {
                     "room": this.roomID,
                   }).subscribe(resp => {
                     if(resp != null) {
@@ -165,7 +164,7 @@ export class MeetingComponent implements OnInit {
 
         let buy = function(customerUUID) {
           instance.selected.forEach(seat => {
-            instance.http.put(MeetingComponent.ENDPOINT + "ticket/", {
+            instance.http.put(data["endpoint"] + "ticket/", {
               "price": seat['price'],
               "seat": seat['uuid'],
               "meeting": instance.uuid,
@@ -177,7 +176,7 @@ export class MeetingComponent implements OnInit {
         }
 
         if(instance.customer == null) {
-          instance.http.put(MeetingComponent.ENDPOINT + "customer/", {
+          instance.http.put(data["endpoint"] + "customer/", {
             "email": this.email,
             "firstname": this.firstname,
             "lastname": this.lastname,

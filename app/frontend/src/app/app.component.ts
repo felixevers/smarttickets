@@ -4,6 +4,8 @@ import { Title } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
+import * as data from './endpoint.json';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -11,8 +13,6 @@ import { Router } from '@angular/router';
 })
 @Injectable()
 export class AppComponent {
-
-  private static ENDPOINT = "/../";
 
   title = 'smarttickets';
 
@@ -34,7 +34,7 @@ export class AppComponent {
   }
 
   getSetting(key, callback) {
-    this.http.get(AppComponent.ENDPOINT + 'setting/' + key).subscribe(resp => {
+    this.http.get(data["endpoint"] + 'setting/' + key).subscribe(resp => {
       callback(resp["value"]);
     });
   }

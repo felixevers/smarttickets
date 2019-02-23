@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+import * as data from '../endpoint.json';
+
 @Component({
   selector: 'app-imprint',
   templateUrl: './imprint.component.html',
   styleUrls: ['./imprint.component.css']
 })
 export class ImprintComponent implements OnInit {
-
-  private static ENDPOINT = "/../";
 
   text: string = '';
 
@@ -24,7 +24,7 @@ export class ImprintComponent implements OnInit {
   }
 
   getSetting(key, callback) {
-    this.http.get(ImprintComponent.ENDPOINT + 'setting/' + key).subscribe(resp => {
+    this.http.get(data["endpoint"] + 'setting/' + key).subscribe(resp => {
       callback(resp["value"]);
     });
   }

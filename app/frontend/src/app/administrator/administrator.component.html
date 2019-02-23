@@ -1,4 +1,4 @@
-<mat-card *ngIf="token != null" class="floating">
+<mat-card *ngIf="token == null">
   <mat-card-header>
     <mat-card-title>
       <h1>Administrator</h1>
@@ -20,3 +20,261 @@
     <button mat-flat-button color="primary" (click)="signIn()" [disabled]="signInDisabled()">Sign In</button>
   </mat-card-content>
 </mat-card>
+<div *ngIf="token != null">
+  <mat-tab-group>
+    <mat-tab label="Statistics">
+      <ng-template matTabContent>
+        <div class="content">
+          coming soon...
+        </div>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Meeting">
+      <ng-template matTabContent>
+        <div class="content">
+          <mat-list>
+            <h2 mat-subheader>Meetings</h2>
+            <mat-list-item *ngFor="let meeting of meetings; let i = index" (click)="selectedMeeting = meeting">
+              <mat-icon mat-list-icon>event</mat-icon>
+              <h3 mat-line>{{meeting.name}}</h3>
+              <p mat-line>{{meeting.uuid}}</p>
+            </mat-list-item>
+          </mat-list>
+          <div *ngIf="meetings.length == 0">
+            No meetings found!
+          </div>
+          <br>
+          <mat-divider></mat-divider>
+          <br>
+          <h2>create meeting</h2>
+          <form>
+            <mat-form-field>
+              <input matInput placeholder="Name" [(ngModel)]="meetingName" [ngModelOptions]="{standalone: true}" required>
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+              <textarea matInput placeholder="Description" [(ngModel)]="meetingDescription" [ngModelOptions]="{standalone: true}" required></textarea>
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+              <input required matInput [matDatepicker]="picker1" [(ngModel)]="meetingSaleStart" [ngModelOptions]="{standalone: true}" placeholder="sale start">
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+              <input required matInput [matDatepicker]="picker2" [(ngModel)]="meetingSaleStop" [ngModelOptions]="{standalone: true}" placeholder="sale stop">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+              <input required matInput [matDatepicker]="picker3" [(ngModel)]="meetingDate" [ngModelOptions]="{standalone: true}" placeholder="date">
+              <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+              <mat-datepicker #picker3></mat-datepicker>
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+              <mat-select [(ngModel)]="meetingRoom" [ngModelOptions]="{standalone: true}" required placeholder="Room">
+                <mat-option *ngFor="let room of rooms" [value]="room.uuid">
+                  {{room.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <br>
+            <button mat-flat-button [disabled]="disableMeeting()" color="primary" (click)="createMeeting()">Create</button>
+          </form>
+          <div *ngIf="selectedMeeting != null">
+            <br>
+            <br>
+            <mat-divider></mat-divider>
+            <br>
+            <form>
+              <mat-form-field>
+                <input matInput placeholder="Name" [(ngModel)]="selectedMeeting.name" [ngModelOptions]="{standalone: true}" required>
+              </mat-form-field>
+              <br>
+              <mat-form-field>
+                <textarea matInput placeholder="Description" [(ngModel)]="selectedMeeting.description" [ngModelOptions]="{standalone: true}" required></textarea>
+              </mat-form-field>
+              <br>
+              <mat-form-field>
+                <input required matInput [matDatepicker]="picker1" [(ngModel)]="selectedMeetingSaleStart" [ngModelOptions]="{standalone: true}" placeholder="sale start">
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+              </mat-form-field>
+              <br>
+              <mat-form-field>
+                <input required matInput [matDatepicker]="picker2" [(ngModel)]="selectedMeetingSaleStop" [ngModelOptions]="{standalone: true}" placeholder="sale stop">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+              </mat-form-field>
+              <br>
+              <mat-form-field>
+                <input required matInput [matDatepicker]="picker3" [(ngModel)]="selectedMeetingDate" [ngModelOptions]="{standalone: true}" placeholder="date">
+                <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                <mat-datepicker #picker3></mat-datepicker>
+              </mat-form-field>
+              <br>
+              <mat-form-field>
+                <mat-select [(ngModel)]="selectedMeeting.room" [ngModelOptions]="{standalone: true}" required placeholder="Room">
+                  <mat-option *ngFor="let room of rooms" [value]="room.uuid">
+                    {{room.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <br>
+              <button mat-flat-button color="primary" (click)="update()">update</button>
+              <br>
+              <button mat-flat-button color="primary" (click)="delete()">delete</button>
+            </form>
+          </div>
+        </div>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Price">
+      <ng-template matTabContent>
+        <div class="content">
+          <mat-list>
+            <h2 mat-subheader>Prices</h2>
+            <mat-list-item *ngFor="let price of prices; let i = index" (click)="selectedPrice = price">
+              <mat-icon mat-list-icon>attach_money</mat-icon>
+              <h3 mat-line>{{price.name}}</h3>
+              <p mat-line>{{price.uuid}}</p>
+            </mat-list-item>
+          </mat-list>
+          <div *ngIf="prices.length == 0">
+            No price found!
+          </div>
+          <br>
+          <mat-divider></mat-divider>
+          <br>
+          <h2>create price</h2>
+          <form>
+            <mat-form-field>
+              <input matInput placeholder="Name" [(ngModel)]="priceName" [ngModelOptions]="{standalone: true}" required>
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+              <textarea matInput placeholder="Description" [(ngModel)]="priceDescription" [ngModelOptions]="{standalone: true}" required></textarea>
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+              <input matInput type="number" placeholder="Value" [(ngModel)]="meetingValue" [ngModelOptions]="{standalone: true}" required>
+            </mat-form-field>
+            <br>
+            <button mat-flat-button [disabled]="disablePrice()" color="primary" (click)="createPrice()">Create</button>
+          </form>
+          <div *ngIf="selectedPrice != null">
+            <br>
+            <br>
+            <mat-divider></mat-divider>
+            <br>
+            <form>
+              <mat-form-field>
+                <input matInput placeholder="Name" [(ngModel)]="selectedPrice.name" [ngModelOptions]="{standalone: true}" required>
+              </mat-form-field>
+              <br>
+              <mat-form-field>
+                <textarea matInput placeholder="Description" [(ngModel)]="selectedPrice.description" [ngModelOptions]="{standalone: true}" required></textarea>
+              </mat-form-field>
+              <br>
+              <mat-form-field>
+                <input matInput type="number" placeholder="Value" [(ngModel)]="selectedPrice.value" [ngModelOptions]="{standalone: true}" required>
+              </mat-form-field>
+              <br>
+              <button mat-flat-button color="primary" (click)="update()">update</button>
+              <br>
+              <button mat-flat-button color="primary" (click)="delete()">delete</button>
+            </form>
+          </div>
+        </div>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Room">
+      <ng-template matTabContent>
+        <div class="content">
+          <mat-list>
+            <h2 mat-subheader>Rooms</h2>
+            <mat-list-item *ngFor="let room of rooms; let i = index" (click)="selectedRoom = room">
+              <mat-icon mat-list-icon>room</mat-icon>
+              <h3 mat-line>{{room.name}}</h3>
+              <p mat-line>{{room.uuid}}</p>
+            </mat-list-item>
+          </mat-list>
+          <div *ngIf="rooms.length == 0">
+            No price found!
+          </div>
+          <br>
+          <mat-divider></mat-divider>
+          <br>
+          <h2>create room</h2>
+          <form>
+            <mat-form-field>
+              <input matInput placeholder="Name" [(ngModel)]="roomName" [ngModelOptions]="{standalone: true}" required>
+            </mat-form-field>
+            <br>
+            <button mat-flat-button [disabled]="disableRoom()" color="primary" (click)="createRoom()">Create</button>
+          </form>
+          <div *ngIf="selectedRoom != null">
+            <br>
+            <br>
+            <mat-divider></mat-divider>
+            <br>
+            <form>
+              <h2>{{selectedRoom.name}}</h2>
+              <br>
+              <button mat-flat-button color="primary" (click)="delete()">delete</button>
+            </form>
+            <br>
+            <br>
+            <form>
+              <mat-form-field>
+                <input matInput type="number" placeholder="Block" [(ngModel)]="seatBlock" [ngModelOptions]="{standalone: true}" required>
+              </mat-form-field>
+              <br>
+              <mat-form-field>
+                <input matInput type="number" placeholder="Row" [(ngModel)]="seatRow" [ngModelOptions]="{standalone: true}" required>
+              </mat-form-field>
+              <br>
+              <mat-checkbox [(ngModel)]="seatAccessible" [ngModelOptions]="{standalone: true}" required>Accessible</mat-checkbox>
+              <br>
+              <br>
+              <br>
+              <button mat-flat-button color="primary" [disabled]="disableSeat()" (click)="createSeat()">create</button>
+            </form>
+          </div>
+        </div>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Customer">
+      <ng-template matTabContent>
+        <div class="content">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </div>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Administrator">
+      <ng-template matTabContent>
+        <div class="content">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </div>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Setting">
+      <ng-template matTabContent>
+        <div class="content">
+          <form>
+            <mat-form-field>
+              <input matInput type="text" placeholder="Key" (change)="refreshSetting()" [(ngModel)]="settingKey" [ngModelOptions]="{standalone: true}" required>
+            </mat-form-field>
+            <mat-form-field>
+              <textarea matInput placeholder="Value" [(ngModel)]="settingValue" [ngModelOptions]="{standalone: true}" required></textarea>
+            </mat-form-field>
+            <button mat-flat-button color="primary" [disabled]="disableSetting()" (click)="updateSetting()">update</button>
+          </form>
+        </div>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

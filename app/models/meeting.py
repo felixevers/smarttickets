@@ -9,7 +9,7 @@ class MeetingModel(db.Model):
 
     uuid: db.Column = db.Column(db.String(32), primary_key=True, unique=True)
     name: db.Column = db.Column(db.String(255), nullable=False)
-    description: db.Column = db.Column(db.String(255), nullable=False)
+    description: db.Column = db.Column(db.String(1024), nullable=False)
     date: db.Column = db.Column(db.Integer())
     start: db.Column = db.Column(db.Integer())
     stop: db.Column = db.Column(db.Integer())
@@ -19,12 +19,14 @@ class MeetingModel(db.Model):
     def serialize(self):
         _ = self.uuid
 
+        dict = self.__dict__
+
         key = '_sa_instance_state'
 
         if key in dict:
             del dict[key]
-        
-        return self.__dict__
+
+        return dict
 
     @staticmethod
     def create(name: str, description: str, room, date, start, stop) -> "MeetingModel":

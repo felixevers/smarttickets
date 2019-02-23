@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 
+import * as data from '../endpoint.json';
+
 @Component({
   selector: 'app-overview',
   templateUrl: './overview.component.html',
@@ -40,7 +42,7 @@ export class OverviewComponent implements OnInit {
 
   private getMeetings() {
     let obj = this;
-    this.http.get(OverviewComponent.ENDPOINT + "meeting/").subscribe(
+    this.http.get(data["endpoint"] + "meeting/").subscribe(
       resp => {
         let list = resp["meetings"];
 
@@ -60,7 +62,7 @@ export class OverviewComponent implements OnInit {
   }
 
   private getMeeting(uuid) {
-    return this.http.get(OverviewComponent.ENDPOINT + "meeting/" + uuid);
+    return this.http.get(data["endpoint"] + "meeting/" + uuid);
   }
 
   openDashboard() {
@@ -68,7 +70,7 @@ export class OverviewComponent implements OnInit {
   }
 
   getSetting(key, callback) {
-    this.http.get(OverviewComponent.ENDPOINT + 'setting/' + key).subscribe(resp => {
+    this.http.get(data["endpoint"] + 'setting/' + key).subscribe(resp => {
       callback(resp["value"]);
     });
   }

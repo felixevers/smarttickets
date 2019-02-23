@@ -18,6 +18,11 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatInputModule} from '@angular/material/input';
 import {MatSliderModule} from '@angular/material/slider';
 import {MatSelectModule} from '@angular/material/select';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatTableModule} from '@angular/material/table';
 
 import { HttpClientModule } from '@angular/common/http';
 import { ViewMeetingComponent } from './view-meeting/view-meeting.component';
@@ -55,7 +60,7 @@ const appRoutes: Routes = [
     CustomerComponent,
     ImprintComponent,
     SetupComponent,
-    AdministratorComponent
+    AdministratorComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -73,6 +78,12 @@ const appRoutes: Routes = [
     MatInputModule,
     MatSliderModule,
     MatSelectModule,
+    MatTabsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatCheckboxModule,
+    MatSliderModule,
+    MatTableModule,
     FormsModule,
     RouterModule.forRoot(
       appRoutes,
@@ -81,7 +92,7 @@ const appRoutes: Routes = [
   ],
   providers: [
     Title,
-    CookieService
+    CookieService,
   ],
   bootstrap: [AppComponent]
 })

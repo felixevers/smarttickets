@@ -66,8 +66,7 @@ class GeneralSeatService(Resource):
 
     @seat_api.doc('get all seats of room')
     @seat_api.expect(requestSchema["AllSeatModel"])
-    @require_session
-    def post(self, session):
+    def post(self):
         uuid = request.json["room"]
 
         seats: list = SeatModel.query.filter_by(room_id=uuid).all()
