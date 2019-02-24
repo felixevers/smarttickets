@@ -39,3 +39,8 @@ mat-checkbox {
 #customers table {
   width: 100%;
 }
+
+mat-slider {
+  width: 98%;
+  padding: 1%;
+}

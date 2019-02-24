@@ -1,4 +1,4 @@
-<mat-card class="meeting" style="margin-bottom: 7.5%;">
+<mat-card class="meeting" style="margin-bottom: 7.5%;" [routerLink]="'/meeting/' + meeting.uuid + '/' + customer">
   <mat-card-header>
     <mat-card-title><h2>{{meeting.name}}</h2></mat-card-title>
     <mat-card-subtitle>{{meeting.description}}</mat-card-subtitle>

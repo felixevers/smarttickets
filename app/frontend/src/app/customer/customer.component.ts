@@ -39,7 +39,11 @@ export class CustomerComponent implements OnInit {
                 instance.tickets.forEach(ticket => {
                   ticket["meeting"] = "";
                   ticket["price"] = "";
+                  ticket["seat"] = "";
 
+                  instance.http.get(data["endpoint"] + "seat/" + ticket.seat_id).subscribe(resp => {
+                    ticket["seat"] = resp;
+                  });
                   instance.http.get(data["endpoint"] + "meeting/" + ticket.meeting_id).subscribe(resp => {
                     ticket["meeting"] = resp;
                   });

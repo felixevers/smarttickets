@@ -7,6 +7,7 @@ from models.seat import SeatModel
 from models.room import RoomModel
 from models.price import PriceModel
 from models.customer import CustomerModel
+from session import require_session
 
 ticket_api = Namespace('ticket')
 
@@ -107,6 +108,20 @@ class SpecificPriceService(Resource):
 
         return ticket.serialize
 
+    @ticket_api.doc('pay a ticket')
+    @ticket_api.response(404, "Not Found", {})
+    @require_session
+    def post(self, uuid, session):
+        pay = request.json["pay"];
+
+        ticket: TicketModel = TicketModel.query.filter_by(uuid=uuid).first()
+
+        ticket.paid = pay
+
+        db.session.commit()
+
+        return ticket.serialize
+
     @ticket_api.doc('delete a ticket')
     @ticket_api.expect(requestSchema["SpecificTicketModel"])
     @ticket_api.marshal_with(responseSchema["SuccessModel"])
@@ -114,10 +129,13 @@ class SpecificPriceService(Resource):
     def delete(self, uuid):
         ticket: TicketModel = TicketModel.query.filter_by(uuid=uuid).first()
 
-        db.session.delete(ticket)
-        db.session.commit()
+        if not ticket.paid:
+            db.session.delete(ticket)
+            db.session.commit()
 
-        return True
+            return True
+
+        return False
 
 @ticket_api.route('/customer/<string:uuid>')
 @ticket_api.doc('general customer ticket actions')

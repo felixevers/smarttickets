@@ -19,7 +19,7 @@ mat-icon {
 }
 
 .reserved {
-  color: red;
+  color: gray;
 }
 
 .selected {
@@ -55,7 +55,7 @@ mat-card {
 }
 
 #step-3 {
-  font-size: 2rem;
+  font-size: 1.5rem;
   padding: 5%;
 }
 
@@ -86,4 +86,8 @@ mat-card {
 
 .time-list-icon {
   color: rgb(33,33,33);
+}
+
+mat-card {
+  margin-bottom: 50%;
 }

@@ -76,3 +76,17 @@ class CustomerService(Resource):
             abort(404, "invalid customer")
 
         return customer.serialize
+
+    @customer_api.doc('deletes the customer')
+    @customer_api.response(404, "Not Found", {})
+    @require_session
+    def delete(self, uuid: str, session):
+        customer: CustomerModel = CustomerModel.query.filter_by(uuid=uuid).first()
+
+        if not customer:
+            abort(404, "invalid customer")
+
+        db.session.delete(customer)
+        db.session.commit()
+
+        return customer.serialize

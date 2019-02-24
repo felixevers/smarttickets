@@ -79,8 +79,6 @@ class GeneralSeatService(Resource):
 class SpecificSeatService(Resource):
 
     @seat_api.doc('get a seat')
-    @seat_api.expect(requestSchema["SpecificSeatModel"])
-    @seat_api.marshal_with(responseSchema["SuccessModel"])
     @seat_api.response(404, "Not Found", {})
     def get(self, uuid):
         seat: SeatModel = SeatModel.query.filter_by(uuid=uuid).first()

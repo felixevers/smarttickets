@@ -109,9 +109,15 @@ export class MeetingComponent implements OnInit {
                           instance.room[block][row] = [];
                         }
 
+                        let icon = "event_seat";
+
+                        if(seat.accessible) {
+                          icon = "accessible";
+                        }
+
                         instance.room[block][row].push({
                           "uuid": seat["uuid"],
-                          "icon": "event_seat",
+                          "icon": icon,
                           "reserved": reserved.includes(seat["uuid"]),
                           "price": prices[0].uuid,
                         });

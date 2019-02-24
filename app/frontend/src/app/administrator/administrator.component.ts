@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-
+import {SelectionModel} from '@angular/cdk/collections';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
@@ -30,9 +30,15 @@ export class AdministratorComponent implements OnInit {
   selectedSeat;
   selectedCustomer;
 
+  selectedCustomerTickets = [];
+  selectedCustomerSelectedTickets = new SelectionModel(true, []);
+
   selectedMeetingDate = new Date();
   selectedMeetingSaleStart = new Date();
   selectedMeetingSaleStop = new Date();
+  selectedMeetingSaleStopTime = 0;
+  selectedMeetingSaleStartTime = 0;
+  selectedMeetingDateTime = 0;
 
   firstname: string = '';
   lastname: string = '';
@@ -41,13 +47,16 @@ export class AdministratorComponent implements OnInit {
   meetingName: string = '';
   meetingDescription: string = '';
   meetingSaleStart = new Date();
+  meetingSaleStartTime = 0;
   meetingSaleStop = new Date();
+  meetingSaleStopTime = 0;
   meetingDate = new Date();
+  meetingDateTime = 0;
   meetingRoom;
 
   priceName: string = '';
   priceDescription: string = '';
-  priceValue = 0;
+  priceValue;
 
   roomName: string = '';
 
@@ -70,11 +79,25 @@ export class AdministratorComponent implements OnInit {
   dataSource;
 
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('tabGroup') tabGroup;
 
-  customerDisplayedColumns: string[] = ['select', 'uuid', 'firstname', 'lastname', 'email'];
+  customerDisplayedColumns: string[] = ['select', 'firstname', 'lastname', 'email', 'place', 'address']
+  selectedCustomerDisplayedColumns: string[] = ['select', 'price', 'amount', 'paid'];
+
+  times = [];
 
   constructor(private cookieService: CookieService, private http: HttpClient) {
     this.token = this.cookieService.get("token");
+
+    for(var h = 0; h < 24; h++) {
+      for(var m = 0; m < 4; m++) {
+        this.times.push({
+          "value": h*60 + m * 15,
+          "minute": String("0" + m * 15).slice(-2),
+          "hour": String("0" + h).slice(-2),
+        })
+      }
+    }
 
     let instance = this;
 
@@ -93,6 +116,94 @@ export class AdministratorComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  selectMeeting(meeting) {
+    this.selectedMeeting = meeting;
+
+    this.selectedMeetingDate = new Date(meeting.date * 1000);
+    this.selectedMeetingDateTime = this.selectedMeetingDate.getMinutes();
+
+    this.selectedMeetingSaleStart = new Date(meeting.start * 1000);
+    this.selectedMeetingSaleStartTime = this.selectedMeetingSaleStart.getMinutes();
+
+    this.selectedMeetingSaleStop = new Date(meeting.stop * 1000);
+    this.selectedMeetingSaleStopTime = this.selectedMeetingSaleStop.getMinutes();
+  }
+
+  isAllSelected() {
+    const numSelected = this.selectedCustomerSelectedTickets.selected.length;
+    const numRows = this.selectedCustomerTickets.length;
+    return numSelected === numRows;
+  }
+
+  masterToggle() {
+    this.isAllSelected() ?
+        this.selectedCustomerSelectedTickets.clear() :
+        this.selectedCustomerTickets.forEach(row => this.selectedCustomerSelectedTickets.select(row));
+  }
+
+  calcAmountDue() {
+    let amount = 0;
+
+    this.selectedCustomerTickets.forEach(e => {
+      if(!e.paid) {
+        let price = this.getPrice(e.price_id);
+        if(price != null) {
+          amount += price.value;
+        }
+      }
+    });
+
+    return amount;
+  }
+
+  timeConverter(b) {
+    let a = new Date(parseInt(b) * 1000);
+
+    var year = a.getFullYear();
+    var month = String("0" + (a.getMonth() + 1)).slice(-2);
+    var date = String("0" + a.getDate()).slice(-2);
+    var hour = String("0" + a.getHours()).slice(-2);
+    var min = String("0" + a.getMinutes()).slice(-2);
+
+    var time = date + '.' + month + '.' + year + ' um ' + hour + ':' + min + ' Uhr'
+
+    return time;
+  }
+
+  calcSelectedAmountDue() {
+    let amount = 0;
+
+    this.selectedCustomerSelectedTickets.selected.forEach(e => {
+      if(!e.paid) {
+        amount += this.getPrice(e.price_id).value;
+      }
+    });
+
+    return amount;
+  }
+
+  paySelected(pay) {
+    let instance = this;
+
+    instance.selectedCustomerSelectedTickets.selected.forEach(ticket => {
+      instance.http.post(data["endpoint"] + 'ticket/' + ticket.uuid, {
+        "pay": pay
+      }, instance.getHeader()).subscribe(resp => {
+      });
+    });
+
+    instance.selectedCustomer = null;
+    instance.selectedCustomerSelectedTickets = new SelectionModel(true, []);;
+    instance.selectedCustomerTickets = [];
+  }
+
+  private loadTickets() {
+    let instance = this;
+    instance.http.post(data["endpoint"] + 'ticket/customer/' + instance.selectedCustomer.uuid, {}).subscribe(resp => {
+      instance.selectedCustomerTickets = resp["tickets"];
+    });
   }
 
   getHeader() {
@@ -129,8 +240,23 @@ export class AdministratorComponent implements OnInit {
     });
   }
 
+  private getPrice(uuid) {
+    let instance = this;
+    let result = null;
+
+    instance.prices.forEach(e => {
+      if(e.uuid == uuid) {
+        result = e;
+      }
+    });
+
+    return result;
+  }
+
   private createMeeting() {
     let instance = this;
+
+    this.updateTime();
 
     instance.http.put(data["endpoint"] + 'meeting/', {
       "name": instance.meetingName,
@@ -146,6 +272,10 @@ export class AdministratorComponent implements OnInit {
       instance.meetingDate = null;
       instance.meetingSaleStart = null;
       instance.meetingSaleStop = null;
+      instance.meetingSaleStopTime = 0;
+      instance.meetingSaleStartTime = 0;
+      instance.meetingDateTime = 0;
+
       instance.getMeetings();
     });
   }
@@ -196,7 +326,6 @@ export class AdministratorComponent implements OnInit {
       "row": instance.seatRow - 1,
       "accessible": instance.seatAccessible,
     }, instance.getHeader()).subscribe(resp => {
-      console.log(resp);
     });
   }
 
@@ -283,6 +412,21 @@ export class AdministratorComponent implements OnInit {
     });
   }
 
+  private updateTime() {
+    this.meetingSaleStop.setHours(Math.floor(this.meetingSaleStopTime / 60));
+    this.meetingSaleStop.setMinutes(this.meetingSaleStopTime % 60);
+    this.meetingSaleStart.setHours(Math.floor(this.meetingSaleStartTime / 60));
+    this.meetingSaleStart.setMinutes(this.meetingSaleStartTime % 60);
+    this.meetingDate.setHours(Math.floor(this.meetingDateTime / 60));
+    this.meetingDate.setMinutes(this.meetingDateTime % 60);
+    this.selectedMeetingSaleStop.setHours(Math.floor(this.selectedMeetingSaleStopTime / 60));
+    this.selectedMeetingSaleStop.setMinutes(this.selectedMeetingSaleStopTime % 60);
+    this.selectedMeetingSaleStart.setHours(Math.floor(this.selectedMeetingSaleStartTime / 60));
+    this.selectedMeetingSaleStart.setMinutes(this.selectedMeetingSaleStartTime % 60);
+    this.selectedMeetingDate.setHours(Math.floor(this.selectedMeetingDateTime / 60));
+    this.selectedMeetingDate.setMinutes(this.selectedMeetingDateTime % 60);
+  }
+
   private updateSetting() {
     let instance = this;
 
@@ -345,7 +489,9 @@ export class AdministratorComponent implements OnInit {
 
   private update() {
     let instance = this;
-    if(instance.selectedPrice != null) {
+    let i = this.tabGroup.selectedIndex;
+
+    if(instance.selectedPrice != null && i == 2) {
       instance.http.post(data["endpoint"] + 'price/' + instance.selectedPrice.uuid, {
         "name": instance.selectedPrice.name,
         "description": instance.selectedPrice.description,
@@ -355,19 +501,24 @@ export class AdministratorComponent implements OnInit {
         instance.getPrices();
       });
     }
-    if(instance.selectedMeeting != null) {
+    if(instance.selectedMeeting != null && i == 1) {
+      instance.updateTime();
+
       instance.http.post(data["endpoint"] + 'meeting/' + instance.selectedMeeting.uuid, {
         "name": instance.selectedMeeting.name,
         "description": instance.selectedMeeting.description,
         "room": instance.selectedMeeting.room,
-        "date": instance.selectedMeeting.date,
-        "start": instance.selectedMeeting.start,
-        "stop": instance.selectedMeeting.stop,
+        "date": (instance.selectedMeetingDate.getTime() / 1000),
+        "start": (instance.selectedMeetingSaleStart.getTime() / 1000),
+        "stop": (instance.selectedMeetingSaleStop.getTime() / 1000),
       }, instance.getHeader()).subscribe(resp => {
         instance.selectedMeeting = null;
         instance.selectedMeetingDate = new Date();
         instance.selectedMeetingSaleStart = new Date();
         instance.selectedMeetingSaleStop = new Date();
+        instance.selectedMeetingSaleStopTime = 0;
+        instance.selectedMeetingSaleStartTime = 0;
+        instance.selectedMeetingDateTime = 0;
 
         instance.getMeetings();
       });
@@ -376,22 +527,39 @@ export class AdministratorComponent implements OnInit {
 
   private delete() {
     let instance = this;
-    if(instance.selectedPrice != null) {
+    let i = this.tabGroup.selectedIndex;
+
+    if(instance.selectedPrice != null && i == 2) {
       instance.http.delete(data["endpoint"] + 'price/' + instance.selectedPrice.uuid, instance.getHeader()).subscribe(resp => {
         instance.selectedPrice = null;
         instance.getPrices();
       });
     }
-    if(instance.selectedRoom != null) {
+    if(instance.selectedRoom != null && i == 3) {
       instance.http.delete(data["endpoint"] + 'room/' + instance.selectedRoom.uuid, instance.getHeader()).subscribe(resp => {
         instance.selectedRoom = null;
         instance.getRooms();
       });
     }
-    if(instance.selectedMeeting != null) {
+    if(instance.selectedMeeting != null && i == 1) {
       instance.http.delete(data["endpoint"] + 'meeting/' + instance.selectedMeeting.uuid, instance.getHeader()).subscribe(resp => {
         instance.selectedMeeting = null;
         instance.getMeetings();
+      });
+    }
+    if(instance.selectedCustomer != null && i == 4) {
+      instance.http.delete(data["endpoint"] + 'customer/' + instance.selectedCustomer.uuid, instance.getHeader()).subscribe(resp => {
+        instance.selectedCustomer = null;
+        instance.getCustomers();
+      });
+    }
+    if(instance.selectedCustomerSelectedTickets.selected.length > 0 && i == 4) {
+      instance.selectedCustomerSelectedTickets.selected.forEach(e => {
+        instance.http.delete(data["endpoint"] + 'ticket/' + e.uuid, {}).subscribe(resp => {
+          instance.selectedCustomer = null;
+          instance.selectedCustomerSelectedTickets = new SelectionModel(true, []);;
+          instance.selectedCustomerTickets = [];
+        });
       });
     }
   }
