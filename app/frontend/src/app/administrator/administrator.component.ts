@@ -553,6 +553,12 @@ export class AdministratorComponent implements OnInit {
         instance.getCustomers();
       });
     }
+  }
+
+  deleteTicket() {
+    let instance = this;
+    let i = this.tabGroup.selectedIndex;
+
     if(instance.selectedCustomerSelectedTickets.selected.length > 0 && i == 4) {
       instance.selectedCustomerSelectedTickets.selected.forEach(e => {
         instance.http.delete(data["endpoint"] + 'ticket/' + e.uuid, {}).subscribe(resp => {

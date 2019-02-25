@@ -396,7 +396,7 @@
               </h4>
               <button mat-flat-button color="primary" [disabled]="selectedCustomerSelectedTickets.selected.length == 0" (click)="paySelected(true)">Pay Selected</button>
               <button mat-flat-button color="primary" [disabled]="selectedCustomerSelectedTickets.selected.length == 0" (click)="paySelected(false)">Unpay Selected</button>
-              <button mat-flat-button color="primary" [disabled]="selectedCustomerSelectedTickets.selected.length == 0" (click)="delete()">Delete Selected</button>
+              <button mat-flat-button color="primary" [disabled]="selectedCustomerSelectedTickets.selected.length == 0" (click)="deleteTicket()">Delete Selected</button>
               <button mat-flat-button color="primary" [disabled]="selectedCustomerTickets.length > 0" (click)="delete()">Delete Customer</button>
             </div>
           </div>
