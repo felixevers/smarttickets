@@ -182,3 +182,4 @@ tags
 # Persistent undo
 [._]*.un~
 app/frontend/node_modules/
+app/Pipfile.lock
