@@ -13,7 +13,7 @@ COPY ./frontend/ .
 RUN $(npm bin)/ng build --prod --build-optimizer --base-href /f/
 
 
-FROM python:3.7-alpine
+FROM python:3.6-alpine
 
 EXPOSE 80
 

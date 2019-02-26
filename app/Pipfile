@@ -14,7 +14,6 @@ flask-restplus = "*"
 flask-bcrypt = "*"
 Flask-WeasyPrint = "*"
 
-
 [dev-packages]
 
 [requires]
@@ -22,5 +21,4 @@ python_version = "3.7"
 
 [scripts]
 dev = "python app.py"
-#dev = "flask run"
 prod = "gunicorn --workers 4 app:create_app() --bind 0.0.0.0:80 --log-syslog --log-level DEBUG"
