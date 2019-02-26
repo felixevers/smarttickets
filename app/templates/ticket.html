@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Ticket</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Roboto', sans-serif;
+        text-align: center;
+      }
+
+      .line {
+        width: 100%;
+        position: relative;
+      }
+
+      .big {
+        font-size: 2rem;
+      }
+
+      #code {
+        position: absolute;
+        bottom: 5%;
+        left: 50%;
+        transform: translate(-50%, 0%);
+      }
+
+      #room {
+        position: absolute;
+        bottom: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Ticket</h1>
+    <div class="line big">
+      {{date}}
+      <br><br>
+      {{price.name}}
+    </div>
+    <br>
+    <br>
+    <div id="room">
+      <h2>
+        Block: {{seat.block+1}}
+        <br>
+        Reihe: {{seat.row+1}}
+      </h2>
+      {% for s in seats %}
+        {% if s.uuid != seat.uuid %}
+          <i class="material-icons">event_seat</i>
+        {% endif %}
+        {% if s.uuid == seat.uuid %}
+          <i class="material-icons big">event_seat</i>
+        {% endif %}
+      {% endfor %}
+    </div>
+    <br>
+    <br>
+    <div id="code">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?data={{uuid}}&size=150x150">
+    </div>
+  </body>
+</html>

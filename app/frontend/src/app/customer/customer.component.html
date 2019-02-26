@@ -50,7 +50,7 @@
         <mat-icon mat-list-icon>arrow_forward</mat-icon>
         <h4 mat-line>Reihe {{ticket.seat.row+1}}</h4>
       </mat-list-item>
-      <mat-list-item class="click success" *ngIf="ticket.paid" [routerLink]="''">
+      <mat-list-item class="click success" *ngIf="ticket.paid"  (click)="goToLink('download/' + ticket.uuid)">
         <mat-icon mat-list-icon>save</mat-icon>
         <h4 mat-line>Ticket-Download</h4>
       </mat-list-item>

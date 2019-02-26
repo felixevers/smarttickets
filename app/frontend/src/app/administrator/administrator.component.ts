@@ -102,17 +102,22 @@ export class AdministratorComponent implements OnInit {
     let instance = this;
 
     if(this.token != null && this.token != "") {
-      instance.http.get(data["endpoint"] + 'administrator/session/', instance.getHeader()).subscribe(resp => {
-        instance.firstname = resp["firstname"];
-        instance.lastname = resp["lastname"];
-        instance.getMeetings();
-        instance.getPrices();
-        instance.getRooms();
-        instance.getCustomers();
-      });
+      instance.init();
     } else {
       this.token = null;
     }
+  }
+
+  init() {
+    let instance = this;
+    instance.http.get(data["endpoint"] + 'administrator/session/', instance.getHeader()).subscribe(resp => {
+      instance.firstname = resp["firstname"];
+      instance.lastname = resp["lastname"];
+      instance.getMeetings();
+      instance.getPrices();
+      instance.getRooms();
+      instance.getCustomers();
+    });
   }
 
   ngOnInit() {
@@ -236,6 +241,8 @@ export class AdministratorComponent implements OnInit {
       } else {
         instance.token = resp["uuid"];
         instance.cookieService.set("token", instance.token);
+
+        instance.init();
       }
     });
   }

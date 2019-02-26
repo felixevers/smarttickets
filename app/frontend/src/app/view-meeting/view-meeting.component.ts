@@ -20,6 +20,8 @@ export class ViewMeetingComponent implements OnInit {
   stop: Date = null;
   stopStr: string = "";
 
+  active: boolean = false;
+
   constructor() {
   }
 
@@ -32,6 +34,10 @@ export class ViewMeetingComponent implements OnInit {
 
     this.stop = new Date(this.meeting.stop * 1000);
     this.stopStr = this.timeConverter(this.stop);
+
+    let now = new Date(Date.now());
+
+    this.active = this.start.getTime() < now.getTime() && this.stop.getTime() > now.getTime();
   }
 
   timeConverter(a) {
@@ -41,7 +47,7 @@ export class ViewMeetingComponent implements OnInit {
     var hour = String("0" + a.getHours()).slice(-2);
     var min = String("0" + a.getMinutes()).slice(-2);
 
-    var time = date + '.' + month + '.' + year + ' um ' + hour + ':' + min + ' Uhr'
+    var time = date + '.' + month + '.' + year + ' um ' + hour + ':' + min + ' Uhr';
 
     return time;
   }

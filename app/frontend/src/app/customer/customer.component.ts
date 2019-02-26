@@ -61,6 +61,10 @@ export class CustomerComponent implements OnInit {
   ngOnInit() {
   }
 
+  goToLink(url: string){
+    window.open(data['endpoint'] + url, "_blank");
+  }
+
   deleteTicket(uuid) {
     let instance = this;
     instance.http.delete(data["endpoint"] + "ticket/" + uuid).subscribe(resp => {

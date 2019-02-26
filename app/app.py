@@ -9,6 +9,7 @@ from resources.room import room_api
 from resources.seat import seat_api
 from resources.ticket import ticket_api
 from resources.administrator import administrator_api
+from resources.download import register_download
 
 from config import config
 from api import db, api
@@ -31,7 +32,7 @@ import os
 
 def create_app() -> Flask:
     frontend = os.path.abspath(config["FRONTEND"])
-    app: Flask = Flask("smarttickets", template_folder=frontend)
+    app: Flask = Flask("smarttickets")
 
     app.config.update(**config)
 
@@ -40,13 +41,14 @@ def create_app() -> Flask:
             CORS(app)
 
         register_render(app)
+        register_download(app)
 
         register_extensions(app)
 
         register_namespaces()
 
         setup_database()
-        
+
     return app
 
 

@@ -11,7 +11,7 @@ def register_render(app: Flask):
     @app.route('/f/')
     def render_index():
         return send_from_directory(config["FRONTEND"], 'index.html')
-        
+
     @app.errorhandler(404)
     def render_all_index(e):
         return send_from_directory(config["FRONTEND"], 'index.html')
