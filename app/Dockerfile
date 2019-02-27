@@ -27,7 +27,7 @@ ADD . /app/
 
 COPY --from=builder /frontend/dist/frontend/ /app/frontend/dist/frontend
 
-RUN apk add gcc musl-dev libffi-dev libressl-dev zlib build-base python-dev py-pip jpeg-dev zlib-dev bash cairo pango gdk-pixbuf py3-cffi py3-pillow py-lxml glib build-base cairo-dev cairo-tools jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev pango-dev
+RUN apk add gcc musl-dev libffi-dev libressl-dev python3-dev zlib build-base py-pip jpeg-dev zlib-dev bash cairo pango gdk-pixbuf py3-cffi py3-pillow py-lxml glib build-base cairo-dev cairo-tools jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev pango-dev
 ENV LIBRARY_PATH=/lib:/usr/lib
 
 RUN pip install pipenv

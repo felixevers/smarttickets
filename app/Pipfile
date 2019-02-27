@@ -13,7 +13,6 @@ gunicorn = "*"
 flask-restplus = "*"
 flask-bcrypt = "*"
 Flask-WeasyPrint = "*"
-weasyprint = "*"
 
 [dev-packages]
 
