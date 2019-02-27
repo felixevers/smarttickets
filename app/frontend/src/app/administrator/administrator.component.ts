@@ -111,12 +111,18 @@ export class AdministratorComponent implements OnInit {
   init() {
     let instance = this;
     instance.http.get(data["endpoint"] + 'administrator/session/', instance.getHeader()).subscribe(resp => {
-      instance.firstname = resp["firstname"];
-      instance.lastname = resp["lastname"];
-      instance.getMeetings();
-      instance.getPrices();
-      instance.getRooms();
-      instance.getCustomers();
+        if(resp["firstname"] != null && resp["lastname"] != null) {
+        instance.firstname = resp["firstname"];
+        instance.lastname = resp["lastname"];
+
+        instance.getMeetings();
+        instance.getPrices();
+        instance.getRooms();
+        instance.getCustomers();
+      } else {
+        instance.cookieService.set("token", "");
+        instance.token = null;
+      }
     });
   }
 
