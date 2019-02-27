@@ -52,6 +52,10 @@ export class MeetingComponent implements OnInit {
 
   private sub: any;
 
+  order1 = '';
+  order2 = '';
+  order3 = '';
+
   pricesKeys() {
     return Object.keys(this.prices);
   }
@@ -60,6 +64,16 @@ export class MeetingComponent implements OnInit {
 
   ngOnInit() {
     let instance = this;
+
+    instance.getSetting('order1', function(value) {
+      instance.order1 = value;
+    });
+    instance.getSetting('order2', function(value) {
+      instance.order2 = value;
+    });
+    instance.getSetting('order3', function(value) {
+      instance.order3 = value;
+    });
 
     this.sub = this.route.params.subscribe(params => {
         instance.uuid = params['uuid'];
@@ -129,6 +143,12 @@ export class MeetingComponent implements OnInit {
             });
           }
         });
+    });
+  }
+
+  getSetting(key, callback) {
+    this.http.get(data["endpoint"] + 'setting/' + key).subscribe(resp => {
+      callback(resp["value"]);
     });
   }
 

@@ -1,3 +1,9 @@
+<mat-card>
+  <mat-card-content>
+    {{intro}}
+  </mat-card-content>
+</mat-card>
+
 <app-view-meeting *ngFor="let meeting of meetings;" [customer]="customer" [meeting]="meeting"></app-view-meeting>
 
 <mat-card *ngIf="meetings.length == 0">

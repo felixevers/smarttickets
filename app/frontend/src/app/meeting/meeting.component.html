@@ -26,6 +26,8 @@
     <br>
     <mat-divider></mat-divider>
     <div id="step-1" *ngIf="step == 1">
+      {{order1}}
+      <br><br>
       <div [style.width.%]="calcBlocks()" *ngFor="let block of room; let i = index" class="block">
         <div *ngFor="let row of block; let ri = index" class="row">
           <sup>{{ri+1}} </sup>
@@ -41,6 +43,8 @@
       <div class="map"><mat-icon>accessible</mat-icon> = <span>Zugänglich</span></div>
     </div>
     <div id="step-2" *ngIf="step == 2">
+      {{order2}}
+      <br><br>
       <form>
         <div *ngFor="let selectedSeat of selected; let i = index" class="price">
           <div><sub>{{i+1}}. Sitz</sub></div>
@@ -81,8 +85,7 @@
       </form>
     </div>
     <div id="step-3" *ngIf="step == 3">
-      Sie haben Ihre Reservierung erfolgreich abgeschlossen.
-      Als nächstes erhalten Sie eine E-Mail mit einer Bestätigung.
+      {{order3}}
       <br><br>
       <button mat-stroked-button *ngIf="customer == null" [routerLink]="'/customer/' + customerToken">Zur Kunden-Übersicht</button>
       <button mat-stroked-button *ngIf="customer != null" [routerLink]="'/customer/' + customer">Zurück zur Kunden-Übersicht</button>
