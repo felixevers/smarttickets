@@ -10,6 +10,7 @@ from models.customer import CustomerModel
 from models.setting import SettingModel
 from session import require_session
 from config import config
+from flask_mail import Mail, Message
 
 ticket_api = Namespace('ticket')
 

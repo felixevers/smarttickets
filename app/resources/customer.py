@@ -5,6 +5,7 @@ from models.customer import CustomerModel
 from models.setting import SettingModel
 from config import config
 from session import require_session
+from flask_mail import Mail, Message
 
 customer_api = Namespace('customer')
 
