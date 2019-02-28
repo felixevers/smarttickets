@@ -20,6 +20,15 @@ to_load: Union[str, Tuple[str, any]] = [
     ("SWAGGER_UI_JSONEDITOR", True),
     ("RESTPLUS_MASK_SWAGGER", False),
 
+    # flask-mail
+    ("MAIL", False),
+    ("MAIL_SERVER", "localhost"),
+    ("MAIL_PORT", 25),
+    ("MAIL_USE_TLS", False),
+    ("MAIL_USE_SSL", False),
+    ("MAIL_USERNAME", "smarttickets"),
+    ("MAIL_PASSWORD", "smarttickets"),
+
     # frontend rendering
     ("FRONTEND", "./frontend/dist/frontend"),
 ]

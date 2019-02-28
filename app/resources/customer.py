@@ -1,7 +1,9 @@
 from flask_restplus import Namespace, Resource, fields, abort
-from api import api, db
+from api import api, db, mail
 from flask import request
 from models.customer import CustomerModel
+from models.setting import SettingModel
+from config import config
 from session import require_session
 
 customer_api = Namespace('customer')
@@ -57,6 +59,21 @@ class CustomerCreateService(Resource):
         place = request.json["place"]
 
         customer: CustomerModel = CustomerModel.create(firstname, lastname, email, address, place)
+
+        if config["MAIL"]:
+            msg_title = SettingModel.query.filter_by(key="customer_mail_title").first().value
+            msg_content = SettingModel.query.filter_by(key="customer_mail_content").first().value
+
+            msg = Message(msg_title)
+
+            customer_url = str(request.host_url) + 'f/customer/' + customer.uuid
+
+            msg_content = msg_content.replace('<name>', firstname + ' ' + lastname)
+            msg_content = msg_content.replace('<customer>', customer_url)
+
+            msg.html = msg_content
+
+            mail.send(msg)
 
         return customer.serialize
 

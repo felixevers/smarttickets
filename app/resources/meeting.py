@@ -62,7 +62,6 @@ responseSchema = {
     })
 }
 
-# TODO require a session of an administrator
 @meeting_api.route('/')
 @meeting_api.doc('general meeting actions')
 class GeneralMeetingService(Resource):

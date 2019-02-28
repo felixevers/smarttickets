@@ -13,7 +13,7 @@ COPY ./frontend/ .
 RUN $(npm bin)/ng build --prod --build-optimizer --base-href /f/
 
 
-FROM python:3.7-alpine
+FROM python:3.7-slim
 
 EXPOSE 80
 
@@ -27,10 +27,11 @@ ADD . /app/
 
 COPY --from=builder /frontend/dist/frontend/ /app/frontend/dist/frontend
 
-RUN apk add gcc musl-dev libffi-dev libressl-dev wkhtmltopdf
+#RUN apk add --update gcc musl-dev libffi-dev libressl-dev py-pdfkit
+RUN apt-get update && apt-get install -y gcc build-essential libpq-dev libffi-dev wkhtmltopdf
 
 RUN pip install pipenv
 RUN pipenv run pip install pip==18.0
 RUN pipenv install
 
-CMD pipenv run prod
+CMD pipenv run dev

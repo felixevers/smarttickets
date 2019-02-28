@@ -13,6 +13,7 @@ gunicorn = "*"
 flask-restplus = "*"
 flask-bcrypt = "*"
 pdfkit = "*"
+Flask-Mail = "*"
 
 [dev-packages]
 

@@ -1,5 +1,5 @@
 from flask_restplus import Namespace, Resource, fields, abort
-from api import api, db
+from api import api, db, mail
 from flask import request
 from models.ticket import TicketModel
 from models.meeting import MeetingModel
@@ -7,7 +7,9 @@ from models.seat import SeatModel
 from models.room import RoomModel
 from models.price import PriceModel
 from models.customer import CustomerModel
+from models.setting import SettingModel
 from session import require_session
+from config import config
 
 ticket_api = Namespace('ticket')
 
@@ -119,6 +121,21 @@ class SpecificPriceService(Resource):
         ticket.paid = pay
 
         db.session.commit()
+
+        if config["MAIL"]:
+            msg_title = SettingModel.query.filter_by(key="ticket_mail_title").first().value
+            msg_content = SettingModel.query.filter_by(key="ticket_mail_content").first().value
+
+            msg = Message(msg_title)
+
+            ticket_url = str(request.host_url) + 'download/' + ticket.uuid
+
+            msg_content = msg_content.replace('<name>', firstname + ' ' + lastname)
+            msg_content = msg_content.replace('<download>', ticket_url)
+
+            msg.html = msg_content
+
+            mail.send(msg)
 
         return ticket.serialize
 

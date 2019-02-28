@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_mail import Mail
 
 from resources.render import register_render
 from resources.customer import customer_api
@@ -12,7 +13,7 @@ from resources.administrator import administrator_api
 from resources.download import register_download
 
 from config import config
-from api import db, api
+from api import db, api, mail
 from flask_cors import CORS
 from time import sleep
 
@@ -40,6 +41,9 @@ def create_app() -> Flask:
         if config["CROSS_ORIGIN"]:
             CORS(app)
 
+        if config["MAIL"]:
+            mail.init_app(app)
+
         register_render(app)
         register_download(app)
 
@@ -48,7 +52,7 @@ def create_app() -> Flask:
         register_namespaces()
 
         setup_database()
-        
+
 
     return app
 
