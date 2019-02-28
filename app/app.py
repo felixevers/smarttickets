@@ -79,6 +79,7 @@ def setup_database() -> None:
             db.create_all()
             break
         except Exception as e:
+            raise e
             sleep(2)
 
 
