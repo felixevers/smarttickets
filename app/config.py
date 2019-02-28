@@ -50,5 +50,3 @@ for key in to_load:
 config["SQLALCHEMY_DATABASE_URI"]: str = \
     f"mysql+pymysql://{config['MYSQL_USERNAME']}:{config['MYSQL_PASSWORD']}@" \
     f"{config['MYSQL_HOSTNAME']}:{config['MYSQL_PORT']}/{config['MYSQL_DATABASE']}"
-
-print(config)
