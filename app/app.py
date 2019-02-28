@@ -48,6 +48,7 @@ def create_app() -> Flask:
         register_namespaces()
 
         setup_database()
+        
 
     return app
 

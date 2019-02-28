@@ -12,12 +12,12 @@ PyMySQL = "*"
 gunicorn = "*"
 flask-restplus = "*"
 flask-bcrypt = "*"
-Flask-WeasyPrint = "*"
+pdfkit = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"
 
 [scripts]
 dev = "python app.py"

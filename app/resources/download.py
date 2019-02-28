@@ -1,5 +1,5 @@
-from flask import Flask, render_template, url_for
-from flask_weasyprint import HTML, render_pdf
+from flask import Flask, render_template, make_response
+import pdfkit
 from config import config
 from api import api, db
 from models.ticket import TicketModel
@@ -25,6 +25,14 @@ def register_download(app: Flask):
                 date = datetime.fromtimestamp(meeting.date).strftime('%d.%m.%Y um %H:%M Uhr')
 
                 html = render_template('ticket.html', uuid=uuid, date=date, seats=seats, seat=seat, price=price)
-                return render_pdf(HTML(string=html))
+
+                pdf = pdfkit.from_string(html, False)
+
+                response = make_response(pdf)
+
+                response.headers['Content-Type'] = 'application/pdf'
+                response.headers['Content-Disposition'] = 'attachment; filename=ticket' + tickte.uuid
+
+                return response
 
         return '', 404
