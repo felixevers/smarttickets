@@ -34,4 +34,4 @@ RUN pip install pipenv
 RUN pipenv run pip install pip==18.0
 RUN pipenv install
 
-CMD pipenv run dev
+CMD pipenv run prod
