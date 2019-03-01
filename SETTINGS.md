@@ -18,7 +18,8 @@
 
 ## mail variables
 
-The mail variables can be used in the setting value.  
+The mail variables can be used in the setting value like this:
+`<variable>`  
 
 ### customer
 
@@ -26,8 +27,8 @@ The mail variables can be used in the setting value.
 
 | Variables                 | Description                                     |
 | ------------------------- | ----------------------------------------------- |
-| <name>                    | full name of target customer                    |
-| <customer>                | link to the customer dashboard                  |
+| name                      | full name of target customer                    |
+| customer                  | link to the customer dashboard                  |
 
 ### ticket
 
@@ -35,5 +36,5 @@ The mail variables can be used in the setting value.
 
 | Variables                 | Description                                     |
 | ------------------------- | ----------------------------------------------- |
-| <name>                    | full name of target customer                    |
-| <download>                | link to download the ticket                     |
+| name                      | full name of target customer                    |
+| download                  | link to download the ticket                     |
