@@ -6,7 +6,7 @@ You are able to use the docker image from https://hub.docker.com/r/smarttickets/
 `docker pull smarttickets/smarttickets`  
 If you want to use docker-compose:   
 `docker-compose up -d`  
-For development purpose you can use the build docker-compose-file:
+For development purpose you can use the build docker-compose-file:  
 `docker-compose -f docker-compose-build.yml up -d`
 
 ## Models

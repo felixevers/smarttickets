@@ -27,12 +27,14 @@
     <mat-divider></mat-divider>
     <div id="step-1" *ngIf="step == 1">
       <br><br>
-      <h3 *ngFor="let line of order1.split('\n')">
-        {{line}}
-      </h3>
-      <br><br>
-      <mat-divider></mat-divider>
-      <br><br>
+      <div *ngIf="order1 != ''">
+        <h3 *ngFor="let line of order1.split('\n')">
+          {{line}}
+        </h3>
+        <br><br>
+        <mat-divider></mat-divider>
+        <br><br>
+      </div>
       <div [style.width.%]="calcBlocks()" *ngFor="let block of room; let i = index" class="block">
         <div *ngFor="let row of block; let ri = index" class="row">
           <sup>{{ri+1}} </sup>
@@ -51,14 +53,16 @@
     </div>
     <div id="step-2" *ngIf="step == 2">
       <br><br>
-      <div style="text-align: left;">
-        <h3 *ngFor="let line of order2.split('\n')">
-          {{line}}
-        </h3>
+      <div *ngIf="order2 != ''">
+        <div style="text-align: left;">
+          <h3 *ngFor="let line of order2.split('\n')">
+            {{line}}
+          </h3>
+        </div>
+        <br><br>
+        <mat-divider></mat-divider>
+        <br>
       </div>
-      <br><br>
-      <mat-divider></mat-divider>
-      <br>
       <form>
         <div *ngFor="let selectedSeat of selected; let i = index" class="price">
           <div><sub>{{i+1}}. Sitz</sub></div>
@@ -100,14 +104,16 @@
     </div>
     <div id="step-3" *ngIf="step == 3">
       <br><br>
-      <div style="text-align: left;">
-        <h3 *ngFor="let line of order3.split('\n')">
-          {{line}}
-        </h3>
+      <div *ngIf="order3 != ''">
+        <div style="text-align: left;">
+          <h3 *ngFor="let line of order3.split('\n')">
+            {{line}}
+          </h3>
+        </div>
+        <br><br>
+        <mat-divider></mat-divider>
+        <br><br>
       </div>
-      <br><br>
-      <mat-divider></mat-divider>
-      <br><br>
       <button mat-stroked-button *ngIf="customer == null" [routerLink]="'/customer/' + customerToken">Zur Kunden-Übersicht</button>
       <button mat-stroked-button *ngIf="customer != null" [routerLink]="'/customer/' + customer">Zurück zur Kunden-Übersicht</button>
     </div>

@@ -61,8 +61,6 @@ class CustomerCreateService(Resource):
 
         customer: CustomerModel = CustomerModel.create(firstname, lastname, email, address, place)
 
-        print(config["MAIL_ENABLED"])
-
         if config["MAIL_ENABLED"]:
             msg_title = SettingModel.query.filter_by(key="customer_mail_title").first().value
             msg_content = SettingModel.query.filter_by(key="customer_mail_content").first().value
@@ -72,7 +70,8 @@ class CustomerCreateService(Resource):
             customer_url = str(request.host_url) + 'f/customer/' + customer.uuid
 
             msg_content = msg_content.replace('<name>', firstname + ' ' + lastname)
-            msg_content = msg_content.replace('<customer>', customer_url)
+            msg_content = msg_content.replace('<customer>', '<a href="' + customer_url + '">' + customer_url + '</a>')
+            msg_content = msg_content.replace('\n', '<br>')
 
             msg.html = msg_content
 
