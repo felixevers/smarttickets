@@ -285,7 +285,9 @@
                 <input matInput type="number" placeholder="Row" [(ngModel)]="seatRow" [ngModelOptions]="{standalone: true}" required>
               </mat-form-field>
               <br>
-              <mat-checkbox [(ngModel)]="seatAccessible" [ngModelOptions]="{standalone: true}" required>Accessible</mat-checkbox>
+              <mat-form-field>
+                <input matInput type="number" placeholder="type" [(ngModel)]="seatType" [ngModelOptions]="{standalone: true}" required>
+              </mat-form-field>              
               <br>
               <br>
               <br>

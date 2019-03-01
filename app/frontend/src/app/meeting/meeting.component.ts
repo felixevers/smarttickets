@@ -125,13 +125,23 @@ export class MeetingComponent implements OnInit {
 
                         let icon = "event_seat";
 
-                        if(seat.accessible) {
+                        if(seat.type == 1) {
+                          icon = "";
+                        } else
+                        if(seat.type == 2) {
+                          icon = "texture";
+                        } else
+                        if(seat.type == 3) {
+                          icon = "texture";
+                        } else
+                        if(seat.type == 4) {
                           icon = "accessible";
                         }
 
                         instance.room[block][row].push({
                           "uuid": seat["uuid"],
                           "icon": icon,
+                          "type": seat["type"],
                           "reserved": reserved.includes(seat["uuid"]),
                           "price": prices[0].uuid,
                         });
@@ -157,7 +167,7 @@ export class MeetingComponent implements OnInit {
   }
 
   select(seat) {
-    if(!seat.reserved) {
+    if(seat.type == 0 || seat.type == 4) {
       if(this.selectedSeat(seat)) {
         this.selected.splice(this.selected.indexOf(seat), 1);
       } else {

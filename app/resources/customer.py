@@ -61,7 +61,9 @@ class CustomerCreateService(Resource):
 
         customer: CustomerModel = CustomerModel.create(firstname, lastname, email, address, place)
 
-        if config["MAIL"]:
+        print(config["MAIL_ENABLED"])
+
+        if config["MAIL_ENABLED"]:
             msg_title = SettingModel.query.filter_by(key="customer_mail_title").first().value
             msg_content = SettingModel.query.filter_by(key="customer_mail_content").first().value
 

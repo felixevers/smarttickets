@@ -62,7 +62,7 @@ export class AdministratorComponent implements OnInit {
 
   seatRow;
   seatBlock;
-  seatAccessible;
+  seatType;
 
   settingKey: string = '';
   settingValue: string = '';
@@ -337,13 +337,13 @@ export class AdministratorComponent implements OnInit {
       "room": instance.selectedRoom.uuid,
       "block": instance.seatBlock - 1,
       "row": instance.seatRow - 1,
-      "accessible": instance.seatAccessible,
+      "type": instance.seatType,
     }, instance.getHeader()).subscribe(resp => {
     });
   }
 
   private disableSeat() {
-    return this.seatBlock == null || this.seatRow == null || this.seatAccessible == null;
+    return this.seatBlock == null || this.seatRow == null || this.seatType == null;
   }
 
   private getRooms() {

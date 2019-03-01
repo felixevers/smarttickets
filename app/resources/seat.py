@@ -12,7 +12,7 @@ requestSchema = {
                               description="uuid of room"),
         "block": fields.Integer(required=True),
         "row": fields.Integer(required=True),
-        "accessible": fields.Boolean(required=True),
+        "type": fields.Integer(required=True),
     }),
     "SpecificSeatModel": api.model("specific seat", {
         "uuid": fields.String(required=True, example="12abc34d5efg67hi89j1klm2nop3pqrs",
@@ -33,7 +33,7 @@ responseSchema = {
         "block": fields.Integer(required=True),
         "row": fields.Integer(required=True),
         "column": fields.Integer(required=True),
-        "accessible": fields.Boolean(required=True),
+        "type": fields.Integer(required=True),
     }),
     "SuccessModel": api.model("success", {
         "result": fields.Boolean(required=True)
@@ -52,9 +52,9 @@ class GeneralSeatService(Resource):
         room = request.json["room"]
         block = request.json["block"]
         row = request.json["row"]
-        accessible = request.json["accessible"]
+        type = request.json["type"]
 
-        seat: SeatModel = SeatModel.create(room, block, row, accessible)
+        seat: SeatModel = SeatModel.create(room, block, row, type)
 
         return seat.serialize
 
@@ -70,6 +70,7 @@ class GeneralSeatService(Resource):
         uuid = request.json["room"]
 
         seats: list = SeatModel.query.filter_by(room_id=uuid).all()
+        seats = sorted(seats, key=lambda x: x.id)
 
         return {'seats': [s.serialize for s in seats]}
 

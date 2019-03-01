@@ -21,7 +21,7 @@ to_load: Union[str, Tuple[str, any]] = [
     ("RESTPLUS_MASK_SWAGGER", False),
 
     # flask-mail
-    ("MAIL", False),
+    ("MAIL_ENABLED", False),
     ("MAIL_SERVER", "localhost"),
     ("MAIL_PORT", 25),
     ("MAIL_USE_TLS", False),

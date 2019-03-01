@@ -18,13 +18,32 @@ mat-icon {
   padding: 2.0%;
 }
 
+
 .reserved {
   color: gray;
+}
+
+.stage {
+  color: red;
+}
+
+.technology {
+  color: black;
+}
+
+.invisible {
+  cursor: default;
+  color: white;
+}
+
+.invisible:HOVER {
+  cursor: default;
 }
 
 .selected {
   color: blue;
 }
+
 
 .map {
   font-size: 1rem;

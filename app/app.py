@@ -41,7 +41,7 @@ def create_app() -> Flask:
         if config["CROSS_ORIGIN"]:
             CORS(app)
 
-        if config["MAIL"]:
+        if config["MAIL_ENABLED"]:
             mail.init_app(app)
 
         register_render(app)
@@ -79,7 +79,6 @@ def setup_database() -> None:
             db.create_all()
             break
         except Exception as e:
-            raise e
             sleep(2)
 
 

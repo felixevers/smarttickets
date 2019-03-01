@@ -71,21 +71,27 @@ class GeneralTicketService(Resource):
         meeting_uuid = request.json["meeting"]
         customer_uuid = request.json["customer"]
 
-        price: PriceModel = PriceModel.query.filter_by(uuid=price_uuid).first()
         seat: SeatModel = SeatModel.query.filter_by(uuid=seat_uuid).first()
-        meeting: MeetingModel = MeetingModel.query.filter_by(uuid=meeting_uuid).first()
-        customer: CustomerModel = CustomerModel.query.filter_by(uuid=customer_uuid).first()
 
-        if TicketModel.query.filter_by(seat_id=seat.uuid, meeting_id=meeting.uuid).first():
-            return { "result": False }
+        if seat.type == 0:
+            price: PriceModel = PriceModel.query.filter_by(uuid=price_uuid).first()
+            meeting: MeetingModel = MeetingModel.query.filter_by(uuid=meeting_uuid).first()
+            customer: CustomerModel = CustomerModel.query.filter_by(uuid=customer_uuid).first()
 
-        ticket: TicketModel = TicketModel.create(customer, meeting, seat, price)
+            if TicketModel.query.filter_by(seat_id=seat.uuid, meeting_id=meeting.uuid).first():
+                return { "result": False }
 
-        seat.reserved = True
+            ticket: TicketModel = TicketModel.create(customer, meeting, seat, price)
 
-        db.session.commit()
+            seat.reserved = True
 
-        return ticket.serialize
+            db.session.commit()
+
+            return ticket.serialize
+
+        return {
+            "result": False
+        }
 
     @ticket_api.doc('get reserved tickets')
     @ticket_api.expect(requestSchema["SpecificMeetingModel"])
@@ -94,9 +100,18 @@ class GeneralTicketService(Resource):
 
         meeting: MeetingModel = MeetingModel.query.filter_by(uuid=meeting_uuid).first()
 
-        tickets: TicketModel = TicketModel.query.filter_by(meeting_id=meeting.uuid).all()
+        tickets = TicketModel.query.filter_by(meeting_id=meeting.uuid).all()
 
-        return {"reserved": [t.seat_id for t in tickets]}
+        invisible = SeatModel.query.filter_by(room_id=meeting.room, type=1)
+        stage = SeatModel.query.filter_by(room_id=meeting.room, type=2)
+        technology = SeatModel.query.filter_by(room_id=meeting.room, type=3)
+
+        return {
+            "reserved": [t.seat_id for t in tickets],
+            "invisible": [s.uuid for s in invisible],
+            "stage": [s.uuid for s in stage],
+            "technology": [s.uuid for s in technology],
+        }
 
 @ticket_api.route('/<string:uuid>')
 @ticket_api.doc('specific ticket actions')
@@ -123,7 +138,7 @@ class SpecificPriceService(Resource):
 
         db.session.commit()
 
-        if config["MAIL"]:
+        if config["MAIL_ENABLED"]:
             msg_title = SettingModel.query.filter_by(key="ticket_mail_title").first().value
             msg_content = SettingModel.query.filter_by(key="ticket_mail_content").first().value
 

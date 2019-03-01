@@ -1,6 +1,16 @@
 <mat-card>
   <mat-card-content>
-    {{intro}}
+    <h3 *ngFor="let line of intro.split('\n')">
+      {{line}}
+    </h3>
+    <br>
+    <div *ngIf="banner != ''">
+      <mat-divider></mat-divider>
+      <br>
+      <br>
+      <img [src]="banner">
+      <br>
+    </div>
   </mat-card-content>
 </mat-card>
 

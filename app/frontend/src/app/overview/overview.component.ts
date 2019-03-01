@@ -19,6 +19,7 @@ export class OverviewComponent implements OnInit {
   meetings = [];
 
   intro = '';
+  banner = '';
 
   constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {
     let instance = this;
@@ -39,6 +40,10 @@ export class OverviewComponent implements OnInit {
 
     this.getSetting('intro', function(value) {
       instance.intro = value;
+    });
+
+    this.getSetting('banner', function(value) {
+      instance.banner = value;
     });
   }
 
