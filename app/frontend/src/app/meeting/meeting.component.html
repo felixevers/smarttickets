@@ -1,4 +1,5 @@
-<mat-card>
+<div id="meeting">
+  <mat-card>
   <mat-card-header>
     <mat-card-title><h2>{{name}}</h2></mat-card-title>
     <mat-card-subtitle>{{description}}</mat-card-subtitle>
@@ -24,7 +25,8 @@
       </mat-list-item>
     </mat-list>
     <br>
-    <mat-divider></mat-divider>
+  </mat-card-content>
+</mat-card>
     <div id="step-1" *ngIf="step == 1">
       <br><br>
       <div *ngIf="order1 != ''">
@@ -35,19 +37,22 @@
         <mat-divider></mat-divider>
         <br><br>
       </div>
-      <div [style.width.%]="calcBlocks()" *ngFor="let block of room; let i = index" class="block">
-        <div *ngFor="let row of block; let ri = index" class="row">
-          <sup>{{ri+1}} </sup>
-          <mat-icon *ngFor="let seat of row; let si = index" [class.invisible]="seat.type == 1" [class.stage]="seat.type == 2" [class.technology]="seat.type == 3" [class.reserved]="seat.reserved" [class.selected]="selectedSeat(seat)" (click)="select(seat)">
-            {{seat.icon}}
-          </mat-icon>
-          <br>
+      <div>
+        <div [style.width.%]="calcBlocks()" *ngFor="let block of room; let i = index" class="block">
+          {{clearOffset()}}
+          <div *ngFor="let row of block; let ri = index" class="row">
+            <sup *ngIf="calcOffset(row)">{{ri+1-offset}} </sup>
+            <mat-icon *ngFor="let seat of row; let si = index" [class.invisible]="seat.type == 1" [class.stage]="seat.type == 2" [class.technology]="seat.type == 3" [class.reserved]="seat.reserved" [class.selected]="selectedSeat(seat)" (click)="select(seat)">
+              {{seat.icon}}
+            </mat-icon>
+            <br>
+          </div>
         </div>
       </div>
       <br>
       <div class="map"><mat-icon>event_seat</mat-icon> = <span>Frei</span></div>
       <div class="map"><mat-icon class="reserved">event_seat</mat-icon> = <span>Reserviert</span></div>
-      <div class="map"><mat-icon class="stage">texture</mat-icon> = <span>Bühne</span></div>
+      <!--<div class="map"><mat-icon class="stage">texture</mat-icon> = <span>Bühne</span></div>-->
       <div class="map"><mat-icon class="technology">texture</mat-icon> = <span>Technik</span></div>
       <div class="map"><mat-icon>accessible</mat-icon> = <span>Zugänglich</span></div>
     </div>
@@ -117,9 +122,7 @@
       <button mat-stroked-button *ngIf="customer == null" [routerLink]="'/customer/' + customerToken">Zur Kunden-Übersicht</button>
       <button mat-stroked-button *ngIf="customer != null" [routerLink]="'/customer/' + customer">Zurück zur Kunden-Übersicht</button>
     </div>
-  </mat-card-content>
-</mat-card>
-
+</div>
 <mat-toolbar color="primary" id="bottom-toolbar" *ngIf="step < 3">
   {{selected.length}} Sitze &nbsp;<span *ngIf="step == 2">für {{amount}} €</span>
   <button mat-fab [disabled]="buttonEnabled()" (click)="continue()" style="postition: absolute; transform: translate(50%, -50%); right: 10%; color: rgb(255,255,255);">

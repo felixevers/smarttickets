@@ -16,12 +16,13 @@ class SeatModel(db.Model):
 
     @property
     def serialize(self):
-        dict = self.__dict__
-
-        key = '_sa_instance_state'
-
-        if key in dict:
-            del dict[key]
+        dict = {
+            "uuid": self.uuid,
+            "room_id": self.room_id,
+            "block": self.block,
+            "row": self.row,
+            "type": self.type,
+        }
 
         return dict
 

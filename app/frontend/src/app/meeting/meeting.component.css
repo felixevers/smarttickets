@@ -11,24 +11,39 @@ mat-icon {
 .block {
   float: left;
   text-align: center;
-  margin-bottom: 5%;
+  margin-bottom: 15%;
 }
 
 .row {
-  padding: 2.0%;
+  padding: 0.25%;
 }
 
 
 .reserved {
   color: gray;
+  cursor: default;
+}
+
+.reserved:HOVER {
+  cursor: default;
 }
 
 .stage {
   color: red;
+  cursor: default;
+}
+
+.stage:HOVER {
+  cursor: default;
 }
 
 .technology {
   color: black;
+  cursor: default;
+}
+
+.technology:HOVER {
+  cursor: default;
 }
 
 .invisible {
@@ -50,7 +65,7 @@ mat-icon {
 }
 
 mat-card {
-  margin-bottom: 5%;
+  margin-bottom: 2.5%;
 }
 
 #bottom-toolbar {
@@ -105,8 +120,4 @@ mat-card {
 
 .time-list-icon {
   color: rgb(33,33,33);
-}
-
-mat-card {
-  margin-bottom: 50%;
 }

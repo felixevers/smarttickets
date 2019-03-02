@@ -11,6 +11,7 @@ from models.setting import SettingModel
 from session import require_session
 from config import config
 from flask_mail import Mail, Message
+from datetime import datetime
 
 ticket_api = Namespace('ticket')
 
@@ -74,20 +75,24 @@ class GeneralTicketService(Resource):
         seat: SeatModel = SeatModel.query.filter_by(uuid=seat_uuid).first()
 
         if seat.type == 0:
-            price: PriceModel = PriceModel.query.filter_by(uuid=price_uuid).first()
             meeting: MeetingModel = MeetingModel.query.filter_by(uuid=meeting_uuid).first()
-            customer: CustomerModel = CustomerModel.query.filter_by(uuid=customer_uuid).first()
 
-            if TicketModel.query.filter_by(seat_id=seat.uuid, meeting_id=meeting.uuid).first():
-                return { "result": False }
+            now = int(datetime.now().strftime("%s"))
 
-            ticket: TicketModel = TicketModel.create(customer, meeting, seat, price)
+            if meeting.start < now and now < meeting.stop:
+                price: PriceModel = PriceModel.query.filter_by(uuid=price_uuid).first()
+                customer: CustomerModel = CustomerModel.query.filter_by(uuid=customer_uuid).first()
 
-            seat.reserved = True
+                if TicketModel.query.filter_by(seat_id=seat.uuid, meeting_id=meeting.uuid).first():
+                    return { "result": False }
 
-            db.session.commit()
+                ticket: TicketModel = TicketModel.create(customer, meeting, seat, price)
 
-            return ticket.serialize
+                seat.reserved = True
+
+                db.session.commit()
+
+                return ticket.serialize
 
         return {
             "result": False

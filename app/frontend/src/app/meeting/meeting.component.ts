@@ -56,6 +56,8 @@ export class MeetingComponent implements OnInit {
   order2 = '';
   order3 = '';
 
+  offset = 0;
+
   pricesKeys() {
     return Object.keys(this.prices);
   }
@@ -156,6 +158,42 @@ export class MeetingComponent implements OnInit {
     });
   }
 
+  calcBreak() {
+    let max = 0;
+
+    this.room.forEach(block => {
+      if(max < block.length) {
+        max = block.length;
+      }
+    });
+
+    return max;
+  }
+
+  clearOffset() {
+    this.offset = 0;
+  }
+
+  calcOffset(row) {
+    let stage = true;
+
+    if(row != null) {
+      row.forEach(seat => {
+        if(seat != null && seat["type"] != 2) {
+          stage = false;
+        }
+      });
+
+      if(stage) {
+        this.offset++;
+      }
+
+      return !stage;
+    } else {
+      return false;
+    }
+  }
+
   getSetting(key, callback) {
     this.http.get(data["endpoint"] + 'setting/' + key).subscribe(resp => {
       callback(resp["value"]);
@@ -167,7 +205,7 @@ export class MeetingComponent implements OnInit {
   }
 
   select(seat) {
-    if(seat.type == 0 || seat.type == 4) {
+    if((seat.type == 0 || seat.type == 4) && !seat["reserved"]) {
       if(this.selectedSeat(seat)) {
         this.selected.splice(this.selected.indexOf(seat), 1);
       } else {
