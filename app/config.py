@@ -31,6 +31,9 @@ to_load: Union[str, Tuple[str, any]] = [
 
     # frontend rendering
     ("FRONTEND", "./frontend/dist/frontend"),
+
+    # timezone
+    ("TIMEZONE", "Europe/Berlin"),
 ]
 
 # the final configuration dict

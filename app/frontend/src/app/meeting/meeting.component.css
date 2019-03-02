@@ -65,7 +65,7 @@ mat-icon {
 }
 
 mat-card {
-  margin-bottom: 2.5%;
+  margin-bottom: 30%;
 }
 
 #bottom-toolbar {
@@ -120,4 +120,12 @@ mat-card {
 
 .time-list-icon {
   color: rgb(33,33,33);
+}
+
+#overflow {
+  overflow: scroll;
+}
+
+#room {
+  width: 2050px;
 }

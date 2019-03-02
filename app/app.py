@@ -38,6 +38,9 @@ def create_app() -> Flask:
     app.config.update(**config)
 
     with app.app_context():
+        if config["TIMEZONE"]:
+            os.environ['TZ'] = config["TIMEZONE"]
+
         if config["CROSS_ORIGIN"]:
             CORS(app)
 
