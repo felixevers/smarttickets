@@ -24,6 +24,7 @@
       </mat-list-item>
     </mat-list>
     <br>
+    <mat-divider></mat-divider>
     <div id="step-1" *ngIf="step == 1">
       <br><br>
       <div *ngIf="order1 != ''">
@@ -47,6 +48,7 @@
             </div>
           </div>
         </div>
+        <mat-divider></mat-divider>
       </div>
       <br>
       <div class="map"><mat-icon>event_seat</mat-icon> = <span>Frei</span></div>
@@ -95,7 +97,7 @@
             <input matInput placeholder="Straße" [(ngModel)]="street" [ngModelOptions]="{standalone: true}" required>
           </mat-form-field>
           <mat-form-field class="input">
-            <input matInput type="number" placeholder="Hausnummer" [(ngModel)]="housenumber" [ngModelOptions]="{standalone: true}" required>
+            <input matInput placeholder="Hausnummer" [(ngModel)]="housenumber" [ngModelOptions]="{standalone: true}" required>
           </mat-form-field>
           <mat-form-field class="input">
             <input matInput placeholder="Ort" [(ngModel)]="place" [ngModelOptions]="{standalone: true}" required>
