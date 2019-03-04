@@ -74,8 +74,9 @@ class CustomerCreateService(Resource):
 
             customer_url = str(request.host_url) + 'f/customer/' + customer.uuid
 
-            msg_content = msg_content.replace('<name>', firstname + ' ' + lastname)
-            msg_content = msg_content.replace('<customer>', '<a href="' + customer_url + '">' + customer_url + '</a>')
+            msg_content = msg_content.replace('{{name}}', customer.firstname + ' ' + customer.lastname)
+            msg_content = msg_content.replace('{{customer}}', '<a href="' + customer_url + '">' + customer_url + '</a>')
+            msg_content = msg_content.replace('{{img}}', '<img src="' + img +'">')
             msg_content = msg_content.replace('\n', '<br>')
 
             msg.html = msg_content

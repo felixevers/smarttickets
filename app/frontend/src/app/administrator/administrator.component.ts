@@ -108,6 +108,10 @@ export class AdministratorComponent implements OnInit {
     }
   }
 
+  goToLink(url: string){
+    window.open(data['endpoint'] + url, "_blank");
+  }
+
   init() {
     let instance = this;
     instance.http.get(data["endpoint"] + 'administrator/session/', instance.getHeader()).subscribe(resp => {
@@ -198,11 +202,16 @@ export class AdministratorComponent implements OnInit {
   paySelected(pay) {
     let instance = this;
 
+    var uuids = [];
+
     instance.selectedCustomerSelectedTickets.selected.forEach(ticket => {
-      instance.http.post(data["endpoint"] + 'ticket/' + ticket.uuid, {
-        "pay": pay
-      }, instance.getHeader()).subscribe(resp => {
-      });
+      uuids.push(ticket["uuid"]);
+    });
+
+    instance.http.post(data["endpoint"] + 'ticket/pay/', {
+      "tickets": uuids,
+      "pay": pay,
+    }, instance.getHeader()).subscribe(resp => {
     });
 
     instance.selectedCustomer = null;

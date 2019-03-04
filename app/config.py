@@ -28,6 +28,7 @@ to_load: Union[str, Tuple[str, any]] = [
     ("MAIL_USE_SSL", False),
     ("MAIL_USERNAME", "smarttickets"),
     ("MAIL_PASSWORD", "smarttickets"),
+    ("MAIL_DEFAULT_SENDER", "smarttickets"),
 
     # frontend rendering
     ("FRONTEND", "./frontend/dist/frontend"),

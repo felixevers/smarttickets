@@ -21,22 +21,12 @@
 ## mail variables
 
 The mail variables can be used in the setting value like this:
-`<variable>`  
+`{{variable}}`  
 
-### customer
-
-`customer_mail_content` supports following variables:  
+The variables are supported:  
 
 | Variables                 | Description                                     |
 | ------------------------- | ----------------------------------------------- |
 | name                      | full name of target customer                    |
 | customer                  | link to the customer dashboard                  |
-
-### ticket
-
-`ticket_mail_content` supports following variables:  
-
-| Variables                 | Description                                     |
-| ------------------------- | ----------------------------------------------- |
-| name                      | full name of target customer                    |
-| download                  | link to download the ticket                     |
+| img                       | ticket image                                    |

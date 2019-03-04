@@ -287,7 +287,7 @@
               <br>
               <mat-form-field>
                 <input matInput type="number" placeholder="Type" [(ngModel)]="seatType" [ngModelOptions]="{standalone: true}" required>
-              </mat-form-field>              
+              </mat-form-field>
               <br>
               <br>
               <br>
@@ -302,6 +302,9 @@
         <div class="content">
           <div id="customers">
             <h2>all customer</h2>
+            <br>
+            <br>
+            <button mat-stroked-button color="primary" (click)="getCustomers()">Refresh</button>
             <br>
             <br>
             <mat-form-field>
@@ -400,6 +403,7 @@
               <button mat-flat-button color="primary" [disabled]="selectedCustomerSelectedTickets.selected.length == 0" (click)="paySelected(false)">Unpay Selected</button>
               <button mat-flat-button color="primary" [disabled]="selectedCustomerSelectedTickets.selected.length == 0" (click)="deleteTicket()">Delete Selected</button>
               <button mat-flat-button color="primary" [disabled]="selectedCustomerTickets.length > 0" (click)="delete()">Delete Customer</button>
+              <button mat-flat-button color="primary" (click)="goToLink('f/customer/' + selectedCustomer.uuid)">Open Customer-Dashboard</button>
             </div>
           </div>
         </div>

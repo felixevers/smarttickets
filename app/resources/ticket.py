@@ -1,6 +1,7 @@
 from flask_restplus import Namespace, Resource, fields, abort
 from api import api, db, mail
 from flask import request
+from resources import download
 from models.ticket import TicketModel
 from models.meeting import MeetingModel
 from models.seat import SeatModel
@@ -10,7 +11,7 @@ from models.customer import CustomerModel
 from models.setting import SettingModel
 from session import require_session
 from config import config
-from flask_mail import Mail, Message
+from flask_mail import Mail, Message, Attachment
 from datetime import datetime
 
 ticket_api = Namespace('ticket')
@@ -118,9 +119,79 @@ class GeneralTicketService(Resource):
             "technology": [s.uuid for s in technology],
         }
 
+@ticket_api.route('/pay/')
+@ticket_api.doc('pay ticket actions')
+class SpecificPriceService(Resource):
+
+    @ticket_api.doc('pay some tickets')
+    @ticket_api.response(404, "Not Found", {})
+    @require_session
+    def post(self, session):
+        tickets = request.json["tickets"]
+        pay = request.json["pay"]
+
+        customer = None
+
+        done = []
+
+        for uuid in tickets:
+            ticket: TicketModel = TicketModel.query.filter_by(uuid=uuid).first()
+
+            ticket.paid = pay
+
+            db.session.commit()
+
+            customer = CustomerModel.query.filter_by(uuid=ticket.customer).first()
+
+            done.append(ticket)
+
+        if config["MAIL_ENABLED"] and pay and len(done) > 0:
+            msg_title = SettingModel.query.filter_by(key="ticket_mail_title").first().value
+            msg_content = SettingModel.query.filter_by(key="ticket_mail_content").first().value
+
+            bcc = SettingModel.query.filter_by(key="mail_bcc").first()
+
+            pdfs = []
+
+            for ticket in done:
+                file = download.create_pdf(ticket)
+                pdfs.append(Attachment(filename='ticket_' + ticket.uuid + '.pdf',
+                    content_type='application/pdf', data=file))
+
+            msg = Message(msg_title, recipients=[customer.email], attachments=pdfs)
+
+            if bcc and bcc.value != '':
+                msg.bcc = bcc.value
+
+            customer_url = str(request.host_url) + 'f/customer/' + customer.uuid
+
+            ticket_img = SettingModel.query.filter_by(key="ticket_img").first()
+
+            img = ''
+
+            if ticket_img and ticket_img.value != '':
+                img = ticket_img.value
+
+            msg_content = msg_content.replace('{{name}}', customer.firstname + ' ' + customer.lastname)
+            msg_content = msg_content.replace('{{customer}}', '<a href="' + customer_url + '">' + customer_url + '</a>')
+            msg_content = msg_content.replace('{{img}}', '<img src="' + img +'">')
+            msg_content = msg_content.replace('\n', '<br>')
+
+            msg.html = msg_content
+
+            mail.send(msg)
+
+            return {
+                "mail": True
+            }
+
+        return {
+            "mail": False
+        }
+
 @ticket_api.route('/<string:uuid>')
 @ticket_api.doc('specific ticket actions')
-class SpecificPriceService(Resource):
+class SpecificTicketService(Resource):
 
     @ticket_api.doc('get a ticket')
     @ticket_api.expect(requestSchema["SpecificTicketModel"])
@@ -128,41 +199,6 @@ class SpecificPriceService(Resource):
     @ticket_api.response(404, "Not Found", {})
     def get(self, uuid):
         ticket: TicketModel = TicketModel.query.filter_by(uuid=uuid).first()
-
-        return ticket.serialize
-
-    @ticket_api.doc('pay a ticket')
-    @ticket_api.response(404, "Not Found", {})
-    @require_session
-    def post(self, uuid, session):
-        pay = request.json["pay"];
-
-        ticket: TicketModel = TicketModel.query.filter_by(uuid=uuid).first()
-
-        ticket.paid = pay
-
-        db.session.commit()
-
-        if config["MAIL_ENABLED"] and ticket.paid:
-            msg_title = SettingModel.query.filter_by(key="ticket_mail_title").first().value
-            msg_content = SettingModel.query.filter_by(key="ticket_mail_content").first().value
-
-            bcc = SettingModel.query.filter_by(key="mail_bcc").first()
-
-            msg = Message(msg_title, recipients=[customer.email])
-
-            if bcc and bcc.value != '':
-                msg.bcc = bcc.value
-
-            ticket_url = str(request.host_url) + 'download/' + ticket.uuid
-
-            msg_content = msg_content.replace('<name>', firstname + ' ' + lastname)
-            msg_content = msg_content.replace('<download>', '<a href="' + ticket_url + '">' + ticket_url + '</a>')
-            msg_content = msg_content.replace('\n', '<br>')
-
-            msg.html = msg_content
-
-            mail.send(msg)
 
         return ticket.serialize
 
