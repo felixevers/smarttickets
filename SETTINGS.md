@@ -2,19 +2,21 @@
 
 ## available settings
 
-| Keys                      | Description                                     |
-| ------------------------- |-------------------------------------------------|
-| title                     | system-name like ticket-system                  |
-| imprint                   | imprint in the frontend                         |
-| order1                    | text displayed at in step one of an order       |
-| order2                    | text displayed at in step two of an order       |
-| order3                    | text displayed at in step three of an order     |
-| customer_mail_title       | title of the mail if a customer was created     |
-| customer_mail_content     | content of the mail if a customer was created   |
-| ticket_mail_title         | title of the mail when a ticket has been paid   |
-| ticket_mail_content       | content of the mail when a ticket has been paid |
-| intro                     | text displayed on the start page                |
-| banner                    | main image                                      |
+| Keys                      | Description                                        |
+| ------------------------- |----------------------------------------------------|
+| title                     | system-name like ticket-system                     |
+| imprint                   | imprint in the frontend                            |
+| order1                    | text displayed at in step one of an order          |
+| order2                    | text displayed at in step two of an order          |
+| order3                    | text displayed at in step three of an order        |
+| customer_mail_title       | title of the mail if a customer was created        |
+| customer_mail_content     | content of the mail if a customer was created      |
+| ticket_mail_title         | title of the mail when a ticket has been paid      |
+| ticket_mail_content       | content of the mail when a ticket has been paid    |
+| intro                     | text displayed on the start page                   |
+| banner                    | main image (base64)                                |
+| mail_bcc                  | mail as bcc                                        |
+| ticket_img                | the image that is displayed on the ticket (base64) |
 
 ## mail variables
 

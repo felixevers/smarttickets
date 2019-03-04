@@ -1,4 +1,9 @@
 .meeting {
   margin: 3.5%;
   background-color: rgb(250,250,250);
+  cursor: pointer;
+}
+
+.meeting:hover {
+  cursor: pointer;
 }

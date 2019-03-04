@@ -34,6 +34,7 @@ export class MeetingComponent implements OnInit {
   firstname: string = '';
   lastname: string = '';
   email: string = '';
+  email2: string = '';
   street: string = '';
   housenumber: string = '';
   place: string = '';
@@ -98,7 +99,17 @@ export class MeetingComponent implements OnInit {
             instance.roomID = resp["room"];
             this.http.get(data["endpoint"] + "price/").subscribe(resp => {
               if(resp != null) {
-                let prices = resp['prices']
+                let prices = resp['prices'];
+
+                prices.sort(function(a,b) {
+                  if(a.value < b.value) {
+                    return 1;
+                  }
+                  if(a.value > b.value) {
+                    return -1;
+                  }
+                  return 0;
+                });
 
                 prices.forEach(price => {
                   instance.prices[price['uuid']] = price;
@@ -276,7 +287,7 @@ export class MeetingComponent implements OnInit {
     if(this.step == 1) {
       return this.selected.length <= 0;
     } else if(this.step == 2) {
-      return (this.firstname == '' || this.lastname == '' || this.email == '' || this.street == '' || this.place == '' || this.housenumber == '' || this.plz == '') && this.customer == null;
+      return (this.firstname == '' || this.lastname == '' || this.email == '' || this.email2 == '' || this.email != this.email2 || this.street == '' || this.place == '' || this.housenumber == '' || this.plz == '') && this.customer == null;
     }
   }
 

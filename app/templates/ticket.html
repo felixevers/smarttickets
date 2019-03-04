@@ -26,10 +26,24 @@
         width: 5%;
         height: auto;
       }
+
+      #header {
+        position: absolute;
+        top: 5%;
+        left: 50%;
+        font-size: 2rem;
+        transform: translate(-50%, -50%);
+      }
+
+      #ticket-img {
+        height: 20%;
+        width: auto;
+      }
     </style>
   </head>
   <body>
-    <h1>Ticket</h1>
+    <h1 id="header">Eintrittskarte</h1>
+    <img id="ticket-img" src="{{img}}">
     <h2>
       {{date}}
       <br><br>

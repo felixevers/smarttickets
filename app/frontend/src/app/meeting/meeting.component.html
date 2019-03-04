@@ -48,7 +48,6 @@
             </div>
           </div>
         </div>
-        <mat-divider></mat-divider>
       </div>
       <br>
       <div class="map"><mat-icon>event_seat</mat-icon> = <span>Frei</span></div>
@@ -67,7 +66,7 @@
         </div>
         <br><br>
         <mat-divider></mat-divider>
-        <br>
+        <br><br>
       </div>
       <form>
         <div *ngFor="let selectedSeat of selected; let i = index" class="price">
@@ -91,7 +90,10 @@
             <input matInput placeholder="Nachname" [(ngModel)]="lastname" [ngModelOptions]="{standalone: true}" required>
           </mat-form-field>
           <mat-form-field class="input">
-            <input matInput placeholder="E-Mail" [(ngModel)]="email" [ngModelOptions]="{standalone: true}" required>
+            <input matInput placeholder="E-Mail" type="email" [(ngModel)]="email" [ngModelOptions]="{standalone: true}" required>
+          </mat-form-field>
+          <mat-form-field class="input">
+            <input matInput placeholder="E-Mail wiederholen" type="email" [(ngModel)]="email2" [ngModelOptions]="{standalone: true}" required>
           </mat-form-field>
           <mat-form-field class="input">
             <input matInput placeholder="Straße" [(ngModel)]="street" [ngModelOptions]="{standalone: true}" required>

@@ -147,7 +147,12 @@ class SpecificPriceService(Resource):
             msg_title = SettingModel.query.filter_by(key="ticket_mail_title").first().value
             msg_content = SettingModel.query.filter_by(key="ticket_mail_content").first().value
 
-            msg = Message(msg_title)
+            bcc = SettingModel.query.filter_by(key="mail_bcc").first()
+
+            msg = Message(msg_title, recipients=[customer.email])
+
+            if bcc and bcc.value != '':
+                msg.bcc = bcc.value
 
             ticket_url = str(request.host_url) + 'download/' + ticket.uuid
 
