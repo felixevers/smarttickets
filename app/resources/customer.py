@@ -72,6 +72,11 @@ class CustomerCreateService(Resource):
             if bcc and bcc.value != '':
                 msg.bcc = bcc.value
 
+            img = ''
+
+            if ticket_img and ticket_img.value != '':
+                img = ticket_img.value
+
             customer_url = str(request.host_url) + 'f/customer/' + customer.uuid
 
             msg_content = msg_content.replace('{{name}}', customer.firstname + ' ' + customer.lastname)

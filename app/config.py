@@ -22,6 +22,7 @@ to_load: Union[str, Tuple[str, any]] = [
 
     # flask-mail
     ("MAIL_ENABLED", False),
+    ("MAIL_DEBUG", 1),
     ("MAIL_SERVER", "localhost"),
     ("MAIL_PORT", 25),
     ("MAIL_USE_TLS", False),
