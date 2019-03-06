@@ -122,7 +122,7 @@ class GeneralTicketService(Resource):
             msg_content = msg_content.replace('{{name}}', customer.firstname + ' ' + customer.lastname)
             msg_content = msg_content.replace('{{customer}}', '<a href="' + customer_url + '">' + customer_url + '</a>')
             msg_content = msg_content.replace('{{img}}', '<img src="' + img +'">')
-            msg_content = msg_content.replace('{{amount}}', amount)
+            msg_content = msg_content.replace('{{amount}}', str(amount))
             msg_content = msg_content.replace('\n', '<br>')
 
             msg.html = msg_content
@@ -221,7 +221,7 @@ class SpecificPriceService(Resource):
             msg_content = msg_content.replace('{{name}}', customer.firstname + ' ' + customer.lastname)
             msg_content = msg_content.replace('{{customer}}', '<a href="' + customer_url + '">' + customer_url + '</a>')
             msg_content = msg_content.replace('{{img}}', '<img src="' + img +'">')
-            msg_content = msg_content.replace('{{amount}}', amount)
+            msg_content = msg_content.replace('{{amount}}', str(amount))
             msg_content = msg_content.replace('\n', '<br>')
 
             msg.html = msg_content
