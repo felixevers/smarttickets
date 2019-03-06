@@ -103,31 +103,32 @@ class GeneralTicketService(Resource):
             msg_title = SettingModel.query.filter_by(key="buy_mail_title").first().value
             msg_content = SettingModel.query.filter_by(key="buy_mail_content").first().value
 
-            bcc = SettingModel.query.filter_by(key="mail_bcc").first()
+            if msg_title != '' and msg_content != '':
+                bcc = SettingModel.query.filter_by(key="mail_bcc").first()
 
-            msg = Message(msg_title, recipients=[customer.email])
+                msg = Message(msg_title, recipients=[customer.email])
 
-            if bcc and bcc.value != '':
-                msg.bcc = bcc.value
+                if bcc and bcc.value != '':
+                    msg.bcc = bcc.value
 
-            customer_url = str(request.host_url) + 'f/customer/' + customer.uuid
+                customer_url = str(request.host_url) + 'f/customer/' + customer.uuid
 
-            ticket_img = SettingModel.query.filter_by(key="ticket_img").first()
+                ticket_img = SettingModel.query.filter_by(key="ticket_img").first()
 
-            img = ''
+                img = ''
 
-            if ticket_img and ticket_img.value != '':
-                img = ticket_img.value
+                if ticket_img and ticket_img.value != '':
+                    img = ticket_img.value
 
-            msg_content = msg_content.replace('{{name}}', customer.firstname + ' ' + customer.lastname)
-            msg_content = msg_content.replace('{{customer}}', '<a href="' + customer_url + '">' + customer_url + '</a>')
-            msg_content = msg_content.replace('{{img}}', '<img src="' + img +'">')
-            msg_content = msg_content.replace('{{amount}}', str(amount))
-            msg_content = msg_content.replace('\n', '<br>')
+                msg_content = msg_content.replace('{{name}}', customer.firstname + ' ' + customer.lastname)
+                msg_content = msg_content.replace('{{customer}}', '<a href="' + customer_url + '">' + customer_url + '</a>')
+                msg_content = msg_content.replace('{{img}}', '<img src="' + img +'">')
+                msg_content = msg_content.replace('{{amount}}', str(amount))
+                msg_content = msg_content.replace('\n', '<br>')
 
-            msg.html = msg_content
+                msg.html = msg_content
 
-            mail.send(msg)
+                mail.send(msg)
 
         return {
             "result": True
@@ -195,42 +196,43 @@ class SpecificPriceService(Resource):
             msg_title = SettingModel.query.filter_by(key="ticket_mail_title").first().value
             msg_content = SettingModel.query.filter_by(key="ticket_mail_content").first().value
 
-            bcc = SettingModel.query.filter_by(key="mail_bcc").first()
+            if msg_title != '' and msg_content != '':
+                bcc = SettingModel.query.filter_by(key="mail_bcc").first()
 
-            pdfs = []
+                pdfs = []
 
-            for ticket in done:
-                file = download.create_pdf(ticket)
-                pdfs.append(Attachment(filename='ticket_' + ticket.uuid + '.pdf',
-                    content_type='application/pdf', data=file))
+                for ticket in done:
+                    file = download.create_pdf(ticket)
+                    pdfs.append(Attachment(filename='ticket_' + ticket.uuid + '.pdf',
+                        content_type='application/pdf', data=file))
 
-            msg = Message(msg_title, recipients=[customer.email], attachments=pdfs)
+                msg = Message(msg_title, recipients=[customer.email], attachments=pdfs)
 
-            if bcc and bcc.value != '':
-                msg.bcc = bcc.value
+                if bcc and bcc.value != '':
+                    msg.bcc = bcc.value
 
-            customer_url = str(request.host_url) + 'f/customer/' + customer.uuid
+                customer_url = str(request.host_url) + 'f/customer/' + customer.uuid
 
-            ticket_img = SettingModel.query.filter_by(key="ticket_img").first()
+                ticket_img = SettingModel.query.filter_by(key="ticket_img").first()
 
-            img = ''
+                img = ''
 
-            if ticket_img and ticket_img.value != '':
-                img = ticket_img.value
+                if ticket_img and ticket_img.value != '':
+                    img = ticket_img.value
 
-            msg_content = msg_content.replace('{{name}}', customer.firstname + ' ' + customer.lastname)
-            msg_content = msg_content.replace('{{customer}}', '<a href="' + customer_url + '">' + customer_url + '</a>')
-            msg_content = msg_content.replace('{{img}}', '<img src="' + img +'">')
-            msg_content = msg_content.replace('{{amount}}', str(amount))
-            msg_content = msg_content.replace('\n', '<br>')
+                msg_content = msg_content.replace('{{name}}', customer.firstname + ' ' + customer.lastname)
+                msg_content = msg_content.replace('{{customer}}', '<a href="' + customer_url + '">' + customer_url + '</a>')
+                msg_content = msg_content.replace('{{img}}', '<img src="' + img +'">')
+                msg_content = msg_content.replace('{{amount}}', str(amount))
+                msg_content = msg_content.replace('\n', '<br>')
 
-            msg.html = msg_content
+                msg.html = msg_content
 
-            mail.send(msg)
+                mail.send(msg)
 
-            return {
-                "mail": True
-            }
+                return {
+                    "mail": True
+                }
 
         return {
             "mail": False

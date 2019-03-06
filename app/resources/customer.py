@@ -61,32 +61,34 @@ class CustomerCreateService(Resource):
 
         customer: CustomerModel = CustomerModel.create(firstname, lastname, email, address, place)
 
+
         if config["MAIL_ENABLED"]:
             msg_title = SettingModel.query.filter_by(key="customer_mail_title").first().value
             msg_content = SettingModel.query.filter_by(key="customer_mail_content").first().value
 
-            bcc = SettingModel.query.filter_by(key="mail_bcc").first()
+            if msg_title != '' and msg_content != '':
+                bcc = SettingModel.query.filter_by(key="mail_bcc").first()
 
-            msg = Message(msg_title, recipients=[customer.email])
+                msg = Message(msg_title, recipients=[customer.email])
 
-            if bcc and bcc.value != '':
-                msg.bcc = bcc.value
+                if bcc and bcc.value != '':
+                    msg.bcc = bcc.value
 
-            img = ''
+                img = ''
 
-            if ticket_img and ticket_img.value != '':
-                img = ticket_img.value
+                if ticket_img and ticket_img.value != '':
+                    img = ticket_img.value
 
-            customer_url = str(request.host_url) + 'f/customer/' + customer.uuid
+                customer_url = str(request.host_url) + 'f/customer/' + customer.uuid
 
-            msg_content = msg_content.replace('{{name}}', customer.firstname + ' ' + customer.lastname)
-            msg_content = msg_content.replace('{{customer}}', '<a href="' + customer_url + '">' + customer_url + '</a>')
-            msg_content = msg_content.replace('{{img}}', '<img src="' + img +'">')
-            msg_content = msg_content.replace('\n', '<br>')
+                msg_content = msg_content.replace('{{name}}', customer.firstname + ' ' + customer.lastname)
+                msg_content = msg_content.replace('{{customer}}', '<a href="' + customer_url + '">' + customer_url + '</a>')
+                msg_content = msg_content.replace('{{img}}', '<img src="' + img +'">')
+                msg_content = msg_content.replace('\n', '<br>')
 
-            msg.html = msg_content
+                msg.html = msg_content
 
-            mail.send(msg)
+                mail.send(msg)
 
         return customer.serialize
 
