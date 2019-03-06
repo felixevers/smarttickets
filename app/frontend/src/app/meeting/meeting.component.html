@@ -12,7 +12,7 @@
         <h4 mat-line>{{dateStr}}</h4>
         <p mat-line>Aufführungsdatum</p>
       </mat-list-item>
-      <mat-list-item>
+      <!--<mat-list-item>
         <mat-icon class="time-list-icon" mat-list-icon>alarm</mat-icon>
         <h4 mat-line>{{startStr}}</h4>
         <p mat-line>Verkaufsstart</p>
@@ -21,8 +21,23 @@
         <mat-icon class="time-list-icon" mat-list-icon>alarm_off</mat-icon>
         <h4 mat-line>{{stopStr}}</h4>
         <p mat-line>Verkaufsstop</p>
-      </mat-list-item>
+      </mat-list-item>-->
     </mat-list>
+    <br>
+    <br>
+    <br>
+    <div *ngIf="step == 1 || step == 2">
+      <mat-divider></mat-divider>
+      <br>
+      <div style="text-align: center;">
+        <button mat-flat-button color="warn" [disabled]="buttonBackEnabled()" (click)="back()" style="margin-right: 2.5%;">
+          Zurück
+        </button>
+        <button mat-flat-button color="warn" [disabled]="buttonEnabled()" (click)="continue()" style="margin-left: 2.5%;">
+          Weiter
+        </button>
+      </div>
+    </div>
     <br>
     <mat-divider></mat-divider>
     <div id="step-1" *ngIf="step == 1">
@@ -39,6 +54,12 @@
         <div id="room">
           <div [style.width.%]="calcBlocks()" *ngFor="let block of room; let i = index" class="block">
             {{clearOffset()}}
+            <div *ngFor="let row of stage[i]; let ri = index" class="row">
+              <mat-icon *ngFor="let seat of row; let si = index" class="stage">
+                {{seat.icon}}
+              </mat-icon>
+              <br>
+            </div>
             <div *ngFor="let row of block; let ri = index" class="row">
               <sup *ngIf="calcOffset(row)">{{ri+1-offset}} </sup>
               <mat-icon *ngFor="let seat of row; let si = index" [class.invisible]="seat.type == 1" [class.stage]="seat.type == 2" [class.technology]="seat.type == 3" [class.reserved]="seat.reserved" [class.selected]="selectedSeat(seat)" (click)="select(seat)">
@@ -52,7 +73,7 @@
       <br>
       <div class="map"><mat-icon>event_seat</mat-icon> = <span>Frei</span></div>
       <div class="map"><mat-icon class="reserved">event_seat</mat-icon> = <span>Reserviert</span></div>
-      <!--<div class="map"><mat-icon class="stage">texture</mat-icon> = <span>Bühne</span></div>-->
+      <div class="map"><mat-icon class="stage">texture</mat-icon> = <span>Bühne</span></div>
       <div class="map"><mat-icon class="technology">texture</mat-icon> = <span>Technik</span></div>
       <!--<div class="map"><mat-icon>accessible</mat-icon> = <span>Zugänglich</span></div>-->
     </div>
@@ -70,16 +91,20 @@
       </div>
       <form>
         <div *ngFor="let selectedSeat of selected; let i = index" class="price">
-          <div><sub>{{i+1}}. Sitz</sub></div>
+          <div class="line">
+            <sub>Block {{selectedSeat["block"] + 1}} - Reihe {{selectedSeat["row"] + 1}} - Platz {{getPositionOfSeat(selectedSeat)}}</sub>
+          </div>
           <mat-form-field>
             <mat-select (selectionChange)="calcAmount()" [(ngModel)]="selectedSeat.price" [ngModelOptions]="{standalone: true}" required>
               <mat-option *ngFor="let price of pricesKeys()" [value]="price">{{prices[price].name}}</mat-option>
             </mat-select>
           </mat-form-field>
           <br>
+          <br>
+          <br>
+          <br>
         </div>
         <div *ngIf="customer == null">
-          <br>
           <mat-divider></mat-divider>
           <br>
           <mat-form-field class="input">

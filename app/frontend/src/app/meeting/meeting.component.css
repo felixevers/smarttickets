@@ -11,13 +11,12 @@ mat-icon {
 .block {
   float: left;
   text-align: center;
-  margin-bottom: 15%;
+  margin-bottom: 2.5%;
 }
 
 .row {
   padding: 0.25%;
 }
-
 
 .reserved {
   color: gray;
@@ -59,6 +58,9 @@ mat-icon {
   color: blue;
 }
 
+.price .seat-info {
+  font-size: 1rem;
+}
 
 .map {
   font-size: 1rem;
@@ -104,14 +106,14 @@ mat-card {
 
 .price {
   height: 2.5%;
-  padding: 2.5%;
-  margin: 5%;
+  padding: 2% 2.5%;
+  margin: 0% 5%;
 }
 
-.price div {
+.price .line {
   float: left;
-  margin-right: 5%;
-  font-size: 1.75rem;
+  margin: 1% 5%;
+  font-size: 1.5rem;
 }
 
 .price mat-form-field {

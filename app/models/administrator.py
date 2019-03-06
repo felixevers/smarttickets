@@ -9,8 +9,6 @@ class AdministratorModel(db.Model):
     lastname: db.Column = db.Column(db.String(255), nullable=False)
     password: db.Column = db.Column(db.String(255), nullable=False)
 
-    # add an role of the person (viewer, scanner, admin) or smth else
-
     @property
     def serialize(self):
         dict = {
@@ -18,7 +16,7 @@ class AdministratorModel(db.Model):
             "firstname": self.firstname,
             "lastname": self.lastname,
         }
-        
+
         return dict
 
     @staticmethod

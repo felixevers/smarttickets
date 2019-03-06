@@ -65,39 +65,74 @@ responseSchema = {
 class GeneralTicketService(Resource):
 
     @ticket_api.doc('create a ticket')
-    @ticket_api.expect(requestSchema["CreateTicketModel"])
-    @ticket_api.marshal_with(responseSchema["TicketModel"])
     def put(self):
-        price_uuid = request.json["price"]
-        seat_uuid = request.json["seat"]
         meeting_uuid = request.json["meeting"]
         customer_uuid = request.json["customer"]
 
-        seat: SeatModel = SeatModel.query.filter_by(uuid=seat_uuid).first()
+        bought = []
+        amount = 0
 
-        if seat.type == 0:
-            meeting: MeetingModel = MeetingModel.query.filter_by(uuid=meeting_uuid).first()
+        for ticket in request.json["buy"]:
+            seat_uuid = ticket["seat"]
+            price_uuid = ticket["price"]
 
-            now = int(datetime.now().strftime("%s"))
+            seat: SeatModel = SeatModel.query.filter_by(uuid=seat_uuid).first()
 
-            if meeting.start < now and now < meeting.stop:
-                price: PriceModel = PriceModel.query.filter_by(uuid=price_uuid).first()
-                customer: CustomerModel = CustomerModel.query.filter_by(uuid=customer_uuid).first()
+            if seat.type == 0:
+                meeting: MeetingModel = MeetingModel.query.filter_by(uuid=meeting_uuid).first()
 
-                if TicketModel.query.filter_by(seat_id=seat.uuid, meeting_id=meeting.uuid).first():
-                    return { "result": False }
+                now = int(datetime.now().strftime("%s"))
 
-                ticket: TicketModel = TicketModel.create(customer, meeting, seat, price)
+                if meeting.start < now and now < meeting.stop:
+                    price: PriceModel = PriceModel.query.filter_by(uuid=price_uuid).first()
+                    customer: CustomerModel = CustomerModel.query.filter_by(uuid=customer_uuid).first()
 
-                seat.reserved = True
+                    if TicketModel.query.filter_by(seat_id=seat.uuid, meeting_id=meeting.uuid).first():
+                        return { "result": False }
 
-                db.session.commit()
+                    ticket: TicketModel = TicketModel.create(customer, meeting, seat, price)
 
-                return ticket.serialize
+                    seat.reserved = True
+
+                    db.session.commit()
+
+                    amount = amount + price.value
+                    bought.append(ticket)
+
+        if config["MAIL_ENABLED"] and len(bought) > 0:
+            msg_title = SettingModel.query.filter_by(key="buy_mail_title").first().value
+            msg_content = SettingModel.query.filter_by(key="buy_mail_content").first().value
+
+            bcc = SettingModel.query.filter_by(key="mail_bcc").first()
+
+            msg = Message(msg_title, recipients=[customer.email])
+
+            if bcc and bcc.value != '':
+                msg.bcc = bcc.value
+
+            customer_url = str(request.host_url) + 'f/customer/' + customer.uuid
+
+            ticket_img = SettingModel.query.filter_by(key="ticket_img").first()
+
+            img = ''
+
+            if ticket_img and ticket_img.value != '':
+                img = ticket_img.value
+
+            msg_content = msg_content.replace('{{name}}', customer.firstname + ' ' + customer.lastname)
+            msg_content = msg_content.replace('{{customer}}', '<a href="' + customer_url + '">' + customer_url + '</a>')
+            msg_content = msg_content.replace('{{img}}', '<img src="' + img +'">')
+            msg_content = msg_content.replace('{{amount}}', amount)
+            msg_content = msg_content.replace('\n', '<br>')
+
+            msg.html = msg_content
+
+            mail.send(msg)
 
         return {
-            "result": False
+            "result": True
         }
+
 
     @ticket_api.doc('get reserved tickets')
     @ticket_api.expect(requestSchema["SpecificMeetingModel"])
@@ -130,6 +165,8 @@ class SpecificPriceService(Resource):
         tickets = request.json["tickets"]
         pay = request.json["pay"]
 
+        amount = 0
+
         customer = None
 
         done = []
@@ -141,7 +178,16 @@ class SpecificPriceService(Resource):
 
             db.session.commit()
 
-            customer = CustomerModel.query.filter_by(uuid=ticket.customer).first()
+            amount = amount + PriceModel.query.filter_by(uuid=ticket.price_id).first().value
+
+            ticket_customer = customer = CustomerModel.query.filter_by(uuid=ticket.customer).first()
+
+            if customer and ticket_customer.uuid != customer.uuid:
+                return {
+                    "mail": False
+                }
+            else:
+                customer = ticket_customer
 
             done.append(ticket)
 
@@ -175,6 +221,7 @@ class SpecificPriceService(Resource):
             msg_content = msg_content.replace('{{name}}', customer.firstname + ' ' + customer.lastname)
             msg_content = msg_content.replace('{{customer}}', '<a href="' + customer_url + '">' + customer_url + '</a>')
             msg_content = msg_content.replace('{{img}}', '<img src="' + img +'">')
+            msg_content = msg_content.replace('{{amount}}', amount)
             msg_content = msg_content.replace('\n', '<br>')
 
             msg.html = msg_content

@@ -54,7 +54,7 @@ def register_download(app: Flask):
             response = make_response(pdf)
 
             response.headers['Content-Type'] = 'application/pdf'
-            response.headers['Content-Disposition'] = 'attachment; filename=ticket_' + ticket.uuid  + ".pdf"
+            #response.headers['Content-Disposition'] = 'attachment; filename=ticket_' + ticket.uuid  + ".pdf"
 
             return response
 

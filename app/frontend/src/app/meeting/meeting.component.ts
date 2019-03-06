@@ -58,6 +58,7 @@ export class MeetingComponent implements OnInit {
   order3 = '';
 
   offset = 0;
+  stage = [];
 
   pricesKeys() {
     return Object.keys(this.prices);
@@ -129,11 +130,22 @@ export class MeetingComponent implements OnInit {
                         let block = seat["block"];
                         let row = seat["row"];
 
+                        if(instance.stage[block] == null) {
+                          instance.stage[block] = [];
+                        }
+
                         if(instance.room[block] == null) {
                           instance.room[block] = [];
                         }
-                        if(instance.room[block][row] == null) {
-                          instance.room[block][row] = [];
+
+                        if(row < 0) {
+                          if(instance.stage[block][row * -1] == null) {
+                            instance.stage[block][row * -1] = [];
+                          }
+                        } else {
+                          if(instance.room[block][row] == null) {
+                            instance.room[block][row] = [];
+                          }
                         }
 
                         let icon = "event_seat";
@@ -151,13 +163,26 @@ export class MeetingComponent implements OnInit {
                           icon = "accessible";
                         }
 
-                        instance.room[block][row].push({
-                          "uuid": seat["uuid"],
-                          "icon": icon,
-                          "type": seat["type"],
-                          "reserved": reserved.includes(seat["uuid"]),
-                          "price": prices[0].uuid,
-                        });
+                        if(row < 0 && seat["type"] == 2) {
+                          instance.stage[block][row * -1].push({
+                            "uuid": seat["uuid"],
+                            "icon": icon,
+                            "type": seat["type"],
+                            "block": block,
+                            "row": row * -1,
+                          });
+                          console.log(instance.stage);
+                        } else {
+                          instance.room[block][row].push({
+                            "uuid": seat["uuid"],
+                            "icon": icon,
+                            "type": seat["type"],
+                            "block": block,
+                            "row": row,
+                            "reserved": reserved.includes(seat["uuid"]),
+                            "price": prices[0].uuid,
+                          });
+                        }
                       });
                     }
                   });
@@ -167,6 +192,10 @@ export class MeetingComponent implements OnInit {
           }
         });
     });
+  }
+
+  getPositionOfSeat(seat) {
+    return this.room[seat["block"]][seat["row"]].indexOf(seat) + 1;
   }
 
   calcBreak() {
@@ -250,14 +279,18 @@ export class MeetingComponent implements OnInit {
         let instance = this;
 
         let buy = function(customerUUID) {
+          let tickets = [];
           instance.selected.forEach(seat => {
-            instance.http.put(data["endpoint"] + "ticket/", {
-              "price": seat['price'],
+            tickets.push({
               "seat": seat['uuid'],
-              "meeting": instance.uuid,
-              "customer": customerUUID,
-            }).subscribe(resp2 => {
+              "price": seat['price'],
             });
+          });
+          instance.http.put(data["endpoint"] + "ticket/", {
+            "buy": tickets,
+            "meeting": instance.uuid,
+            "customer": customerUUID,
+          }).subscribe(resp2 => {
           });
           instance.step++;
         }
@@ -283,12 +316,24 @@ export class MeetingComponent implements OnInit {
     }
   }
 
+  back() {
+    this.step--;
+  }
+
   buttonEnabled() {
     if(this.step == 1) {
       return this.selected.length <= 0;
     } else if(this.step == 2) {
       return (this.firstname == '' || this.lastname == '' || this.email == '' || this.email2 == '' || this.email != this.email2 || this.street == '' || this.place == '' || this.housenumber == '' || this.plz == '') && this.customer == null;
     }
+    return true;
+  }
+
+  buttonBackEnabled() {
+    if(this.step == 2) {
+      return false;
+    }
+    return true;
   }
 
   timeConverter(a) {
