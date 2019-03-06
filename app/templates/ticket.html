@@ -39,6 +39,8 @@
   </head>
   <body>
     <h1 id="header">Eintrittskarte</h1>
+    <br>
+    <br>
     <img id="ticket-img" src="{{img}}">
     <h2>
       {{date}}
@@ -55,7 +57,7 @@
         /
         Platz: {{seats.index(seat)+1}}
       </h2>
-      {% for i in range(5) %}
+      {% for i in range(3) %}
         <br>
       {% endfor %}
       {% for s in seats %}
@@ -66,7 +68,7 @@
           <img class="big" src="{{data[s.type]}}">
         {% endif %}
       {% endfor %}
-      {% for i in range(10) %}
+      {% for i in range(5) %}
         <br>
       {% endfor %}
     </div>
