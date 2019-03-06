@@ -74,6 +74,8 @@ class CustomerCreateService(Resource):
                 if bcc and bcc.value != '':
                     msg.bcc = bcc.value
 
+                ticket_img = SettingModel.query.filter_by(key="ticket_img").first()
+
                 img = ''
 
                 if ticket_img and ticket_img.value != '':
