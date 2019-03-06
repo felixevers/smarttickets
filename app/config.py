@@ -36,6 +36,9 @@ to_load: Union[str, Tuple[str, any]] = [
 
     # timezone
     ("TIMEZONE", "Europe/Berlin"),
+
+    # endpoint
+    ("ENDPOINT", "https://smarttickets.de/"),
 ]
 
 # the final configuration dict

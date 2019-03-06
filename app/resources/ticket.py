@@ -111,7 +111,7 @@ class GeneralTicketService(Resource):
                 if bcc and bcc.value != '':
                     msg.bcc = bcc.value
 
-                customer_url = str(request.host_url) + 'f/customer/' + customer.uuid
+                customer_url = str(config['ENDPOINT']) + 'f/customer/' + customer.uuid
 
                 ticket_img = SettingModel.query.filter_by(key="ticket_img").first()
 
@@ -123,7 +123,7 @@ class GeneralTicketService(Resource):
                 msg_content = msg_content.replace('{{name}}', customer.firstname + ' ' + customer.lastname)
                 msg_content = msg_content.replace('{{customer}}', '<a href="' + customer_url + '">' + customer_url + '</a>')
                 msg_content = msg_content.replace('{{img}}', '<img src="' + img +'">')
-                msg_content = msg_content.replace('{{amount}}', str(amount))
+                msg_content = msg_content.replace('{{amount}}', str(int(amount)))
                 msg_content = msg_content.replace('\n', '<br>')
 
                 msg.html = msg_content
@@ -211,7 +211,7 @@ class SpecificPriceService(Resource):
                 if bcc and bcc.value != '':
                     msg.bcc = bcc.value
 
-                customer_url = str(request.host_url) + 'f/customer/' + customer.uuid
+                customer_url = str(config['ENDPOINT']) + 'f/customer/' + customer.uuid
 
                 ticket_img = SettingModel.query.filter_by(key="ticket_img").first()
 
@@ -223,7 +223,7 @@ class SpecificPriceService(Resource):
                 msg_content = msg_content.replace('{{name}}', customer.firstname + ' ' + customer.lastname)
                 msg_content = msg_content.replace('{{customer}}', '<a href="' + customer_url + '">' + customer_url + '</a>')
                 msg_content = msg_content.replace('{{img}}', '<img src="' + img +'">')
-                msg_content = msg_content.replace('{{amount}}', str(amount))
+                msg_content = msg_content.replace('{{amount}}', str(int(amount)))
                 msg_content = msg_content.replace('\n', '<br>')
 
                 msg.html = msg_content

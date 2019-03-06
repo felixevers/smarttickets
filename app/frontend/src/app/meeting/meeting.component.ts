@@ -60,6 +60,8 @@ export class MeetingComponent implements OnInit {
   offset = 0;
   stage = [];
 
+  progress = false;
+
   pricesKeys() {
     return Object.keys(this.prices);
   }
@@ -291,9 +293,12 @@ export class MeetingComponent implements OnInit {
             "meeting": instance.uuid,
             "customer": customerUUID,
           }).subscribe(resp2 => {
+            instance.progress = false;
           });
           instance.step++;
         }
+
+        instance.progress = true;
 
         if(instance.customer == null) {
           instance.http.put(data["endpoint"] + "customer/", {
@@ -324,7 +329,7 @@ export class MeetingComponent implements OnInit {
     if(this.step == 1) {
       return this.selected.length <= 0;
     } else if(this.step == 2) {
-      return (this.firstname == '' || this.lastname == '' || this.email == '' || this.email2 == '' || this.email != this.email2 || this.street == '' || this.place == '' || this.housenumber == '' || this.plz == '') && this.customer == null;
+      return ((this.firstname == '' || this.lastname == '' || this.email == '' || this.email2 == '' || this.email != this.email2 || this.street == '' || this.place == '' || this.housenumber == '' || this.plz == '') && this.customer == null) || this.progress;
     }
     return true;
   }

@@ -81,7 +81,7 @@ class CustomerCreateService(Resource):
                 if ticket_img and ticket_img.value != '':
                     img = ticket_img.value
 
-                customer_url = str(request.host_url) + 'f/customer/' + customer.uuid
+                customer_url = str(config['ENDPOINT']) + 'f/customer/' + customer.uuid
 
                 msg_content = msg_content.replace('{{name}}', customer.firstname + ' ' + customer.lastname)
                 msg_content = msg_content.replace('{{customer}}', '<a href="' + customer_url + '">' + customer_url + '</a>')
