@@ -58,6 +58,20 @@ export class CustomerComponent implements OnInit {
     });
   }
 
+  timeConverter(b) {
+    var a = new Date(b);
+
+    var year = a.getFullYear();
+    var month = String("0" + (a.getMonth() + 1)).slice(-2);
+    var date = String("0" + a.getDate()).slice(-2);
+    var hour = String("0" + a.getHours()).slice(-2);
+    var min = String("0" + a.getMinutes()).slice(-2);
+
+    var time = date + '.' + month + '.' + year + ' um ' + hour + ':' + min + ' Uhr'
+
+    return time;
+  }
+
   goToLink(url: string){
     window.open(data['endpoint'] + url, "_blank");
   }

@@ -113,16 +113,8 @@ class GeneralTicketService(Resource):
 
                 customer_url = str(config['ENDPOINT']) + 'f/customer/' + customer.uuid
 
-                ticket_img = SettingModel.query.filter_by(key="ticket_img").first()
-
-                img = ''
-
-                if ticket_img and ticket_img.value != '':
-                    img = ticket_img.value
-
                 msg_content = msg_content.replace('{{name}}', customer.firstname + ' ' + customer.lastname)
                 msg_content = msg_content.replace('{{customer}}', '<a href="' + customer_url + '">' + customer_url + '</a>')
-                msg_content = msg_content.replace('{{img}}', '<img src="' + img +'">')
                 msg_content = msg_content.replace('{{amount}}', str(int(amount)))
                 msg_content = msg_content.replace('\n', '<br>')
 
@@ -213,16 +205,8 @@ class SpecificPriceService(Resource):
 
                 customer_url = str(config['ENDPOINT']) + 'f/customer/' + customer.uuid
 
-                ticket_img = SettingModel.query.filter_by(key="ticket_img").first()
-
-                img = ''
-
-                if ticket_img and ticket_img.value != '':
-                    img = ticket_img.value
-
                 msg_content = msg_content.replace('{{name}}', customer.firstname + ' ' + customer.lastname)
                 msg_content = msg_content.replace('{{customer}}', '<a href="' + customer_url + '">' + customer_url + '</a>')
-                msg_content = msg_content.replace('{{img}}', '<img src="' + img +'">')
                 msg_content = msg_content.replace('{{amount}}', str(int(amount)))
                 msg_content = msg_content.replace('\n', '<br>')
 

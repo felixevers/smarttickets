@@ -39,6 +39,7 @@ export class MeetingComponent implements OnInit {
   housenumber: string = '';
   place: string = '';
   plz: string = '';
+  dsgvo: boolean = false;
 
   step = 1;
   stepIcon = "add_shopping_cart"
@@ -62,6 +63,8 @@ export class MeetingComponent implements OnInit {
 
   progress = false;
 
+  question_mail: string = '';
+
   pricesKeys() {
     return Object.keys(this.prices);
   }
@@ -79,6 +82,10 @@ export class MeetingComponent implements OnInit {
     });
     instance.getSetting('order3', function(value) {
       instance.order3 = value;
+    });
+
+    instance.getSetting('question_mail', function(value) {
+      instance.question_mail = value;
     });
 
     this.sub = this.route.params.subscribe(params => {
@@ -194,6 +201,10 @@ export class MeetingComponent implements OnInit {
           }
         });
     });
+  }
+
+  openMail() {
+    window.open("mailto:" + this.question_mail + "?subject=Fragen zu " + this.name, '_self');
   }
 
   getPositionOfSeat(seat) {
@@ -329,7 +340,7 @@ export class MeetingComponent implements OnInit {
     if(this.step == 1) {
       return this.selected.length <= 0;
     } else if(this.step == 2) {
-      return ((this.firstname == '' || this.lastname == '' || this.email == '' || this.email2 == '' || this.email != this.email2 || this.street == '' || this.place == '' || this.housenumber == '' || this.plz == '') && this.customer == null) || this.progress;
+      return ((this.firstname == '' || this.lastname == '' || this.email == '' || this.email2 == '' || this.email != this.email2 || this.street == '' || this.place == '' || this.housenumber == '' || this.plz == '' || !this.dsgvo) && this.customer == null) || this.progress;
     }
     return true;
   }

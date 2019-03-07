@@ -64,6 +64,16 @@ export class OverviewComponent implements OnInit {
                 if(resp != null) {
                   obj.meetings.push(resp);
                 }
+                obj.meetings.sort(function(a, b) {
+                  if(a["date"] < b["date"]) {
+                    return -1;
+                  }
+                  if(a["date"] > b["date"]) {
+                    return 1;
+                  }
+
+                  return 0;
+                })
               }
             );;
           });

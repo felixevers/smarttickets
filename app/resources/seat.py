@@ -12,6 +12,7 @@ requestSchema = {
                               description="uuid of room"),
         "block": fields.Integer(required=True),
         "row": fields.Integer(required=True),
+        "count": fields.Integer(),
         "type": fields.Integer(required=True),
     }),
     "SpecificSeatModel": api.model("specific seat", {
@@ -84,7 +85,13 @@ class SpecificSeatService(Resource):
     def get(self, uuid):
         seat: SeatModel = SeatModel.query.filter_by(uuid=uuid).first()
 
-        return seat.serialize
+        seats: list = SeatModel.query.filter_by(room_id=seat.room_id, block=seat.block, row=seat.row)
+
+        data = seat.serialize
+
+        data["count"] = [s.serialize for s in seats].index(data)
+
+        return data
 
     @seat_api.doc('delete a seat')
     @seat_api.expect(requestSchema["SpecificSeatModel"])

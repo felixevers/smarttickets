@@ -29,10 +29,10 @@
       <mat-divider></mat-divider>
       <br>
       <div style="text-align: center;">
-        <button mat-flat-button color="warn" [disabled]="buttonBackEnabled()" (click)="back()" style="margin-right: 2.5%;">
+        <button mat-flat-button color="accent" [disabled]="buttonBackEnabled()" (click)="back()" style="margin-right: 2.5%;">
           Zurück
         </button>
-        <button mat-flat-button color="warn" [disabled]="buttonEnabled()" (click)="continue()" style="margin-left: 2.5%;">
+        <button mat-flat-button color="accent" [disabled]="buttonEnabled()" (click)="continue()" style="margin-left: 2.5%;">
           Weiter
         </button>
       </div>
@@ -131,16 +131,22 @@
           <mat-form-field class="input">
             <input matInput type="number" placeholder="Postleitzahl" [(ngModel)]="plz" [ngModelOptions]="{standalone: true}" required>
           </mat-form-field>
+          <br>
+          <mat-checkbox [(ngModel)]="dsgvo" [ngModelOptions]="{standalone: true}" required color="warn">Ich bin mit der Speicherung meiner personenbezogenen Daten einverstanden.</mat-checkbox>
         </div>
       </form>
+      <div *ngIf="question_mail != ''">
+        <br><br><br>
+        <button mat-raised-button color="accent" (click)="openMail()">Hinweis auf Rollstuhlfahrer, Fragen, Bemerkungen...</button>
+      </div>
     </div>
     <div id="step-3" *ngIf="step == 3">
       <br><br>
       <div *ngIf="order3 != ''">
         <div style="text-align: left;">
-          <h3 *ngFor="let line of order3.split('\n')">
+          <h4 *ngFor="let line of order3.split('\n')">
             {{line}}
-          </h3>
+          </h4>
         </div>
         <br><br>
         <mat-divider></mat-divider>

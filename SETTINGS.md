@@ -18,6 +18,7 @@
 | intro                     | text displayed on the start page                    |
 | banner                    | main image (base64)                                 |
 | mail_bcc                  | mail as bcc                                         |
+| question_mail             | mail for questions                                  |
 | ticket_img                | the image that is displayed on the ticket (base64)  |
 
 ## mail variables
@@ -31,5 +32,4 @@ The variables are supported:
 | ------------------------- | ------------------------------------------------ |
 | name                      | full name of target customer                     |
 | customer                  | link to the customer dashboard                   |
-| img                       | ticket image                                     |
 | amount                    | amount to be paid (not in customer_mail_content) |

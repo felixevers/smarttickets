@@ -30,7 +30,7 @@
       <mat-list-item class="click" [routerLink]="'../../meeting/' + ticket.meeting.uuid + '/' + uuid">
         <mat-icon mat-list-icon>event</mat-icon>
         <h4 mat-line>{{ticket.meeting.name}}</h4>
-        <p mat-line>Veranstaltung</p>
+        <p mat-line>{{timeConverter(ticket.meeting.date)}}</p>
       </mat-list-item>
       <mat-list-item>
         <mat-icon mat-list-icon>credit_card</mat-icon>
@@ -49,6 +49,10 @@
       <mat-list-item>
         <mat-icon mat-list-icon>arrow_forward</mat-icon>
         <h4 mat-line>Reihe {{ticket.seat.row+1}}</h4>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon mat-list-icon>event_seat</mat-icon>
+        <h4 mat-line>Platz {{ticket.seat.count+1}}</h4>
       </mat-list-item>
       <mat-list-item class="click success" *ngIf="ticket.paid" (click)="goToLink('download/' + ticket.uuid)">
         <mat-icon mat-list-icon>save</mat-icon>
