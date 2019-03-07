@@ -59,7 +59,7 @@ export class CustomerComponent implements OnInit {
   }
 
   timeConverter(b) {
-    var a = new Date(b);
+    var a = new Date(b*1000);
 
     var year = a.getFullYear();
     var month = String("0" + (a.getMonth() + 1)).slice(-2);
