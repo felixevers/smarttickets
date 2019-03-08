@@ -42,9 +42,7 @@
     <div id="step-1" *ngIf="step == 1">
       <br><br>
       <div *ngIf="order1 != ''">
-        <h3 *ngFor="let line of order1.split('\n')">
-          {{line}}
-        </h3>
+        <h3 *ngFor="let line of order1.split('\n')" [innerHTML]="line"></h3>
         <br><br>
         <mat-divider></mat-divider>
         <br><br>
@@ -80,9 +78,7 @@
       <br><br>
       <div *ngIf="order2 != ''">
         <div style="text-align: left;">
-          <h3 *ngFor="let line of order2.split('\n')">
-            {{line}}
-          </h3>
+          <h3 *ngFor="let line of order2.split('\n')" [innerHTML]="line"></h3>
         </div>
         <br><br>
         <mat-divider></mat-divider>
@@ -104,7 +100,8 @@
           <br>
         </div>
         <div *ngIf="customer == null">
-          <mat-divider></mat-divider>
+          <br>
+          <br>
           <br>
           <mat-form-field class="input">
             <input matInput placeholder="Vorname" [(ngModel)]="firstname" [ngModelOptions]="{standalone: true}" required>
@@ -131,8 +128,16 @@
           <mat-form-field class="input">
             <input matInput type="number" placeholder="Postleitzahl" [(ngModel)]="plz" [ngModelOptions]="{standalone: true}" required>
           </mat-form-field>
+          <!--<br>
+          <mat-form-field class="input" [(ngModel)]="questions" [ngModelOptions]="{standalone: true}">
+            <textarea matInput placeholder="Hinweis auf Rollstuhlfahrer, Fragen, Bemerkungen..."></textarea>
+          </mat-form-field>-->
           <br>
-          <mat-checkbox [(ngModel)]="dsgvo" [ngModelOptions]="{standalone: true}" required color="warn">Ich bin mit der Speicherung meiner personenbezogenen Daten einverstanden.</mat-checkbox>
+          <br>
+          <div id="dsgvo">
+            Ich bin mit der Speicherung meiner personenbezogenen Daten einverstanden:
+            <mat-checkbox [(ngModel)]="dsgvo" [ngModelOptions]="{standalone: true}" required color="warn"></mat-checkbox>
+          </div>
         </div>
       </form>
       <div *ngIf="question_mail != ''">
@@ -144,9 +149,7 @@
       <br><br>
       <div *ngIf="order3 != ''">
         <div style="text-align: left;">
-          <h4 *ngFor="let line of order3.split('\n')">
-            {{line}}
-          </h4>
+          <h3 *ngFor="let line of order3.split('\n')" [innerHTML]="line"></h3>
         </div>
         <br><br>
         <mat-divider></mat-divider>

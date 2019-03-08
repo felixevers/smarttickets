@@ -1,9 +1,7 @@
 <mat-card>
   <mat-card-content>
     <br>
-    <h3 *ngFor="let line of intro.split('\n')">
-      {{line}}
-    </h3>
+    <h3 *ngFor="let line of intro.split('\n')" [innerHTML]="line"></h3>
     <br>
     <div id="banner" *ngIf="banner != ''">
       <mat-divider></mat-divider>

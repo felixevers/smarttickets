@@ -15,6 +15,7 @@ import * as data from './endpoint.json';
 export class AppComponent {
 
   title = 'smarttickets';
+  inc: string = '';
 
   public constructor(private http: HttpClient, private titleService: Title) {
     let instance = this;
@@ -27,6 +28,10 @@ export class AppComponent {
       instance.setTitle(title);
       instance.title = title;
     });
+
+    this.getSetting('inc', function(inc) {
+      instance.inc = inc;
+    })
   }
 
   public setTitle(newTitle: string) {

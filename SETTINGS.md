@@ -20,6 +20,7 @@
 | mail_bcc                  | mail as bcc                                         |
 | question_mail             | mail for questions                                  |
 | ticket_img                | the image that is displayed on the ticket (base64)  |
+| inc                       | html include on each site                           |
 
 ## mail variables
 

@@ -71,8 +71,8 @@ class CustomerCreateService(Resource):
 
                 msg = Message(msg_title, recipients=[customer.email])
 
-                if bcc and bcc.value != '':
-                    msg.bcc = bcc.value
+                #if bcc and bcc.value != '':
+                #    msg.bcc = bcc.value
 
                 customer_url = str(config['ENDPOINT']) + 'f/customer/' + customer.uuid
 

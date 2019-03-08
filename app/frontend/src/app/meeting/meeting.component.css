@@ -91,7 +91,6 @@ mat-card {
 }
 
 #step-3 {
-  font-size: 1.5rem;
   padding: 5%;
 }
 
@@ -130,4 +129,9 @@ mat-card {
 
 #room {
   width: 2050px;
+}
+
+#dsgvo {
+  margin-left: 12.5%;
+  text-align: left;
 }

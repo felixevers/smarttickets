@@ -64,6 +64,7 @@ export class MeetingComponent implements OnInit {
   progress = false;
 
   question_mail: string = '';
+  questions: string = '';
 
   pricesKeys() {
     return Object.keys(this.prices);
@@ -317,7 +318,7 @@ export class MeetingComponent implements OnInit {
             "firstname": this.firstname,
             "lastname": this.lastname,
             "address": this.street + " " + this.housenumber,
-            "place": this.place + " " + this.plz
+            "place": this.place + " " + this.plz,
           }).subscribe(resp => {
             if(resp != null) {
               instance.customerToken = resp["uuid"];
