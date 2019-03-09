@@ -104,12 +104,12 @@ class GeneralTicketService(Resource):
             msg_content = SettingModel.query.filter_by(key="buy_mail_content").first().value
 
             if msg_title != '' and msg_content != '':
-                bcc = SettingModel.query.filter_by(key="mail_bcc").first()
+                cc = SettingModel.query.filter_by(key="mail_cc").first()
 
                 msg = Message(msg_title, recipients=[customer.email])
 
-                if bcc and bcc.value != '':
-                    msg.bcc = bcc.value
+                if cc and cc.value != '':
+                    msg.cc = cc.value
 
                 customer_url = str(config['ENDPOINT']) + 'f/customer/' + customer.uuid
 
