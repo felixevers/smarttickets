@@ -109,7 +109,7 @@ class GeneralTicketService(Resource):
                 msg = Message(msg_title, recipients=[customer.email])
 
                 if cc and cc.value != '':
-                    msg.cc = cc.value
+                    msg.cc = [cc.value]
 
                 customer_url = str(config['ENDPOINT']) + 'f/customer/' + customer.uuid
 
