@@ -38,7 +38,7 @@ def create_pdf(ticket):
         if ticket_img and ticket_img.value != '':
             img = ticket_img.value
 
-        html = render_template('ticket.html', uuid=ticket.uuid, date=date, seats=seats, seat=seat, price=price, data=data, img=img, name=name)
+        html = render_template('ticket.html', uuid=ticket.uuid, date=date, meeting=meeting.name, seats=seats, seat=seat, price=price, data=data, img=img, name=name)
 
         pdf = pdfkit.from_string(html, False)
 
