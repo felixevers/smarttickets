@@ -3,6 +3,7 @@ from api import api, db, mail
 from flask import request
 from models.customer import CustomerModel
 from models.setting import SettingModel
+from models.ticket import TicketModel
 from config import config
 from session import require_session
 from flask_mail import Mail, Message
@@ -45,8 +46,17 @@ class CustomerCreateService(Resource):
     @customer_api.doc('get all customers')
     @require_session
     def get(self, session):
+        customers = []
+
+        for customer in CustomerModel.query.all():
+            tmp = customer.serialize
+
+            tmp["count"] = len(TicketModel.query.filter_by(customer=customer.uuid).all())
+
+            customers.append(tmp)
+
         return {
-            "customers": [customer.serialize for customer in CustomerModel.query.all()]
+            "customers": customers
         }
 
     @customer_api.doc('creates a customer')

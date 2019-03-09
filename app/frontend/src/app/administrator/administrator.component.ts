@@ -81,8 +81,8 @@ export class AdministratorComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('tabGroup') tabGroup;
 
-  customerDisplayedColumns: string[] = ['select', 'firstname', 'lastname', 'email', 'place', 'address']
-  selectedCustomerDisplayedColumns: string[] = ['select', 'price', 'amount', 'paid'];
+  customerDisplayedColumns: string[] = ['select', 'firstname', 'lastname', 'email', 'count', 'place', 'address']
+  selectedCustomerDisplayedColumns: string[] = ['select', 'price', 'block', 'row', 'seat', 'amount', 'paid'];
 
   times = [];
 
@@ -223,6 +223,7 @@ export class AdministratorComponent implements OnInit {
     let instance = this;
     instance.http.post(data["endpoint"] + 'ticket/customer/' + instance.selectedCustomer.uuid, {}).subscribe(resp => {
       instance.selectedCustomerTickets = resp["tickets"];
+      console.log(resp["tickets"]);
     });
   }
 

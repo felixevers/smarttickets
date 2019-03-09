@@ -64,6 +64,7 @@ export class MeetingComponent implements OnInit {
   progress = false;
 
   question_mail: string = '';
+  question_mail_subject: string = '';
   questions: string = '';
 
   pricesKeys() {
@@ -87,6 +88,10 @@ export class MeetingComponent implements OnInit {
 
     instance.getSetting('question_mail', function(value) {
       instance.question_mail = value;
+    });
+
+    instance.getSetting('question_mail_subject', function(value) {
+      instance.question_mail_subject = value;
     });
 
     this.sub = this.route.params.subscribe(params => {
@@ -181,7 +186,6 @@ export class MeetingComponent implements OnInit {
                             "block": block,
                             "row": row * -1,
                           });
-                          console.log(instance.stage);
                         } else {
                           instance.room[block][row].push({
                             "uuid": seat["uuid"],
@@ -205,7 +209,7 @@ export class MeetingComponent implements OnInit {
   }
 
   openMail() {
-    window.open("mailto:" + this.question_mail + "?subject=Fragen zu " + this.name, '_self');
+    window.open("mailto:" + this.question_mail + "?subject=" + this.question_mail_subject, '_self');
   }
 
   getPositionOfSeat(seat) {

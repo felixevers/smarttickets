@@ -261,4 +261,17 @@ class GeneralCustomerTicketService(Resource):
 
         tickets: TicketModel = TicketModel.query.filter_by(customer=customer.uuid).all()
 
-        return {"tickets": [t.serialize for t in tickets]}
+        all_tickets = []
+
+        for t in tickets:
+            tmp = t.serialize
+
+            seat = SeatModel.query.filter_by(uuid=t.seat_id).first()
+
+            tmp["block"] = seat.block
+            tmp["row"] = seat.row
+            tmp["count"] = SeatModel.query.filter_by(room_id=seat.room_id, block=seat.block, row=seat.row).all().index(seat)
+
+            all_tickets.append(tmp)
+
+        return {"tickets": all_tickets}

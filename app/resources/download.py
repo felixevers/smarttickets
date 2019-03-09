@@ -7,12 +7,14 @@ from models.meeting import MeetingModel
 from models.seat import SeatModel
 from models.price import PriceModel
 from models.setting import SettingModel
+from models.customer import CustomerModel
 
 from datetime import datetime
 
 def create_pdf(ticket):
     if ticket and ticket.paid:
         meeting = MeetingModel.query.filter_by(uuid=ticket.meeting_id).first()
+        customer = CustomerModel.query.filter_by(uuid=ticket.customer).first()
         seat = SeatModel.query.filter_by(uuid=ticket.seat_id).first()
         seats = SeatModel.query.filter_by(block=seat.block, row=seat.row, room_id=meeting.room).all()
         price = PriceModel.query.filter_by(uuid=ticket.price_id).first()
@@ -29,12 +31,14 @@ def create_pdf(ticket):
 
         ticket_img = SettingModel.query.filter_by(key="ticket_img").first()
 
+        name = customer.lastname + ", " + customer.firstname
+
         img = ''
 
         if ticket_img and ticket_img.value != '':
             img = ticket_img.value
 
-        html = render_template('ticket.html', uuid=ticket.uuid, date=date, seats=seats, seat=seat, price=price, data=data, img=img)
+        html = render_template('ticket.html', uuid=ticket.uuid, date=date, seats=seats, seat=seat, price=price, data=data, img=img, name=name)
 
         pdf = pdfkit.from_string(html, False)
 
