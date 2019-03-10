@@ -101,7 +101,7 @@ export class MeetingComponent implements OnInit {
         instance.customer = params['customer'];
 
         instance.getSetting('buy_limit', function(value) {
-          if(!isNaN(value) && value >= 0) {
+          if(value != '' && !isNaN(value) && value >= 0) {
             instance.buy_limit = value;
             if(instance.customer != null && instance.customer != '') {
               instance.http.post(data["endpoint"] + "ticket/customer/" + instance.customer, {}).subscribe(resp => {
@@ -286,7 +286,7 @@ export class MeetingComponent implements OnInit {
     if((seat.type == 0 || seat.type == 4) && !seat["reserved"]) {
       if(this.selectedSeat(seat)) {
         this.selected.splice(this.selected.indexOf(seat), 1);
-      } else if(this.selected.length < this.buy_limit) {
+      } else if(this.buy_limit < 0 || this.selected.length < this.buy_limit) {
         this.selected.push(seat);
       }
     }

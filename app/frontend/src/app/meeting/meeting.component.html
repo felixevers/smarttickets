@@ -162,7 +162,7 @@
 </mat-card>
 <mat-toolbar color="primary" id="bottom-toolbar" *ngIf="step < 3">
   {{selected.length}}&nbsp;
-  <div *ngIf="buy_limit >= 0">von {{buy_limit}}</div>&nbsp;Sitze&nbsp;
+  <div *ngIf="buy_limit >= 0">von {{buy_limit}}&nbsp;</div>Sitze&nbsp;
   <span *ngIf="step == 2">für {{amount}} €</span>
   <button mat-fab [disabled]="buttonEnabled()" (click)="continue()" style="postition: absolute; transform: translate(50%, -50%); right: 10%; color: rgb(255,255,255);">
     <mat-icon>{{stepIcon}}</mat-icon>
