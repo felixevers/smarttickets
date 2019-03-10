@@ -72,7 +72,19 @@ class GeneralTicketService(Resource):
         bought = []
         amount = 0
 
-        for ticket in request.json["buy"]:
+        all_tickets = request.json["buy"]
+
+        buy_limit = SettingModel.query.filter_by(key="buy_limit").first()
+
+        print(buy_limit.value)
+
+        if buy_limit and buy_limit.value.isdigit():
+            if len(all_tickets) + len(TicketModel.query.filter_by(customer=customer_uuid).all()) > int(buy_limit.value):
+                return {
+                    "result": False
+                }
+
+        for ticket in all_tickets:
             seat_uuid = ticket["seat"]
             price_uuid = ticket["price"]
 

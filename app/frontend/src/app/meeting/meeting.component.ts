@@ -67,6 +67,8 @@ export class MeetingComponent implements OnInit {
   question_mail_subject: string = '';
   questions: string = '';
 
+  buy_limit = -1;
+
   pricesKeys() {
     return Object.keys(this.prices);
   }
@@ -97,6 +99,24 @@ export class MeetingComponent implements OnInit {
     this.sub = this.route.params.subscribe(params => {
         instance.uuid = params['uuid'];
         instance.customer = params['customer'];
+
+        instance.getSetting('buy_limit', function(value) {
+          if(!isNaN(value) && value >= 0) {
+            instance.buy_limit = value;
+            if(instance.customer != null && instance.customer != '') {
+              instance.http.post(data["endpoint"] + "ticket/customer/" + instance.customer, {}).subscribe(resp => {
+                if(instance.buy_limit >= 0) {
+                  let amount = resp["tickets"].length;
+                  if(instance.buy_limit > amount) {
+                    instance.buy_limit -= amount;
+                  } else {
+                    instance.buy_limit = 0;
+                  }
+                }
+              });
+            }
+          }
+        });
 
         instance.http.get(data["endpoint"] + "meeting/" + this.uuid).subscribe(resp => {
           if(resp != null) {
@@ -266,7 +286,7 @@ export class MeetingComponent implements OnInit {
     if((seat.type == 0 || seat.type == 4) && !seat["reserved"]) {
       if(this.selectedSeat(seat)) {
         this.selected.splice(this.selected.indexOf(seat), 1);
-      } else {
+      } else if(this.selected.length < this.buy_limit) {
         this.selected.push(seat);
       }
     }

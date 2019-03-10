@@ -22,6 +22,7 @@
 | question_mail_subject     | subject of mail for questions                       |
 | ticket_img                | the image that is displayed on the ticket (base64)  |
 | inc                       | html include on each site                           |
+| buy_limit                 | maximum amount of tickets                           |
 
 ## mail variables
 

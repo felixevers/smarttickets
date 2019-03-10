@@ -15,7 +15,7 @@
     </mat-card-content>
   </div>
   <mat-divider></mat-divider>
-  <button mat-fab style="transform: translate(0%, 75%); position: absoulute;" [routerLink]="'/' + uuid">
+  <button mat-fab style="transform: translate(0%, 75%); position: absoulute;" [disabled]="buyDisabled()" [routerLink]="'/' + uuid">
     <mat-icon>add</mat-icon>
   </button>
 </mat-card>

@@ -8,6 +8,10 @@ mat-icon {
   color: green;
 }
 
+.warn {
+  color: red;
+}
+
 .block {
   float: left;
   text-align: center;

@@ -19,11 +19,18 @@ export class CustomerComponent implements OnInit {
   address: string;
 
   tickets = [];
+  buy_limit = -1;
 
   constructor(private http: HttpClient, private route: ActivatedRoute) {
     let instance = this;
 
     this.route.params.subscribe(params => {
+        instance.getSetting('buy_limit', function(value) {
+          if(!isNaN(value) && value >= 0) {
+            instance.buy_limit = value;
+          }
+        });
+
         instance.uuid = params['uuid'];
         instance.http.get(data["endpoint"] + "customer/" + this.uuid).subscribe(resp => {
           if(resp != null) {
@@ -55,6 +62,16 @@ export class CustomerComponent implements OnInit {
             });
           }
         });
+    });
+  }
+
+  buyDisabled() {
+    return this.buy_limit >= 0 && this.tickets.length >= this.buy_limit;
+  }
+
+  getSetting(key, callback) {
+    this.http.get(data["endpoint"] + 'setting/' + key).subscribe(resp => {
+      callback(resp["value"]);
     });
   }
 
