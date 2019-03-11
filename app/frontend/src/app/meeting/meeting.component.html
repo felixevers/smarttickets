@@ -85,20 +85,6 @@
         <br><br>
       </div>
       <form>
-        <div *ngFor="let selectedSeat of selected; let i = index" class="price">
-          <div class="line">
-            <sub>Block {{selectedSeat["block"] + 1}} - Reihe {{selectedSeat["row"] + 1}} - Platz {{getPositionOfSeat(selectedSeat)}}</sub>
-          </div>
-          <mat-form-field>
-            <mat-select (selectionChange)="calcAmount()" [(ngModel)]="selectedSeat.price" [ngModelOptions]="{standalone: true}" required>
-              <mat-option *ngFor="let price of pricesKeys()" [value]="price">{{prices[price].name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <br>
-          <br>
-          <br>
-          <br>
-        </div>
         <div *ngIf="customer == null">
           <br>
           <br>
@@ -129,21 +115,40 @@
             <input matInput type="number" placeholder="Postleitzahl" [(ngModel)]="plz" [ngModelOptions]="{standalone: true}" required>
           </mat-form-field>
           <!--<br>
-          <mat-form-field class="input" [(ngModel)]="questions" [ngModelOptions]="{standalone: true}">
-            <textarea matInput placeholder="Hinweis auf Rollstuhlfahrer, Fragen, Bemerkungen..."></textarea>
-          </mat-form-field>-->
-          <br>
-          <br>
-          <div id="dsgvo">
-            Ich bin mit der Speicherung meiner personenbezogenen Daten einverstanden:
-            <mat-checkbox [(ngModel)]="dsgvo" [ngModelOptions]="{standalone: true}" required color="warn"></mat-checkbox>
+            <mat-form-field class="input" [(ngModel)]="questions" [ngModelOptions]="{standalone: true}">
+              <textarea matInput placeholder="Hinweis auf Rollstuhlfahrer, Fragen, Bemerkungen..."></textarea>
+            </mat-form-field>-->
+            <br>
+            <br>
+            <div id="dsgvo">
+              Ich bin mit der Speicherung meiner personenbezogenen Daten einverstanden:
+              <mat-checkbox [(ngModel)]="dsgvo" [ngModelOptions]="{standalone: true}" required color="warn"></mat-checkbox>
+            </div>
           </div>
+          <br><br>
+          <mat-divider></mat-divider>
+          <br>
+        </form>
+        <div *ngIf="question_mail != ''">
+          <br>
+          <button mat-stroked-button (click)="openMail()">Hinweis auf Rollstuhlfahrer, Fragen, Bemerkungen...</button>
+          <br><br>
+          <mat-divider></mat-divider>
         </div>
-      </form>
-      <div *ngIf="question_mail != ''">
-        <br><br><br>
-        <button mat-stroked-button (click)="openMail()">Hinweis auf Rollstuhlfahrer, Fragen, Bemerkungen...</button>
-      </div>
+        <div *ngFor="let selectedSeat of selected; let i = index" class="price">
+          <div class="line">
+            <sub>Block {{selectedSeat["block"] + 1}} - Reihe {{selectedSeat["row"] + 1}} - Platz {{getPositionOfSeat(selectedSeat)}}</sub>
+          </div>
+          <mat-form-field>
+            <mat-select (selectionChange)="calcAmount()" [(ngModel)]="selectedSeat.price" [ngModelOptions]="{standalone: true}" required>
+              <mat-option *ngFor="let price of pricesKeys()" [value]="price">{{prices[price].name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <br>
+          <br>
+          <br>
+          <br>
+        </div>
     </div>
     <div id="step-3" *ngIf="step == 3">
       <br><br>

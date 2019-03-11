@@ -81,7 +81,7 @@ export class AdministratorComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('tabGroup') tabGroup;
 
-  customerDisplayedColumns: string[] = ['select', 'firstname', 'lastname', 'email', 'count', 'place', 'address']
+  customerDisplayedColumns: string[] = ['select', 'firstname', 'lastname', 'email', 'count', 'place', 'address', 'paid']
   selectedCustomerDisplayedColumns: string[] = ['select', 'price', 'block', 'row', 'seat', 'amount', 'paid'];
 
   times = [];
@@ -115,7 +115,7 @@ export class AdministratorComponent implements OnInit {
   init() {
     let instance = this;
     instance.http.get(data["endpoint"] + 'administrator/session/', instance.getHeader()).subscribe(resp => {
-        if(resp["firstname"] != null && resp["lastname"] != null) {
+      if(resp["firstname"] != null && resp["lastname"] != null) {
         instance.firstname = resp["firstname"];
         instance.lastname = resp["lastname"];
 
@@ -375,6 +375,29 @@ export class AdministratorComponent implements OnInit {
 
     instance.http.get(data["endpoint"] + 'customer/', instance.getHeader()).subscribe(resp => {
       instance.loadedCustomers = resp["customers"];
+
+      instance.loadedCustomers.sort(function(a, b) {
+        if(a["firstname"].toLowerCase() < b["firstname"].toLowerCase()) {
+          return 1;
+        }
+        if(a["firstname"].toLowerCase() > b["firstname"].toLowerCase()) {
+          return -1;
+        }
+
+        return 0;
+      });
+
+      instance.loadedCustomers.sort(function(a, b) {
+        if(a["lastname"].toLowerCase() < b["lastname"].toLowerCase()) {
+          return 1;
+        }
+        if(a["lastname"].toLowerCase() > b["lastname"].toLowerCase()) {
+          return -1;
+        }
+
+        return 0;
+      });
+
       instance.dataSource = new MatTableDataSource(instance.loadedCustomers);
       instance.dataSource.sort = instance.sort;
     });

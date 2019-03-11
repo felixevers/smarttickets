@@ -52,6 +52,7 @@ class CustomerCreateService(Resource):
             tmp = customer.serialize
 
             tmp["count"] = len(TicketModel.query.filter_by(customer=customer.uuid).all())
+            tmp["paid"] = len(TicketModel.query.filter_by(customer=customer.uuid, paid=False).all()) == 0
 
             customers.append(tmp)
 
