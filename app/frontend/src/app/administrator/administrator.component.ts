@@ -162,41 +162,45 @@ export class AdministratorComponent implements OnInit {
   }
 
   getPaidTicketsOfMeeting(meeting) {
-    let x = this.meetingInformation[meeting.uuid]["paid"];
-    if(x != null) {
-      return x;
-    } else {
-      return 0;
+    if(this.meetingInformation[meeting.uuid] != null) {
+      let x = this.meetingInformation[meeting.uuid]["paid"];
+      if(x != null) {
+        return x;
+      }
     }
+    return 0;
   }
 
   getUnpaidTicketsOfMeeting(meeting) {
-    let x = this.meetingInformation[meeting.uuid]["unpaid"];
-    if(x != null) {
-      return x;
-    } else {
-      return 0;
+    if(this.meetingInformation[meeting.uuid] != null) {
+      let x = this.meetingInformation[meeting.uuid]["unpaid"];
+      if(x != null) {
+        return x;
+      }
     }
+    return 0;
   }
 
   getFreeTicketsOfMeeting(meeting) {
-    let all = this.meetingInformation[meeting.uuid]["all"];
-    let paid = this.meetingInformation[meeting.uuid]["paid"];
-    let unpaid = this.meetingInformation[meeting.uuid]["unpaid"];
-    if(all != null && paid != null && unpaid != null) {
-      return all - paid - unpaid;
-    } else {
-      return 0;
+    if(this.meetingInformation[meeting.uuid] != null) {
+      let all = this.meetingInformation[meeting.uuid]["all"];
+      let paid = this.meetingInformation[meeting.uuid]["paid"];
+      let unpaid = this.meetingInformation[meeting.uuid]["unpaid"];
+      if(all != null && paid != null && unpaid != null) {
+        return all - paid - unpaid;
+      }
     }
+    return 0;
   }
 
   getTotalTicketsOfMeeting(meeting) {
-    let x = this.meetingInformation[meeting.uuid]["all"]
-    if(x != null) {
-      return x;
-    } else {
-      return 0;
+    if(this.meetingInformation[meeting.uuid] != null) {
+      let x = this.meetingInformation[meeting.uuid]["all"]
+      if(x != null) {
+        return x;
+      }
     }
+    return 0;
   }
 
   selectMeeting(meeting) {
