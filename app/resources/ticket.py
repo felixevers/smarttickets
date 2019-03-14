@@ -76,8 +76,6 @@ class GeneralTicketService(Resource):
 
         buy_limit = SettingModel.query.filter_by(key="buy_limit").first()
 
-        print(buy_limit.value)
-
         if buy_limit and buy_limit.value.isdigit():
             if len(all_tickets) + len(TicketModel.query.filter_by(customer=customer_uuid).all()) > int(buy_limit.value):
                 return {
@@ -287,3 +285,27 @@ class GeneralCustomerTicketService(Resource):
             all_tickets.append(tmp)
 
         return {"tickets": all_tickets}
+
+@ticket_api.route('/meeting/<string:uuid>')
+@ticket_api.doc('general meeting ticket actions')
+class GeneralMeetingTicketService(Resource):
+
+    @ticket_api.doc('get meeting information')
+    @require_session
+    def post(self, session, uuid):
+        meeting: MeetingModel = MeetingModel.query.filter_by(uuid=uuid).first()
+
+        if meeting:
+            paid = len(TicketModel.query.filter_by(meeting_id=uuid, paid=True).all())
+            unpaid = len(TicketModel.query.filter_by(meeting_id=uuid, paid=False).all())
+            seats = len(SeatModel.query.filter_by(room_id=meeting.room, type=0).all())
+
+            return {
+                "paid": paid,
+                "unpaid": unpaid,
+                "all": seats
+            }
+
+        return {
+            "result": False
+        }

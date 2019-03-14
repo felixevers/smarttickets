@@ -26,7 +26,7 @@ export class CustomerComponent implements OnInit {
 
     this.route.params.subscribe(params => {
         instance.getSetting('buy_limit', function(value) {
-          if(!isNaN(value) && value >= 0) {
+          if(value != "" && !isNaN(value) && value >= 0) {
             instance.buy_limit = value;
           }
         });

@@ -1,12 +1,12 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import {SelectionModel} from '@angular/cdk/collections';
+import { SelectionModel } from '@angular/cdk/collections';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
-import {FormControl} from '@angular/forms';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-import {MatSort, MatTableDataSource} from '@angular/material';
+import { FormControl } from '@angular/forms';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatSort, MatTableDataSource } from '@angular/material';
 
 import * as data from '../endpoint.json';
 
@@ -82,9 +82,11 @@ export class AdministratorComponent implements OnInit {
   @ViewChild('tabGroup') tabGroup;
 
   customerDisplayedColumns: string[] = ['select', 'firstname', 'lastname', 'email', 'count', 'place', 'address', 'paid']
-  selectedCustomerDisplayedColumns: string[] = ['select', 'price', 'block', 'row', 'seat', 'amount', 'paid'];
+  selectedCustomerDisplayedColumns: string[] = ['select', 'price', 'amount', 'block', 'row', 'seat', 'meeting', 'paid'];
 
   times = [];
+
+  meetingInformation = {};
 
   constructor(private cookieService: CookieService, private http: HttpClient) {
     this.token = this.cookieService.get("token");
@@ -108,6 +110,8 @@ export class AdministratorComponent implements OnInit {
     }
   }
 
+  public
+
   goToLink(url: string){
     window.open(data['endpoint'] + url, "_blank");
   }
@@ -130,7 +134,69 @@ export class AdministratorComponent implements OnInit {
     });
   }
 
+  canDeleteSelected() {
+    let result = true;
+
+    this.selectedCustomerSelectedTickets.selected.forEach(e => {
+      if(e.paid) {
+        result = false;
+      }
+    })
+
+    return result;
+  }
+
+  getMeetingByUUID(uuid) {
+    let meeting = null;
+
+    this.meetings.forEach(e => {
+      if(e.uuid == uuid) {
+        meeting = e;
+      }
+    });
+
+    return meeting;
+  }
+
   ngOnInit() {
+  }
+
+  getPaidTicketsOfMeeting(meeting) {
+    let x = this.meetingInformation[meeting.uuid]["paid"];
+    if(x != null) {
+      return x;
+    } else {
+      return 0;
+    }
+  }
+
+  getUnpaidTicketsOfMeeting(meeting) {
+    let x = this.meetingInformation[meeting.uuid]["unpaid"];
+    if(x != null) {
+      return x;
+    } else {
+      return 0;
+    }
+  }
+
+  getFreeTicketsOfMeeting(meeting) {
+    let all = this.meetingInformation[meeting.uuid]["all"];
+    let paid = this.meetingInformation[meeting.uuid]["paid"];
+    let unpaid = this.meetingInformation[meeting.uuid]["unpaid"];
+    if(all != null && paid != null && unpaid != null) {
+      return all - paid - unpaid;
+    } else {
+      return 0;
+    }
+  }
+
+  getTotalTicketsOfMeeting(meeting) {
+    let x = this.meetingInformation[meeting.uuid]["all"]
+    if(x != null) {
+      return x;
+    } else {
+      return 0;
+    }
   }
 
   selectMeeting(meeting) {
@@ -221,9 +287,11 @@ export class AdministratorComponent implements OnInit {
 
   private loadTickets() {
     let instance = this;
+
+    instance.selectedCustomerSelectedTickets.clear();
+
     instance.http.post(data["endpoint"] + 'ticket/customer/' + instance.selectedCustomer.uuid, {}).subscribe(resp => {
       instance.selectedCustomerTickets = resp["tickets"];
-      console.log(resp["tickets"]);
     });
   }
 
@@ -432,6 +500,9 @@ export class AdministratorComponent implements OnInit {
               resp => {
                 if(resp != null) {
                   obj.meetings.push(resp);
+                  obj.http.post(data["endpoint"] + "ticket/meeting/" + uuid, {}, obj.getHeader()).subscribe(resp => {
+                    obj.meetingInformation[uuid] = resp;
+                  });
                 }
               }
             );;

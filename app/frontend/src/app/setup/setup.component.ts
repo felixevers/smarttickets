@@ -83,6 +83,8 @@ export class SetupComponent implements OnInit {
         instance.setSetting('imprint', instance.imprint, httpOptions);
 
         instance.router.navigate(['/admin']);
+
+        location.reload();
       });
     });
   }
