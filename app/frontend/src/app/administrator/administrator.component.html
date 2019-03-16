@@ -37,12 +37,12 @@
             </mat-list-item>
             <mat-list-item>
               <mat-icon mat-list-icon>sentiment_satisfied</mat-icon>
-              <h4 mat-line>{{getUnpaidTicketsOfMeeting(meeting)}} ({{(getUnpaidTicketsOfMeeting(meeting)/getTotalTicketsOfMeeting(meeting)*100) | number}} %)</h4>
+              <h4 mat-line>{{getUnpaidTicketsOfMeeting(meeting)}} ({{(getUnpaidTicketsOfMeeting(meeting)/getTotalTicketsOfMeeting(meeting)*100) | number}} %) (relative: {{(getUnpaidTicketsOfMeeting(meeting)/(getTotalTicketsOfMeeting(meeting)-getPaidTicketsOfMeeting(meeting))*100) | number}} %)</h4>
               <p mat-line>reserved seats</p>
             </mat-list-item>
             <mat-list-item>
               <mat-icon mat-list-icon>sentiment_very_dissatisfied</mat-icon>
-              <h4 mat-line>{{getFreeTicketsOfMeeting(meeting)}} ({{(getFreeTicketsOfMeeting(meeting)/getTotalTicketsOfMeeting(meeting)*100) | number}} %)</h4>
+              <h4 mat-line>{{getFreeTicketsOfMeeting(meeting)}} ({{(getFreeTicketsOfMeeting(meeting)/getTotalTicketsOfMeeting(meeting)*100) | number}} %) (relative: {{(getFreeTicketsOfMeeting(meeting)/(getTotalTicketsOfMeeting(meeting)-getPaidTicketsOfMeeting(meeting))*100) | number}} %)</h4>
               <p mat-line>free seats</p>
             </mat-list-item>
             <mat-list-item>
@@ -456,6 +456,7 @@
               <button mat-flat-button color="primary" [disabled]="selectedCustomerSelectedTickets.selected.length == 0" (click)="paySelected(true)">Pay Selected</button>
               <button mat-flat-button color="primary" [disabled]="selectedCustomerSelectedTickets.selected.length == 0" (click)="paySelected(false)">Unpay Selected</button>
               <button mat-flat-button color="primary" [disabled]="selectedCustomerSelectedTickets.selected.length == 0 || !canDeleteSelected()" (click)="deleteTicket()">Delete Selected</button>
+              <button mat-flat-button color="primary" [disabled]="selectedCustomerSelectedTickets.selected.length == 0 || !canDeleteSelected()" (click)="resendTicket()">Resend Mail</button>
               <button mat-flat-button color="primary" [disabled]="selectedCustomerTickets.length > 0" (click)="delete()">Delete Customer</button>
               <button mat-flat-button color="primary" (click)="goToLink('f/customer/' + selectedCustomer.uuid)">Open Customer-Dashboard</button>
             </div>

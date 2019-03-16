@@ -161,6 +161,54 @@ class GeneralTicketService(Resource):
 @ticket_api.doc('pay ticket actions')
 class SpecificPriceService(Resource):
 
+    @ticket_api.doc('resend ticket-mail')
+    @ticket_api.response(404, "Not Found", {})
+    @require_session
+    def put(self, session):
+        all = []
+        amount = 0
+
+        all_tickets = request.json["tickets"]
+
+        for ticket in all_tickets:
+            t = TicketModel.query.filter_by(uuid=ticket).first()
+
+            if not t:
+                return { "result": False }
+
+            price: PriceModel = PriceModel.query.filter_by(uuid=t.price_id).first()
+
+            if not t.paid:
+                amount = amount + price.value
+                all.append(t)
+
+        if config["MAIL_ENABLED"] and len(all) > 0:
+            msg_title = SettingModel.query.filter_by(key="buy_mail_title").first().value
+            msg_content = SettingModel.query.filter_by(key="buy_mail_content").first().value
+
+            if msg_title != '' and msg_content != '':
+                cc = SettingModel.query.filter_by(key="mail_cc").first()
+
+                msg = Message(msg_title, recipients=[customer.email])
+
+                if cc and cc.value != '':
+                    msg.cc = [cc.value]
+
+                customer_url = str(config['ENDPOINT']) + 'f/customer/' + customer.uuid
+
+                msg_content = msg_content.replace('{{name}}', customer.firstname + ' ' + customer.lastname)
+                msg_content = msg_content.replace('{{customer}}', '<a href="' + customer_url + '">' + customer_url + '</a>')
+                msg_content = msg_content.replace('{{amount}}', str(int(amount)))
+                msg_content = msg_content.replace('\n', '<br>')
+
+                msg.html = msg_content
+
+                mail.send(msg)
+
+        return {
+            "result": True
+        }
+
     @ticket_api.doc('pay some tickets')
     @ticket_api.response(404, "Not Found", {})
     @require_session
@@ -199,7 +247,7 @@ class SpecificPriceService(Resource):
             msg_content = SettingModel.query.filter_by(key="ticket_mail_content").first().value
 
             if msg_title != '' and msg_content != '':
-                bcc = SettingModel.query.filter_by(key="mail_bcc").first()
+                cc = SettingModel.query.filter_by(key="mail_cc_paid").first()
 
                 pdfs = []
 
@@ -210,8 +258,8 @@ class SpecificPriceService(Resource):
 
                 msg = Message(msg_title, recipients=[customer.email], attachments=pdfs)
 
-                #if bcc and bcc.value != '':
-                #    msg.bcc = bcc.value
+                if cc and cc.value != '':
+                    msg.cc = [cc.value]
 
                 customer_url = str(config['ENDPOINT']) + 'f/customer/' + customer.uuid
 

@@ -110,7 +110,21 @@ export class AdministratorComponent implements OnInit {
     }
   }
 
-  public
+  resendTicket() {
+    let instance = this;
+
+    var uuids = [];
+
+    instance.selectedCustomerSelectedTickets.selected.forEach(ticket => {
+      uuids.push(ticket["uuid"]);
+    });
+
+    instance.http.put(data["endpoint"] + 'ticket/pay/', {
+      "tickets": uuids,
+    }, instance.getHeader()).subscribe(resp => {
+      console.log(resp);
+    });
+  }
 
   goToLink(url: string){
     window.open(data['endpoint'] + url, "_blank");

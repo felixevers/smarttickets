@@ -18,6 +18,7 @@
 | intro                     | text displayed on the start page                    |
 | banner                    | main image (base64)                                 |
 | mail_cc                   | mail as cc                                          |
+| mail_cc_paid              | mail as cc (paid)                                   |
 | question_mail             | mail for questions                                  |
 | question_mail_subject     | subject of mail for questions                       |
 | ticket_img                | the image that is displayed on the ticket (base64)  |
