@@ -188,6 +188,7 @@ class SpecificPriceService(Resource):
 
             if msg_title != '' and msg_content != '':
                 cc = SettingModel.query.filter_by(key="mail_cc").first()
+                customer = CustomerModel.query.filter_by(uuid=all_tickets[0].customer).first()
 
                 msg = Message(msg_title, recipients=[customer.email])
 
