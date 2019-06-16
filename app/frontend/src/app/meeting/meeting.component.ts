@@ -136,7 +136,7 @@ export class MeetingComponent implements OnInit {
 
 
             let now = new Date(Date.now());
-            instance.active = instance.stop > now.getTime();
+            instance.active = instance.stop.getTime() > now.getTime();
 
             instance.roomID = resp["room"];
             this.http.get(data["endpoint"] + "price/").subscribe(resp => {
