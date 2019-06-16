@@ -37,7 +37,7 @@ export class ViewMeetingComponent implements OnInit {
 
     let now = new Date(Date.now());
 
-    this.active = this.start.getTime() < now.getTime() && this.stop.getTime() > now.getTime();
+    this.active = this.start.getTime() < now.getTime() && this.date.getTime() > now.getTime();
   }
 
   timeConverter(a) {

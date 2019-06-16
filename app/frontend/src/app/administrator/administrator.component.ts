@@ -110,6 +110,22 @@ export class AdministratorComponent implements OnInit {
     }
   }
 
+  checkDirectDownload() {
+    let result = true;
+
+    this.selectedCustomerTickets.forEach(ticket => {
+      if(!ticket.paid) {
+        result = false;
+      }
+    });
+
+    return result;
+  }
+
+  directDownload(uuid) {
+    this.goToLink('direct/' + this.token + '/' + uuid);
+  }
+
   resendTicket() {
     let instance = this;
 
@@ -521,9 +537,19 @@ export class AdministratorComponent implements OnInit {
                   obj.http.post(data["endpoint"] + "ticket/meeting/" + uuid, {}, obj.getHeader()).subscribe(resp => {
                     obj.meetingInformation[uuid] = resp;
                   });
+                  obj.meetings.sort(function(a, b) {
+                    if(a["date"] < b["date"]) {
+                      return -1;
+                    }
+                    if(a["date"] > b["date"]) {
+                      return 1;
+                    }
+
+                    return 0;
+                  })
                 }
               }
-            );;
+            );
           });
         }
       }

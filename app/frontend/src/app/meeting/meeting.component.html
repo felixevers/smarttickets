@@ -25,7 +25,7 @@
     </mat-list>
     <br>
     <br>
-    <div *ngIf="step == 1 || step == 2">
+    <div *ngIf="(step == 1 || step == 2) && active">
       <mat-divider></mat-divider>
       <br>
       <div style="text-align: center;">
@@ -165,7 +165,7 @@
     </div>
   </mat-card-content>
 </mat-card>
-<mat-toolbar color="primary" id="bottom-toolbar" *ngIf="step < 3">
+<mat-toolbar color="primary" id="bottom-toolbar" *ngIf="step < 3 && active">
   {{selected.length}}&nbsp;
   <div *ngIf="buy_limit >= 0">von {{buy_limit}}&nbsp;</div>Sitze&nbsp;
   <span *ngIf="step == 2">für {{amount}} €</span>

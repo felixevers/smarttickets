@@ -69,6 +69,8 @@ export class MeetingComponent implements OnInit {
 
   buy_limit = -1;
 
+  active: boolean;
+
   pricesKeys() {
     return Object.keys(this.prices);
   }
@@ -131,6 +133,10 @@ export class MeetingComponent implements OnInit {
 
             instance.stop = new Date(resp["stop"] * 1000);
             instance.stopStr = instance.timeConverter(instance.stop);
+
+
+            let now = new Date(Date.now());
+            instance.active = instance.stop > now.getTime();
 
             instance.roomID = resp["room"];
             this.http.get(data["endpoint"] + "price/").subscribe(resp => {
@@ -283,14 +289,16 @@ export class MeetingComponent implements OnInit {
   }
 
   select(seat) {
-    if((seat.type == 0 || seat.type == 4) && !seat["reserved"]) {
-      if(this.selectedSeat(seat)) {
-        this.selected.splice(this.selected.indexOf(seat), 1);
-      } else if(this.buy_limit < 0 || this.selected.length < this.buy_limit) {
-        this.selected.push(seat);
+    if(this.active) {
+      if((seat.type == 0 || seat.type == 4) && !seat["reserved"]) {
+        if(this.selectedSeat(seat)) {
+          this.selected.splice(this.selected.indexOf(seat), 1);
+        } else if(this.buy_limit < 0 || this.selected.length < this.buy_limit) {
+          this.selected.push(seat);
+        }
       }
+      this.calcAmount();
     }
-    this.calcAmount();
   }
 
   selectedSeat(seat) {
@@ -362,6 +370,9 @@ export class MeetingComponent implements OnInit {
   }
 
   buttonEnabled() {
+    if(!this.active) {
+      return true;
+    }
     if(this.step == 1) {
       return this.selected.length <= 0;
     } else if(this.step == 2) {

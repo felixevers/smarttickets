@@ -458,6 +458,7 @@
               <button mat-flat-button color="primary" [disabled]="selectedCustomerSelectedTickets.selected.length == 0 || !canDeleteSelected()" (click)="deleteTicket()">Delete Selected</button>
               <button mat-flat-button color="primary" [disabled]="selectedCustomerSelectedTickets.selected.length == 0 || !canDeleteSelected()" (click)="resendTicket()">Resend Mail</button>
               <button mat-flat-button color="primary" [disabled]="selectedCustomerTickets.length > 0" (click)="delete()">Delete Customer</button>
+              <button mat-flat-button color="primary" [disabled]="checkDirectDownload()" (click)="directDownload(selectedCustomer.uuid)">Direct Ticket Download</button>
               <button mat-flat-button color="primary" (click)="goToLink('f/customer/' + selectedCustomer.uuid)">Open Customer-Dashboard</button>
             </div>
           </div>
