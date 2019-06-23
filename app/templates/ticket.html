@@ -35,6 +35,11 @@
         height: 500px;
         width: auto;
       }
+
+      #code {
+        width: 150px;
+        height: 150px;
+      }
     </style>
   </head>
   <body>
@@ -75,8 +80,6 @@
     </div>
     <br>
     <br>
-    <div id="code">
-      <img src="https://api.qrserver.com/v1/create-qr-code/?data={{uuid}}&size=150x150">
-    </div>
+    <img id="code" src="{{qrcode(uuid)}}">
   </body>
 </html>

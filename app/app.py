@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_mail import Mail
+from flask_qrcode import QRcode
 
 from resources.render import register_render
 from resources.customer import customer_api
@@ -13,7 +14,7 @@ from resources.administrator import administrator_api
 from resources.download import register_download
 
 from config import config
-from api import db, api, mail
+from api import db, api, mail, qrcode
 from flask_cors import CORS
 from time import sleep
 
@@ -63,7 +64,7 @@ def create_app() -> Flask:
 def register_extensions(app: Flask) -> None:
     db.init_app(app)
     api.init_app(app)
-
+    qrcode.init_app(app)
 
 def register_namespaces() -> None:
     api.add_namespace(customer_api)

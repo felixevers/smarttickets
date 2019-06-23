@@ -27,6 +27,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort';
 import {MatRadioModule} from '@angular/material/radio';
 
+import { QRCodeModule } from 'angularx-qrcode';
+
 import { HttpClientModule } from '@angular/common/http';
 import { ViewMeetingComponent } from './view-meeting/view-meeting.component';
 import { MeetingComponent } from './meeting/meeting.component';
@@ -91,6 +93,7 @@ const appRoutes: Routes = [
     MatSortModule,
     MatRadioModule,
     FormsModule,
+    QRCodeModule,
     RouterModule.forRoot(
       appRoutes,
     )
