@@ -465,6 +465,50 @@
         </div>
       </ng-template>
     </mat-tab>
+    <mat-tab label="Map">
+      <ng-template matTabContent>
+        <div class="content">
+          <h4>select meeting</h4>
+          <mat-form-field>
+            <mat-label>Meeting</mat-label>
+            <mat-select [(value)]="mapMeeting">
+              <mat-option *ngFor="let meeting of meetings" [value]="meeting.uuid">
+                {{meeting.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-divider></mat-divider>
+          <!--<br>
+          <h4>room</h4>
+          <br>
+          <div id="overflow" *ngIf="mapMeeting != null">
+            <div id="room">
+              <div [style.width.%]="calcBlocks(mapMeeting)" *ngFor="let block of getRoom(mapMeeting); let i = index" class="block">
+                <div *ngFor="let row of stage[i]; let ri = index" class="row">
+                  <mat-icon *ngFor="let seat of row; let si = index" class="stage">
+                    {{seat.icon}}
+                  </mat-icon>
+                  <br>
+                </div>
+                <div *ngFor="let row of block; let ri = index" class="row">
+                  <mat-icon *ngFor="let seat of row; let si = index" [class.invisible]="seat.type == 1" [class.stage]="seat.type == 2" [class.technology]="seat.type == 3" [class.reserved]="seat.reserved" [class.selected]="selectedSeat(seat)" (click)="select(seat)">
+                    {{seat.icon}}
+                  </mat-icon>
+                  <br>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="mapMeeting == null">
+            Select a meeting...
+          </div>-->
+          <br>
+          <h4>actions</h4>
+          <br>
+          <button mat-flat-button color="primary" [disabled]="mapMeeting == null" (click)="downloadAllTickets(mapMeeting)">download all unpaid tickets</button>
+        </div>
+      </ng-template>
+    </mat-tab>
     <mat-tab label="Administrator">
       <ng-template matTabContent>
         <div class="content">

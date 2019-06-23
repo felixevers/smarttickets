@@ -24,6 +24,8 @@ export class AdministratorComponent implements OnInit {
   prices = [];
   rooms = [];
 
+  mapMeeting;
+
   selectedMeeting;
   selectedPrice;
   selectedRoom;
@@ -124,6 +126,10 @@ export class AdministratorComponent implements OnInit {
 
   directDownload(uuid) {
     this.goToLink('direct/' + this.token + '/' + uuid);
+  }
+
+  downloadAllTickets(uuid) {
+    this.goToLink('directAll/' + this.token + '/' + uuid);
   }
 
   resendTicket() {
@@ -378,6 +384,10 @@ export class AdministratorComponent implements OnInit {
     return result;
   }
 
+  private calcBlocks(uuid: string) {
+    return 100 / this.getRoom(uuid).length;
+  }
+
   private createMeeting() {
     let instance = this;
 
@@ -403,6 +413,15 @@ export class AdministratorComponent implements OnInit {
 
       instance.getMeetings();
     });
+  }
+
+  private getRoom(uuid: string) {
+    this.rooms.forEach(r => {
+      if(r.uuid = uuid) {
+        return r;
+      }
+    });
+    return null;
   }
 
   private disableMeeting() {
